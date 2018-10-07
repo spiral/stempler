@@ -11,6 +11,7 @@
   ],
   "require": {
     "php": "^7.1",
+    "spiral/boot": "^1.1",
     "spiral/views": "^1.0",
     "spiral/tokenizer": "^2.0"
   },
