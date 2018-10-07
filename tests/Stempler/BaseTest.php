@@ -4,13 +4,15 @@
  *
  * @author Wolfy-J
  */
+
 namespace Spiral\Tests\Stempler;
 
+use PHPUnit\Framework\TestCase;
 use Spiral\Stempler\Stempler;
 use Spiral\Stempler\StemplerLoader;
 use Spiral\Stempler\Syntax\DarkSyntax;
 
-abstract class BaseTest extends \PHPUnit_Framework_TestCase
+abstract class BaseTest extends TestCase
 {
     /**
      * Render view and return it's blank lines.

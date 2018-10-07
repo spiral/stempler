@@ -6,12 +6,14 @@
  * @author    Anton Titov (Wolfy-J)
  * @copyright ©2009-2015
  */
+
 namespace Spiral\Tests\Stempler;
 
+use PHPUnit\Framework\TestCase;
 use Spiral\Stempler\HtmlTokenizer;
 use Spiral\Tokenizer\Isolator;
 
-class TokenizerTest extends \PHPUnit_Framework_TestCase
+class TokenizerTest extends TestCase
 {
     public function testInput()
     {
