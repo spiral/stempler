@@ -34,6 +34,17 @@ class EngineTest extends BaseEngineTest
         );
     }
 
+    public function testPrettify()
+    {
+        $stempler = $this->getStempler();
+        $this->assertSame(
+            str_replace("\r\n","\n",'<div>
+    hello world
+</div>'),
+            str_replace("\r\n","\n",$stempler->get('pretty', new ViewContext())->render([]))
+        );
+    }
+
     public function testRenderInContext()
     {
         $ctx = new ViewContext();
