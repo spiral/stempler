@@ -6,7 +6,7 @@
  * @author    Anton Titov (Wolfy-J)
  */
 
-namespace Spiral\Stempler\Prototypes;
+namespace Spiral\Stempler\Exporter;
 
 use Spiral\Stempler\ExporterInterface;
 
@@ -22,7 +22,7 @@ use Spiral\Stempler\ExporterInterface;
  * Prefix will allow you to match some attributes to specific spot, use exclude pattern (with star)
  * to remove attributes like that from other places.
  */
-abstract class ConditionalExporter implements ExporterInterface
+abstract class AbstractExporter implements ExporterInterface
 {
     /**
      * Get blocks matching specified condition.
@@ -32,7 +32,7 @@ abstract class ConditionalExporter implements ExporterInterface
      *
      * @return array
      */
-    protected function filterBlocks(string $condition = null, array $blocks)
+    protected function filterBlocks(string $condition, array $blocks)
     {
         if (empty($condition)) {
             return $blocks;

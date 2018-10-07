@@ -37,7 +37,7 @@ class InheritanceTest extends BaseTest
     }
 
     /**
-     * @expectedException \Spiral\Stempler\Exceptions\StemplerException
+     * @expectedException \Spiral\Stempler\Exception\StemplerException
      * @expectedExceptionMessage Unable to locate view 'includes-none.php' in namespace 'default'
      */
     public function testInvalidParent()

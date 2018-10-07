@@ -6,16 +6,16 @@
  * @author    Anton Titov (Wolfy-J)
  */
 
-namespace Spiral\Stempler\Syntaxes;
+namespace Spiral\Stempler\Syntax;
 
-use Spiral\Stempler\Exceptions\SyntaxException;
-use Spiral\Stempler\Exporters\AttributesExporter;
+use Spiral\Stempler\Exception\SyntaxException;
+use Spiral\Stempler\Exporter\AttributesExporter;
 use Spiral\Stempler\HtmlTokenizer;
 use Spiral\Stempler\ImporterInterface;
-use Spiral\Stempler\Importers\Aliaser;
-use Spiral\Stempler\Importers\Bundler;
-use Spiral\Stempler\Importers\Prefixer;
-use Spiral\Stempler\Importers\Stopper;
+use Spiral\Stempler\Importer\Aliaser;
+use Spiral\Stempler\Importer\Bundler;
+use Spiral\Stempler\Importer\Prefixer;
+use Spiral\Stempler\Importer\Stopper;
 use Spiral\Stempler\Supervisor;
 use Spiral\Stempler\SyntaxInterface;
 

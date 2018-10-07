@@ -8,24 +8,22 @@
 
 namespace Spiral\Stempler;
 
-use Spiral\Stempler\Exceptions\SyntaxException;
+use Spiral\Stempler\Exception\SyntaxException;
 
 /**
  * Used to detect token behaviour based on internal rules.
  */
 interface SyntaxInterface
 {
-    /**
-     * Basic templater behaviours.
-     */
-    const TYPE_BLOCK    = 'block';
-    const TYPE_EXTENDS  = 'extends';
-    const TYPE_IMPORTER = 'use';
-    const TYPE_INCLUDE  = 'include';
-    const TYPE_NONE     = 'none';
+    // Block behaviours
+    public const TYPE_BLOCK    = 'block';
+    public const TYPE_EXTENDS  = 'extends';
+    public const TYPE_IMPORTER = 'use';
+    public const TYPE_INCLUDE  = 'include';
+    public const TYPE_NONE     = 'none';
 
-    //Must be implemented
-    const TYPE_DIRECTIVE = 'directive';
+    // Must be implemented
+    public const TYPE_DIRECTIVE = 'directive';
 
     /**
      * In strict mode every unpaired close tag or other html error will raise an

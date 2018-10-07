@@ -88,7 +88,7 @@ class ImportsTest extends BaseTest
     }
 
     /**
-     * @expectedException \Spiral\Stempler\Exceptions\StemplerException
+     * @expectedException \Spiral\Stempler\Exception\StemplerException
      * @expectedExceptionMessage Unable to locate view 'includes/tag-c.php' in namespace 'default'
      */
     public function testImportWithPrefixErrorTag()
@@ -100,7 +100,7 @@ class ImportsTest extends BaseTest
     }
 
     /**
-     * @expectedException \Spiral\Stempler\Exceptions\SyntaxException
+     * @expectedException \Spiral\Stempler\Exception\SyntaxException
      * @expectedExceptionMessage Undefined use element
      */
     public function testInvalidUseElement()

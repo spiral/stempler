@@ -8,10 +8,10 @@
 
 namespace Spiral\Stempler;
 
-use Spiral\Stempler\Behaviours\ExtendLayout;
-use Spiral\Stempler\Behaviours\IncludeBlock;
-use Spiral\Stempler\Behaviours\InnerBlock;
-use Spiral\Stempler\Exceptions\StrictModeException;
+use Spiral\Stempler\Behaviour\ExtendLayout;
+use Spiral\Stempler\Behaviour\IncludeBlock;
+use Spiral\Stempler\Behaviour\InnerBlock;
+use Spiral\Stempler\Exception\StrictModeException;
 
 /**
  * Stempler Node represents simple XML like tree of blocks defined by behaviours provided by it's

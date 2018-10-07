@@ -5,7 +5,7 @@
  * @author Wolfy-J
  */
 
-namespace Spiral\Stempler\Exceptions;
+namespace Spiral\Stempler\Exception;
 
 class LoaderException extends StemplerException implements LoaderExceptionInterface
 {

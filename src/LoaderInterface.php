@@ -8,7 +8,7 @@
 
 namespace Spiral\Stempler;
 
-use Spiral\Stempler\Exceptions\LoaderExceptionInterface;
+use Spiral\Stempler\Exception\LoaderExceptionInterface;
 
 /**
  * View loader interface. Pretty simple class which is compatible with Twig loader.

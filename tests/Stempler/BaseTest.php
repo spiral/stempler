@@ -8,7 +8,7 @@ namespace Spiral\Tests\Stempler;
 
 use Spiral\Stempler\Stempler;
 use Spiral\Stempler\StemplerLoader;
-use Spiral\Stempler\Syntaxes\DarkSyntax;
+use Spiral\Stempler\Syntax\DarkSyntax;
 
 abstract class BaseTest extends \PHPUnit_Framework_TestCase
 {

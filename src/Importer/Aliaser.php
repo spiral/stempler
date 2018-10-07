@@ -6,7 +6,7 @@
  * @author    Anton Titov (Wolfy-J)
  */
 
-namespace Spiral\Stempler\Importers;
+namespace Spiral\Stempler\Importer;
 
 use Spiral\Stempler\ImporterInterface;
 

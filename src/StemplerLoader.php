@@ -9,7 +9,7 @@ namespace Spiral\Stempler;
 
 use Spiral\Files\FileManager;
 use Spiral\Files\FilesInterface;
-use Spiral\Stempler\Exceptions\LoaderException;
+use Spiral\Stempler\Exception\LoaderException;
 
 /**
  * Simple loader with ability to use multiple namespaces. Copy from TwigLoader.

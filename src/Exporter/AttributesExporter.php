@@ -6,16 +6,14 @@
  * @author    Anton Titov (Wolfy-J)
  */
 
-namespace Spiral\Stempler\Exporters;
-
-use Spiral\Stempler\Prototypes\ConditionalExporter;
+namespace Spiral\Stempler\Exporter;
 
 /**
  * Export user defined (outer) blocks as tag attributes.
  *
  * Use following pattern: node:attributes[="condition"]
  */
-class AttributesExporter extends ConditionalExporter
+class AttributesExporter extends AbstractExporter
 {
     /**
      * {@inheritdoc}

@@ -8,12 +8,12 @@
 
 namespace Spiral\Stempler;
 
-use Spiral\Stempler\Behaviours\ExtendLayout;
-use Spiral\Stempler\Behaviours\IncludeBlock;
-use Spiral\Stempler\Behaviours\InnerBlock;
-use Spiral\Stempler\Exceptions\LoaderExceptionInterface;
-use Spiral\Stempler\Exceptions\StemplerException;
-use Spiral\Stempler\Importers\Stopper;
+use Spiral\Stempler\Behaviour\ExtendLayout;
+use Spiral\Stempler\Behaviour\IncludeBlock;
+use Spiral\Stempler\Behaviour\InnerBlock;
+use Spiral\Stempler\Exception\LoaderExceptionInterface;
+use Spiral\Stempler\Exception\StemplerException;
+use Spiral\Stempler\Importer\Stopper;
 
 /**
  * Supervisors used to control node behaviours and syntax.

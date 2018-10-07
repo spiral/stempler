@@ -6,7 +6,7 @@
  * @author    Anton Titov (Wolfy-J)
  */
 
-namespace Spiral\Stempler\Behaviours;
+namespace Spiral\Stempler\Behaviour;
 
 use Spiral\Stempler\BehaviourInterface;
 use Spiral\Stempler\HtmlTokenizer;

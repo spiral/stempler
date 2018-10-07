@@ -6,7 +6,7 @@
  * @author    Anton Titov (Wolfy-J)
  */
 
-namespace Spiral\Stempler\Exceptions;
+namespace Spiral\Stempler\Exception;
 
 /**
  * StemplerException has ability to specify context token which will can used to define location

@@ -6,7 +6,7 @@
  * @author    Anton Titov (Wolfy-J)
  */
 
-namespace Spiral\Stempler\Exceptions;
+namespace Spiral\Stempler\Exception;
 
 /**
  * Loading exceptions.
