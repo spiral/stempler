@@ -20,14 +20,10 @@ use Spiral\Views\ViewSource;
 /**
  * Supervisors used to control node behaviours and syntax.
  */
-class Compiler implements CompilerInterface
+final class Compiler implements CompilerInterface
 {
-    /**
-     * Used to create unique node names when required.
-     *
-     * @var int
-     */
-    private static $index = 0;
+    /** @var int */
+    private static $uniqueID = 0;
 
     /** @var ImportInterface[] */
     private $imports = [];
@@ -56,7 +52,7 @@ class Compiler implements CompilerInterface
      */
     public function generateID(): string
     {
-        return md5(self::$index++);
+        return md5(self::$uniqueID++);
     }
 
     /**

@@ -13,4 +13,10 @@ use Spiral\Core\InjectableConfig;
 class StemplerConfig extends InjectableConfig
 {
     const CONFIG = "views/stempler";
+
+    /** @var array */
+    protected $config = [
+        'processors'     => [],
+        'postProcessors' => []
+    ];
 }

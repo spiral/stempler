@@ -14,7 +14,7 @@ use Spiral\Stempler\Import;
 /**
  * Default Stempler syntax - Woo. Provides ability to define blocks, extends and includes.
  */
-class DarkSyntax implements SyntaxInterface
+final class Syntax implements SyntaxInterface
 {
     private const PATH_ATTRIBUTE = 'path';
     private const SHORT_TAGS     = '/\${(?P<name>[a-z0-9_\.\-]+)(?: *\| *(?P<default>[^}]+) *)?}/i';

@@ -9,7 +9,7 @@ namespace Spiral\Tests\Stempler;
 
 use PHPUnit\Framework\TestCase;
 use Spiral\Stempler\Compiler;
-use Spiral\Stempler\DarkSyntax;
+use Spiral\Stempler\Syntax;
 use Spiral\Views\ViewLoader;
 
 abstract class BaseTest extends TestCase
@@ -28,7 +28,7 @@ abstract class BaseTest extends TestCase
             'namespace' => [__DIR__ . '/fixtures/namespace/',]
         ]);
 
-        $stempler = new Compiler($loader->withExtension('php'), new DarkSyntax());
+        $stempler = new Compiler($loader->withExtension('php'), new Syntax());
 
         $lines = explode("\n", self::normalizeEndings($stempler->compile($view)));
 
@@ -49,7 +49,7 @@ abstract class BaseTest extends TestCase
             'namespace' => [__DIR__ . '/fixtures/namespace/',]
         ]);
 
-        $stempler = new Compiler($loader->withExtension('php'), new DarkSyntax());
+        $stempler = new Compiler($loader->withExtension('php'), new Syntax());
 
         $lines = explode("\n", self::normalizeEndings($stempler->compileString($string)));
 
