@@ -118,29 +118,20 @@ class StemplerEngine implements EngineInterface
         }
 
         $key = $this->cache->getKey($source, $className);
-        $this->cache->load($key);
 
+        $this->cache->load($key);
         if (class_exists($className, false)) {
             return $className;
         }
 
-        // compiling body
-        $content = $this->compileSource($className, $source, $context);
-        $this->cache->write($key, $content);
+        // write body
+        $this->cache->write($key, $this->compileSource($className, $source, $context));
 
         try {
             $this->cache->load($key);
-
-            if (!class_exists($className, false)) {
-                // unable to invoke template thought include_once, attempting to use
-                // standard eval
-                eval("?>{$content}");
-            }
         } catch (\Throwable $e) {
             $ce = new CompileException($e->getMessage(), [], $e->getCode(), $e);
-            if (file_exists($key)) {
-                $ce->setLocation($key, $e->getLine());
-            }
+            $ce->setLocation($key, $e->getLine());
 
             throw $ce;
         }

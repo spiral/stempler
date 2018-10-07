@@ -35,6 +35,11 @@ class Cache
      */
     public function getKey(ViewSource $source, string $className)
     {
+        if (empty($this->directory)) {
+            // pass all template rendering thought filesystem to ensure proper line linking
+            return tempnam(sys_get_temp_dir(), 'stempler') . '.php';
+        }
+
         $prefix = sprintf("%s:%s:%s", $source->getNamespace(), $source->getName(), $className);
         $prefix = preg_replace('/([^A-Za-z0-9]|\-)+/', '-', $prefix);
 
@@ -49,10 +54,6 @@ class Cache
      */
     public function delete(ViewSource $source, string $className)
     {
-        if (empty($this->directory)) {
-            return;
-        }
-
         try {
             $this->files->delete($this->getKey($source, $className));
         } catch (\Throwable $e) {
@@ -64,10 +65,6 @@ class Cache
      */
     public function write(string $key, string $content)
     {
-        if (empty($this->directory)) {
-            return;
-        }
-
         $this->files->write($key, $content, FilesInterface::RUNTIME, true);
     }
 
@@ -76,10 +73,6 @@ class Cache
      */
     public function load(string $key)
     {
-        if (empty($this->directory)) {
-            return;
-        }
-
         if ($this->files->exists($key)) {
             include_once $key;
         }
