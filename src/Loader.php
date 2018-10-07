@@ -13,7 +13,7 @@ use Spiral\Views\LoaderInterface;
 use Spiral\Views\Traits\ProcessorTrait;
 use Spiral\Views\ViewSource;
 
-class StemplerLoader implements LoaderInterface
+class Loader implements LoaderInterface
 {
     use ProcessorTrait;
 

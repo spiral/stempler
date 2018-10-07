@@ -15,7 +15,7 @@ use Spiral\Core\Bootloader\Bootloader;
 use Spiral\Core\FactoryInterface;
 use Spiral\Stempler\Config\StemplerConfig;
 use Spiral\Stempler\Processor\PrettifyProcessor;
-use Spiral\Stempler\StemplerCache;
+use Spiral\Stempler\Cache;
 use Spiral\Stempler\StemplerEngine;
 use Spiral\Views\Config\ViewsConfig;
 use Spiral\Views\Processor\ContextProcessor;
@@ -68,9 +68,9 @@ class StemplerBootloader extends Bootloader
         ViewsConfig $viewConfig,
         FactoryInterface $factory
     ): StemplerEngine {
-        $engine = new StemplerEngine(
-            $viewConfig->cacheEnabled() ? new StemplerCache($viewConfig->cacheDirectory()) : null
-        );
+        $engine = new StemplerEngine(new Cache(
+            $viewConfig->cacheEnabled() ? $viewConfig->cacheDirectory() : null
+        ));
 
         foreach ($config->getProcessors() as $extension) {
             $engine->addProcessor($extension->resolve($factory));

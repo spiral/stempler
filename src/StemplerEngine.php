@@ -8,6 +8,7 @@
 
 namespace Spiral\Stempler;
 
+use Spiral\Stempler\Exception\CompileException;
 use Spiral\Views\ContextInterface;
 use Spiral\Views\EngineInterface;
 use Spiral\Views\Exception\EngineException;
@@ -20,7 +21,7 @@ class StemplerEngine implements EngineInterface
 {
     protected const EXTENSION = 'dark';
 
-    /** @var StemplerCache|null */
+    /** @var Cache */
     private $cache = null;
 
     /** @var LoaderInterface|null */
@@ -36,9 +37,9 @@ class StemplerEngine implements EngineInterface
     private $postProcessors = [];
 
     /**
-     * @param StemplerCache|null $cache
+     * @param Cache $cache
      */
-    public function __construct(StemplerCache $cache = null)
+    public function __construct(Cache $cache)
     {
         $this->cache = $cache;
     }
@@ -68,7 +69,7 @@ class StemplerEngine implements EngineInterface
         $engine->loader = $loader->withExtension(static::EXTENSION);
 
         $engine->compiler = new Compiler(
-            new StemplerLoader($engine->loader, $this->processors),
+            new Loader($engine->loader, $this->processors),
             new Syntax()
         );
 
@@ -110,18 +111,35 @@ class StemplerEngine implements EngineInterface
     public function compile(string $path, ContextInterface $context)
     {
         $source = $this->getLoader()->load($path);
+        $className = $this->className($source, $context);
 
-        $content = $this->getCompiler($context)->compile($this->normalize($source));
-
-        $source = $source->withCode($content);
-
-        foreach ($this->postProcessors as $processor) {
-            $source = $processor->process($source, $context);
+        if (class_exists($className, false)) {
+            return $className;
         }
 
-        return $source->getCode();
+        $key = $this->cache->getKey($source, $className);
+        $this->cache->load($key);
 
-        //todo: map exception
+        if (class_exists($className, false)) {
+            return $className;
+        }
+
+        // compiling body
+        $content = $this->compileSource($className, $source, $context);
+        $this->cache->write($key, $content);
+        $this->cache->load($key);
+
+        if (!class_exists($className, false)) {
+            // unable to invoke template thought include_once, attempting to use
+            // standard eval
+            eval("?>{$content}");
+        }
+
+        if (!class_exists($className, false)) {
+            throw new CompileException("Unable to compile `{$path}` template.");
+        }
+
+        return $className;
     }
 
     /**
@@ -129,6 +147,12 @@ class StemplerEngine implements EngineInterface
      */
     public function reset(string $path, ContextInterface $context)
     {
+        if (empty($this->cache)) {
+            return;
+        }
+
+        $source = $this->getLoader()->load($path);
+        $this->cache->delete($source, $this->className($source, $context));
     }
 
     /**
@@ -136,7 +160,23 @@ class StemplerEngine implements EngineInterface
      */
     public function get(string $path, ContextInterface $context): ViewInterface
     {
-        return $this->compile($path, $context);
+        $className = $this->compile($path, $context);
+
+        return new $className;
+    }
+
+    /**
+     * Get unique template name.
+     *
+     * @param ViewSource       $source
+     * @param ContextInterface $context
+     * @return string
+     */
+    protected function className(ViewSource $source, ContextInterface $context)
+    {
+        return sprintf("StemplerView_%s", md5(
+            $source->getNamespace() . '.' . $source->getName() . '.' . $context->getID()
+        ));
     }
 
     /**
@@ -146,5 +186,46 @@ class StemplerEngine implements EngineInterface
     protected function normalize(ViewSource $source): string
     {
         return sprintf("%s:%s", $source->getNamespace(), $source->getName());
+    }
+
+    /**
+     * @param string           $className
+     * @param ViewSource       $source
+     * @param ContextInterface $context
+     * @return string
+     */
+    protected function compileSource(
+        string $className,
+        ViewSource $source,
+        ContextInterface $context
+    ): string {
+        $content = $this->getCompiler($context)->compile($this->normalize($source));
+
+        $source = $source->withCode($content);
+        foreach ($this->postProcessors as $processor) {
+            $source = $processor->process($source, $context);
+        }
+
+        return $this->generateClass($className, $source->getCode());
+    }
+
+    /**
+     * Generate view class.
+     *
+     * @param string $className
+     * @param string $body
+     * @return string
+     */
+    protected function generateClass(string $className, string $body)
+    {
+        return "<?php
+class {$className} extends Spiral\Stempler\StemplerView 
+{
+    protected function execute(array \$data) 
+    {
+        extract(\$data, EXTR_OVERWRITE);
+        ?>{$body}<?php
+    }
+}";
     }
 }
