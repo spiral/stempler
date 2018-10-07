@@ -35,13 +35,13 @@ class Cache
      */
     public function getKey(ViewSource $source, string $className)
     {
-        if (empty($this->directory)) {
-            // pass all template rendering thought filesystem to ensure proper line linking
-            return tempnam(sys_get_temp_dir(), 'stempler') . '.php';
-        }
-
         $prefix = sprintf("%s:%s:%s", $source->getNamespace(), $source->getName(), $className);
         $prefix = preg_replace('/([^A-Za-z0-9]|\-)+/', '-', $prefix);
+
+        if (empty($this->directory)) {
+            // pass all template rendering thought filesystem to ensure proper line linking
+            return sprintf("%s.%s.php", tempnam(sys_get_temp_dir(), ''), $prefix);
+        }
 
         return sprintf("%s/%s.php", rtrim($this->directory, '/') . '/', $prefix);
     }
