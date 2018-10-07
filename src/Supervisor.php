@@ -27,21 +27,13 @@ class Supervisor implements SupervisorInterface
      */
     private static $index = 0;
 
-    /**
-     * Active set of imports.
-     *
-     * @var ImporterInterface[]
-     */
+    /** @var ImporterInterface[] */
     private $importers = [];
 
-    /**
-     * @var SyntaxInterface
-     */
+    /** @var SyntaxInterface */
     protected $syntax = null;
 
-    /**
-     * @var LoaderInterface
-     */
+    /** @var LoaderInterface */
     protected $loader = null;
 
     /**
@@ -73,7 +65,7 @@ class Supervisor implements SupervisorInterface
     }
 
     /**
-     * Active templater imports.
+     * Active template imports handlers.
      *
      * @return ImporterInterface[]
      */

@@ -88,8 +88,7 @@ class ImportsTest extends BaseTest
     }
 
     /**
-     * @expectedException \Spiral\Stempler\Exception\StemplerException
-     * @expectedExceptionMessage Unable to locate view 'includes/tag-c.php' in namespace 'default'
+     * @expectedException \Spiral\Views\Exception\LoaderException
      */
     public function testImportWithPrefixErrorTag()
     {

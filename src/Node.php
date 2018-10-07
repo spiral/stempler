@@ -61,23 +61,15 @@ class Node
     /**
      * @param SupervisorInterface $supervisor
      * @param string              $name
-     * @param string|array        $source    String content or array of html tokens.
-     * @param HtmlTokenizer       $tokenizer Html tokens source.
+     * @param string|array        $source String content or array of html tokens.
      */
-    public function __construct(
-        SupervisorInterface $supervisor,
-        $name,
-        $source = [],
-        HtmlTokenizer $tokenizer = null
-    ) {
+    public function __construct(SupervisorInterface $supervisor, string $name, $source = [])
+    {
         $this->supervisor = $supervisor;
         $this->name = $name;
 
-        if (empty($tokenizer)) {
-            $tokenizer = new HtmlTokenizer();
-        }
-
         if (is_string($source)) {
+            $tokenizer = new HtmlTokenizer();
             $source = $tokenizer->parse($source);
         }
 
@@ -101,12 +93,8 @@ class Node
      * @param array        $blocks  Used to redefine node content and bypass token parsing.
      * @param bool         $replace Set to true to send created Node directly to outer blocks.
      */
-    public function mountBlock(
-        string $name,
-        $source,
-        array $blocks = [],
-        bool $replace = false
-    ) {
+    public function mountBlock(string $name, $source, array $blocks = [], bool $replace = false)
+    {
         $node = new static($this->supervisor, $name, $source);
 
         if (!empty($blocks)) {
@@ -145,10 +133,9 @@ class Node
      * Recursively find a children node by it's name.
      *
      * @param string $name
-     *
      * @return Node|null
      */
-    public function findNode($name)
+    public function findNode($name): ?Node
     {
         foreach ($this->nodes as $node) {
             if ($node instanceof self && !empty($node->name)) {
@@ -168,10 +155,8 @@ class Node
     /**
      * Compile node data (inner nodes) into string.
      *
-     * @param array|null $dynamic  All outer blocks will be aggregated in this array (in compiled
-     *                             form).
+     * @param array|null $dynamic  All compiled outer blocks will be aggregated in this array .
      * @param array|null $compiled Internal complication memory (method called recursively)
-     *
      * @return string
      */
     public function compile(&$dynamic = null, &$compiled = null): string

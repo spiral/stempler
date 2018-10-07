@@ -11,6 +11,7 @@ use PHPUnit\Framework\TestCase;
 use Spiral\Stempler\Stempler;
 use Spiral\Stempler\StemplerLoader;
 use Spiral\Stempler\Syntax\DarkSyntax;
+use Spiral\Views\ViewLoader;
 
 abstract class BaseTest extends TestCase
 {
@@ -23,11 +24,13 @@ abstract class BaseTest extends TestCase
      */
     protected function compile($view)
     {
+        $loader = new ViewLoader([
+            'default'   => [__DIR__ . '/fixtures/default/'],
+            'namespace' => [__DIR__ . '/fixtures/namespace/',]
+        ]);
+
         $stempler = new Stempler(
-            new StemplerLoader([
-                'default'   => [__DIR__ . '/fixtures/default/'],
-                'namespace' => [__DIR__ . '/fixtures/namespace/',]
-            ]),
+            new StemplerLoader($loader->withExtension('php')),
             new DarkSyntax()
         );
 
@@ -45,11 +48,13 @@ abstract class BaseTest extends TestCase
      */
     protected function compileString($string)
     {
+        $loader = new ViewLoader([
+            'default'   => [__DIR__ . '/fixtures/default/'],
+            'namespace' => [__DIR__ . '/fixtures/namespace/',]
+        ]);
+
         $stempler = new Stempler(
-            new StemplerLoader([
-                'default'   => [__DIR__ . '/fixtures/default/'],
-                'namespace' => [__DIR__ . '/fixtures/namespace/',]
-            ]),
+            new StemplerLoader($loader->withExtension('php')),
             new DarkSyntax()
         );
 

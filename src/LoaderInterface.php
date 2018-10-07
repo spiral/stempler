@@ -19,7 +19,6 @@ interface LoaderInterface
      * Get source for given name.
      *
      * @param string $path
-     *
      * @return StemplerSource
      *
      * @throws LoaderExceptionInterface

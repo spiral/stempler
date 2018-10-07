@@ -4,6 +4,7 @@
  *
  * @author Wolfy-J
  */
+
 namespace Spiral\Tests\Stempler;
 
 class InheritanceTest extends BaseTest
@@ -37,8 +38,7 @@ class InheritanceTest extends BaseTest
     }
 
     /**
-     * @expectedException \Spiral\Stempler\Exception\StemplerException
-     * @expectedExceptionMessage Unable to locate view 'includes-none.php' in namespace 'default'
+     * @expectedException \Spiral\Views\Exception\LoaderException
      */
     public function testInvalidParent()
     {

@@ -14,8 +14,6 @@ use Spiral\Tokenizer\Isolator;
  * Perform html code tokenization. Class used for spiral Stempler and can be used for other html
  * related operations. HtmlTokenizer is pretty slow! Please don't forget that this is tokenizer,
  * not parser.
- *
- * @todo very old class, improvement is required
  */
 class HtmlTokenizer
 {
