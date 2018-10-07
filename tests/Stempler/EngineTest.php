@@ -38,10 +38,10 @@ class EngineTest extends BaseEngineTest
     {
         $stempler = $this->getStempler();
         $this->assertSame(
-            str_replace("\r\n","\n",'<div>
+            str_replace("\r\n", "\n", '<div>
     hello world
 </div>'),
-            str_replace("\r\n","\n",$stempler->get('pretty', new ViewContext())->render([]))
+            str_replace("\r\n", "\n", $stempler->get('pretty', new ViewContext())->render([]))
         );
     }
 
@@ -54,6 +54,22 @@ class EngineTest extends BaseEngineTest
         $this->assertSame(
             'hello Anton of Test',
             $stempler->get('other:ctx', $ctx)->render(['name' => 'Anton'])
+        );
+    }
+
+
+    /**
+     * @expectedException \Spiral\Views\Exception\RenderException
+     */
+    public function testRenderException()
+    {
+        $ctx = new ViewContext();
+        $ctx = $ctx->withDependency(new ValueDependency('name', 'Test'));
+
+        $stempler = $this->getStempler();
+        $this->assertSame(
+            'hello Anton of Test',
+            $stempler->get('other:ctx', $ctx)->render()
         );
     }
 
