@@ -18,7 +18,7 @@ class TokenizerTest extends TestCase
     public function testInput()
     {
         $tokenizer = new HtmlTokenizer(true, new Isolator());
-        $tokens = $tokenizer->parse(file_get_contents(__DIR__ . '/fixtures/htmlSample.php'));
+        $tokens = $tokenizer->parse(file_get_contents(__DIR__ . '/../fixtures/htmlSample.php'));
         $this->assertNotEmpty($tokens);
     }
 
@@ -26,7 +26,7 @@ class TokenizerTest extends TestCase
     {
         $tokenizer = new HtmlTokenizer(true, new Isolator());
 
-        $tokens = $tokenizer->parse(file_get_contents(__DIR__ . '/fixtures/htmlSample.php'));
+        $tokens = $tokenizer->parse(file_get_contents(__DIR__ . '/../fixtures/htmlSample.php'));
         $this->assertNotEmpty($tokens);
 
         $result = '';
@@ -34,14 +34,14 @@ class TokenizerTest extends TestCase
             $result .= $token[HtmlTokenizer::TOKEN_CONTENT];
         }
 
-        $this->assertSame(file_get_contents(__DIR__ . '/fixtures/htmlSample.php'), $result);
+        $this->assertSame(file_get_contents(__DIR__ . '/../fixtures/htmlSample.php'), $result);
     }
 
     public function testPersistent()
     {
         $tokenizer = new HtmlTokenizer(true, new Isolator());
 
-        $tokens = $tokenizer->parse(file_get_contents(__DIR__ . '/fixtures/htmlSample.php'));
+        $tokens = $tokenizer->parse(file_get_contents(__DIR__ . '/../fixtures/htmlSample.php'));
         $this->assertNotEmpty($tokens);
 
         $this->assertSame([
@@ -236,7 +236,7 @@ class TokenizerTest extends TestCase
     {
         $tokenizer = new HtmlTokenizer(true, new Isolator());
 
-        $tokens = $tokenizer->parse($content = file_get_contents(__DIR__ . '/fixtures/htmlSample.php'));
+        $tokens = $tokenizer->parse($content = file_get_contents(__DIR__ . '/../fixtures/htmlSample.php'));
         $this->assertNotEmpty($tokens);
 
         //Pack back!

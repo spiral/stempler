@@ -24,8 +24,8 @@ abstract class BaseTest extends TestCase
     protected function compile($view)
     {
         $loader = new ViewLoader([
-            'default'   => [__DIR__ . '/fixtures/default/'],
-            'namespace' => [__DIR__ . '/fixtures/namespace/',]
+            'default'   => [__DIR__ . '/../fixtures/default/'],
+            'namespace' => [__DIR__ . '/../fixtures/namespace/',]
         ]);
 
         $stempler = new Compiler($loader->withExtension('php'), new Syntax());
@@ -45,8 +45,8 @@ abstract class BaseTest extends TestCase
     protected function compileString($string)
     {
         $loader = new ViewLoader([
-            'default'   => [__DIR__ . '/fixtures/default/'],
-            'namespace' => [__DIR__ . '/fixtures/namespace/',]
+            'default'   => [__DIR__ . '/../fixtures/default/'],
+            'namespace' => [__DIR__ . '/../fixtures/namespace/',]
         ]);
 
         $stempler = new Compiler($loader->withExtension('php'), new Syntax());

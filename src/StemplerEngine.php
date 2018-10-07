@@ -127,12 +127,22 @@ class StemplerEngine implements EngineInterface
         // compiling body
         $content = $this->compileSource($className, $source, $context);
         $this->cache->write($key, $content);
-        $this->cache->load($key);
 
-        if (!class_exists($className, false)) {
-            // unable to invoke template thought include_once, attempting to use
-            // standard eval
-            eval("?>{$content}");
+        try {
+            $this->cache->load($key);
+
+            if (!class_exists($className, false)) {
+                // unable to invoke template thought include_once, attempting to use
+                // standard eval
+                eval("?>{$content}");
+            }
+        } catch (\Throwable $e) {
+            $ce = new CompileException($e->getMessage(), [], $e->getCode(), $e);
+            if (file_exists($key)) {
+                $ce->setLocation($key, $e->getLine());
+            }
+
+            throw $ce;
         }
 
         if (!class_exists($className, false)) {
@@ -194,7 +204,7 @@ class StemplerEngine implements EngineInterface
      * @param ContextInterface $context
      * @return string
      */
-    protected function compileSource(
+    private function compileSource(
         string $className,
         ViewSource $source,
         ContextInterface $context
@@ -216,7 +226,7 @@ class StemplerEngine implements EngineInterface
      * @param string $body
      * @return string
      */
-    protected function generateClass(string $className, string $body)
+    private function generateClass(string $className, string $body)
     {
         return "<?php
 class {$className} extends Spiral\Stempler\StemplerView 
