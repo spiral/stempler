@@ -8,6 +8,8 @@
 
 namespace Spiral\Stempler;
 
+use Spiral\Views\LoaderInterface;
+
 /**
  * Provides ability to compose multiple html files together.
  */

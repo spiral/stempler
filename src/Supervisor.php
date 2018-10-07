@@ -11,9 +11,10 @@ namespace Spiral\Stempler;
 use Spiral\Stempler\Behaviour\ExtendLayout;
 use Spiral\Stempler\Behaviour\IncludeBlock;
 use Spiral\Stempler\Behaviour\InnerBlock;
-use Spiral\Stempler\Exception\LoaderExceptionInterface;
 use Spiral\Stempler\Exception\StemplerException;
 use Spiral\Stempler\Importer\Stopper;
+use Spiral\Views\LoaderInterface;
+use Spiral\Views\ViewSource;
 
 /**
  * Supervisors used to control node behaviours and syntax.
@@ -148,11 +149,9 @@ class Supervisor implements SupervisorInterface
             $path = str_replace('.', '/', $path);
         }
 
-        try {
-            $context = $this->loader->getSource($path);
-        } catch (LoaderExceptionInterface $e) {
-            throw new StemplerException($e->getMessage(), $token, 0, $e);
-        }
+
+        $context = $this->loader->load($path);
+
 
         try {
             //In isolation
@@ -177,13 +176,13 @@ class Supervisor implements SupervisorInterface
     /**
      * Clarify exeption with it's actual location.
      *
-     * @param StemplerSource    $sourceContext
+     * @param ViewSource        $source
      * @param StemplerException $exception
      *
      * @return StemplerException
      */
     protected function clarifyException(
-        StemplerSource $sourceContext,
+        ViewSource $source,
         StemplerException $exception
     ) {
         if (empty($exception->getToken())) {
@@ -195,13 +194,13 @@ class Supervisor implements SupervisorInterface
         $target = explode("\n", $exception->getToken()[HtmlTokenizer::TOKEN_CONTENT])[0];
 
         //Let's try to locate place where exception was used
-        $lines = explode("\n", $sourceContext->getCode());
+        $lines = explode("\n", $source->getCode());
 
         foreach ($lines as $number => $line) {
             if (strpos($line, $target) !== false) {
                 //We found where token were used (!!)
                 $exception->setLocation(
-                    $sourceContext->getFilename(),
+                    $source->getFilename(),
                     $number + 1
                 );
 
