@@ -7,7 +7,7 @@
 
 namespace Spiral\Stempler;
 
-use Spiral\Files\FileManager;
+use Spiral\Files\Files;
 use Spiral\Files\FilesInterface;
 use Spiral\Stempler\Exception\LoaderException;
 
@@ -45,7 +45,7 @@ class StemplerLoader implements LoaderInterface
     public function __construct(array $namespaces, FilesInterface $files = null)
     {
         $this->namespaces = $namespaces;
-        $this->files = $files ?? new FileManager();
+        $this->files = $files ?? new Files();
     }
 
     /**
