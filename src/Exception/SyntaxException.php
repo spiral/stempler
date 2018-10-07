@@ -11,7 +11,7 @@ namespace Spiral\Stempler\Exception;
 /**
  * Syntax based exceptions.
  */
-class SyntaxException extends StemplerException
+class SyntaxException extends CompileException
 {
 
 }

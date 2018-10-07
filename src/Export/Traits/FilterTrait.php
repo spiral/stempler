@@ -6,9 +6,7 @@
  * @author    Anton Titov (Wolfy-J)
  */
 
-namespace Spiral\Stempler\Exporter;
-
-use Spiral\Stempler\ExporterInterface;
+namespace Spiral\Stempler\Export\Traits;
 
 /**
  * Exported has to export (obviously) specified blocks into content. Every exporter should
@@ -22,7 +20,7 @@ use Spiral\Stempler\ExporterInterface;
  * Prefix will allow you to match some attributes to specific spot, use exclude pattern (with star)
  * to remove attributes like that from other places.
  */
-abstract class AbstractExporter implements ExporterInterface
+trait FilterTrait
 {
     /**
      * Get blocks matching specified condition.

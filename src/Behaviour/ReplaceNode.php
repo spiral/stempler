@@ -9,60 +9,56 @@
 namespace Spiral\Stempler\Behaviour;
 
 use Spiral\Stempler\BehaviourInterface;
+use Spiral\Stempler\CompilerInterface;
 use Spiral\Stempler\HtmlTokenizer;
 use Spiral\Stempler\Node;
-use Spiral\Stempler\Supervisor;
 
 /**
  * Replaces specified block (including tag) with external node, automatically uses inner tag
  * content as "context" block and all other tag attributes as additional node child.
  */
-class IncludeBlock implements BehaviourInterface
+final class ReplaceNode implements BehaviourInterface
 {
-    /**
-     * Name of block used to represent import context.
-     */
-    const CONTEXT_BLOCK = 'context';
+    // all inner block context goes inside this element
+    private const CONTEXT_BLOCK = 'context';
+
+    /** @var CompilerInterface */
+    private $compiler ;
 
     /**
-     * Path to be included (see Supervisor createNode).
+     * External node path.
      *
      * @var string
      */
-    protected $path = '';
+    private $path = '';
 
     /**
      * Import context includes everything between opening and closing tag.
      *
      * @var array
      */
-    protected $context = [];
+    private $context = [];
 
     /**
      * Context token.
      *
      * @var array
      */
-    protected $token = [];
+    private $token = [];
 
     /**
-     * @var Supervisor
-     */
-    protected $supervisor = null;
-
-    /**
-     * @param Supervisor $supervisor
-     * @param string     $path
-     * @param array      $context
-     * @param array      $token
+     * @param CompilerInterface $compiler
+     * @param string            $path
+     * @param array             $context
+     * @param array             $token
      */
     public function __construct(
-        Supervisor $supervisor,
+        CompilerInterface $compiler,
         string $path,
         array $context,
         array $token = []
     ) {
-        $this->supervisor = $supervisor;
+        $this->compiler = $compiler;
         $this->path = $path;
 
         $this->context = $context;
@@ -77,7 +73,7 @@ class IncludeBlock implements BehaviourInterface
     public function createNode(): Node
     {
         //Content of node to be imported
-        $node = $this->supervisor->createNode($this->path, $this->token);
+        $node = $this->compiler->createNode($this->path, $this->token);
 
         //Let's register user defined blocks (context and attributes) as placeholders
         $node->mountBlock(
@@ -98,17 +94,16 @@ class IncludeBlock implements BehaviourInterface
         //Outer blocks (usually user attributes) can be exported to template using non default
         //rendering technique, for example every "extra" attribute can be passed to specific
         //template location. Stempler to decide.
-        foreach ($this->supervisor->getSyntax()->blockExporters() as $exporter) {
+        foreach ($this->compiler->getExports() as $exporter) {
             /** @var array $dynamic */
             $content = $exporter->mountBlocks($content, $dynamic);
         }
 
         //Let's parse complied content without any imports (to prevent collision)
-        $supervisor = clone $this->supervisor;
-        $supervisor->flushImporters();
+        $compiler = clone $this->compiler;
 
         //Outer content must be protected using unique names
-        $rebuilt = new Node($supervisor, $supervisor->uniquePlaceholder(), $content);
+        $rebuilt = new Node($compiler, $compiler->generateID(), $content);
 
         if (!empty($contextBlock = $rebuilt->findNode($contextID))) {
             //Now we can mount our content block
@@ -130,22 +125,22 @@ class IncludeBlock implements BehaviourInterface
             $context .= $token[HtmlTokenizer::TOKEN_CONTENT];
         }
 
-        return new Node($this->supervisor, $this->supervisor->uniquePlaceholder(), $context);
+        return new Node($this->compiler, $this->compiler->generateID(), $context);
     }
 
     /**
      * Create placeholder block (to be injected with inner blocks defined in context).
      *
-     * @param string      $name
+     * @param string $name
      * @param string|null $blockID
      *
      * @return string
      */
     protected function createPlaceholder(string $name, string &$blockID = null): string
     {
-        $blockID = $name . '-' . $this->supervisor->uniquePlaceholder();
+        $blockID = $name . '-' . $this->compiler->generateID();
 
-        //Short block declaration syntax
+        //Short block declaration syntax (match with syntax)?
         return '${' . $blockID . '}';
     }
 }

@@ -6,27 +6,21 @@
  * @author    Anton Titov (Wolfy-J)
  */
 
-namespace Spiral\Stempler\Importer;
+namespace Spiral\Stempler\Import;
 
-use Spiral\Stempler\ImporterInterface;
+use Spiral\Stempler\ImportInterface;
 
 /**
- * {@inheritdoc}
- *
  * Simple aliased based import, declared relation between tag name and it's location. Element alias
  * must be located in "as" attribute caused import, location in "path" attribute (will be passed
  * thought Stempler->fetchLocation()).
  */
-class Aliaser implements ImporterInterface
+class Alias implements ImportInterface
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $alias = '';
 
-    /**
-     * @var mixed
-     */
+    /** @var mixed */
     private $path = null;
 
     /**
@@ -49,7 +43,7 @@ class Aliaser implements ImporterInterface
     /**
      * {@inheritdoc}
      */
-    public function resolvePath(string $element, array $token)
+    public function resolvePath(string $element, array $token): ?string
     {
         return $this->path;
     }

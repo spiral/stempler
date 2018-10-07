@@ -12,7 +12,7 @@ namespace Spiral\Stempler;
  * ImportInterface used by Stempler to define what tags should be treated as includes and how to
  * resolve their view or namespace.
  */
-interface ImporterInterface
+interface ImportInterface
 {
     /**
      * Check if element (tag) has to be imported.
@@ -32,5 +32,5 @@ interface ImporterInterface
      *
      * @return string|null
      */
-    public function resolvePath(string $element, array $token);
+    public function resolvePath(string $element, array $token): ?string;
 }

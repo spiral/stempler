@@ -11,8 +11,6 @@ namespace Spiral\Stempler;
 /**
  * Behaviours created by node supervisor to explain html Nodes how to treat some template specific
  * constructions, such as block, include or extends commands.
- *
- * @todo stupid legacy interface
  */
 interface BehaviourInterface
 {

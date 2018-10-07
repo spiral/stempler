@@ -6,61 +6,27 @@
  * @author    Anton Titov (Wolfy-J)
  */
 
-namespace Spiral\Stempler\Syntax;
+namespace Spiral\Stempler;
 
 use Spiral\Stempler\Exception\SyntaxException;
-use Spiral\Stempler\Exporter\AttributesExporter;
-use Spiral\Stempler\HtmlTokenizer;
-use Spiral\Stempler\ImporterInterface;
-use Spiral\Stempler\Importer\Aliaser;
-use Spiral\Stempler\Importer\Bundler;
-use Spiral\Stempler\Importer\Prefixer;
-use Spiral\Stempler\Importer\Stopper;
-use Spiral\Stempler\Supervisor;
-use Spiral\Stempler\SyntaxInterface;
+use Spiral\Stempler\Import;
 
 /**
  * Default Stempler syntax - Woo. Provides ability to define blocks, extends and includes.
  */
 class DarkSyntax implements SyntaxInterface
 {
-    /**
-     * Path attribute in extends and other nodes.
-     */
-    const PATH_ATTRIBUTE = 'path';
-
-    /**
-     * Short tags expression, usually used inside attributes and etc.
-     */
-    const SHORT_TAGS = '/\${(?P<name>[a-z0-9_\.\-]+)(?: *\| *(?P<default>[^}]+) *)?}/i';
-
-    /**
-     * @var bool
-     */
-    private $strict = true;
-
-    /**
-     * Stempler syntax options, syntax and names. Every option is required.
-     *
-     * @todo Something with DTD? Seems compatible.
-     * @var array
-     */
-    protected $constructions = [
+    private const PATH_ATTRIBUTE = 'path';
+    private const SHORT_TAGS     = '/\${(?P<name>[a-z0-9_\.\-]+)(?: *\| *(?P<default>[^}]+) *)?}/i';
+    private const SYNTAX         = [
         self::TYPE_BLOCK     => ['block:', 'section:', 'yield:', 'define:'],
-        self::TYPE_EXTENDS   => [
-            'extends:',
-            'extends',
-            'dark:extends',
-            'layout:extends'
-        ],
-        self::PATH_ATTRIBUTE => [
-            'path',
-            'layout',
-            'dark:path',
-            'dark:layout'
-        ],
+        self::TYPE_EXTENDS   => ['extends:', 'extends', 'dark:extends', 'layout:extends'],
+        self::PATH_ATTRIBUTE => ['path', 'layout', 'dark:path', 'dark:layout'],
         self::TYPE_IMPORTER  => ['dark:use', 'use', 'node:use', 'stempler:use']
     ];
+
+    /** @var bool */
+    private $strict = true;
 
     /**
      * @param bool $strict
@@ -73,10 +39,30 @@ class DarkSyntax implements SyntaxInterface
     /**
      * {@inheritdoc}
      */
+    public function isStrict(): bool
+    {
+        return $this->strict;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function parseBlock(string $content): ?array
+    {
+        if (preg_match(self::SHORT_TAGS, $content, $matches)) {
+            return $matches;
+        }
+
+        return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function tokenType(array $token, &$name = null): string
     {
         $name = $token[HtmlTokenizer::TOKEN_NAME];
-        foreach ($this->constructions as $type => $prefixes) {
+        foreach (self::SYNTAX as $type => $prefixes) {
             foreach ($prefixes as $prefix) {
                 if (strpos($name, $prefix) === 0) {
                     //We found prefix pointing to needed behaviour
@@ -93,44 +79,28 @@ class DarkSyntax implements SyntaxInterface
     /**
      * {@inheritdoc}
      */
-    public function resolvePath(array $token): string
+    public function fetchPath(array $token): string
     {
-        //Needed to fetch token name
+        // Needed to fetch token name
         $this->tokenType($token, $name);
 
-        foreach ($this->constructions[self::PATH_ATTRIBUTE] as $attribute) {
+        foreach (self::SYNTAX[self::PATH_ATTRIBUTE] as $attribute) {
             if (isset($token[HtmlTokenizer::TOKEN_ATTRIBUTES][$attribute])) {
                 return $token[HtmlTokenizer::TOKEN_ATTRIBUTES][$attribute];
             }
         }
 
-        //By default we can count token name as needed path
+        // By default we can count token name as needed path
         return $name;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function isStrict(): bool
-    {
-        return $this->strict;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function shortTags(): string
-    {
-        return self::SHORT_TAGS;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function createImporter(array $token, Supervisor $supervisor): ImporterInterface
+    public function createImport(array $token, CompilerInterface $compiler): ImportInterface
     {
         //Fetching path
-        $path = $this->resolvePath($token);
+        $path = $this->fetchPath($token);
         if (empty($attributes = $token[HtmlTokenizer::TOKEN_ATTRIBUTES])) {
             throw new SyntaxException("Invalid import element syntax, attributes missing", $token);
         }
@@ -141,7 +111,7 @@ class DarkSyntax implements SyntaxInterface
         if (isset($attributes['bundle'])) {
             $path = $attributes['bundle'];
 
-            return new Bundler($supervisor, $path, $token);
+            return new Import\Bundle($compiler->createNode($path, $token));
         }
 
         /**
@@ -151,7 +121,7 @@ class DarkSyntax implements SyntaxInterface
         if (isset($attributes['element']) || isset($attributes['as'])) {
             $alias = isset($attributes['element']) ? $attributes['element'] : $attributes['as'];
 
-            return new Aliaser($alias, $path);
+            return new Import\Alias($alias, $path);
         }
 
         //Now we have to decide what importer to use
@@ -166,23 +136,13 @@ class DarkSyntax implements SyntaxInterface
                 ? $attributes['namespace'] . ':'
                 : $attributes['prefix'];
 
-            return new Prefixer($prefix, $path);
+            return new Import\Prefix($prefix, $path);
         }
 
         if (isset($attributes['stop'])) {
-            return new Stopper($attributes['stop']);
+            return new Import\Stop($attributes['stop']);
         }
 
         throw new SyntaxException("Undefined use element", $token);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function blockExporters(): array
-    {
-        return [
-            new AttributesExporter()
-        ];
     }
 }

@@ -11,10 +11,10 @@ namespace Spiral\Stempler\Exception;
 /**
  * Error caused by strict mode enabled by node supervisor.
  *
- * @see SupervisorInterface
+ * @see CompilerInterface
  * @see Node
  */
-class StrictModeException extends StemplerException
+class StrictSyntaxException extends CompileException
 {
 
 }

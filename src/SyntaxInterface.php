@@ -22,9 +22,6 @@ interface SyntaxInterface
     public const TYPE_INCLUDE  = 'include';
     public const TYPE_NONE     = 'none';
 
-    // Must be implemented
-    public const TYPE_DIRECTIVE = 'directive';
-
     /**
      * In strict mode every unpaired close tag or other html error will raise an
      * StrictModeException.
@@ -34,19 +31,18 @@ interface SyntaxInterface
     public function isStrict(): bool;
 
     /**
-     * Regular expression which defined short node tag, must declare named pattern with "name" and
-     * "default" keys
+     * Parse string to identify location of short block tag. Syntax specific.
      *
-     * @return string
+     * @param string $content
+     * @return array
      */
-    public function shortTags(): string;
+    public function parseBlock(string $content): ?array;
 
     /**
      * Detect token behaviour.
      *
      * @param array  $token
      * @param string $name Node name stripper from token name.
-     *
      * @return string
      */
     public function tokenType(array $token, &$name = null): string;
@@ -55,26 +51,20 @@ interface SyntaxInterface
      * Resolve include or extend location based on given token.
      *
      * @param array $token
-     *
      * @return string
-     * @throws SyntaxException
-     */
-    public function resolvePath(array $token): string;
-
-    /**
-     * @param array      $token
-     * @param Supervisor $supervisor
-     *
-     * @return ImporterInterface
      *
      * @throws SyntaxException
      */
-    public function createImporter(array $token, Supervisor $supervisor): ImporterInterface;
+    public function fetchPath(array $token): string;
 
     /**
-     * Get all syntax block exporters.
+     * @param array             $token
+     * @param CompilerInterface $compiler
+     * @return ImportInterface
      *
-     * @return ExporterInterface[]
+     * @throws SyntaxException
      */
-    public function blockExporters(): array;
+    public function createImport(array $token, CompilerInterface $compiler): ImportInterface;
+
+
 }

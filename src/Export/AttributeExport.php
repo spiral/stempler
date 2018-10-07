@@ -6,15 +6,20 @@
  * @author    Anton Titov (Wolfy-J)
  */
 
-namespace Spiral\Stempler\Exporter;
+namespace Spiral\Stempler\Export;
+
+use Spiral\Stempler\Export\Traits\FilterTrait;
+use Spiral\Stempler\ExportInterface;
 
 /**
  * Export user defined (outer) blocks as tag attributes.
  *
  * Use following pattern: node:attributes[="condition"]
  */
-class AttributesExporter extends AbstractExporter
+class AttributeExport implements ExportInterface
 {
+    use FilterTrait;
+
     /**
      * {@inheritdoc}
      */
@@ -40,7 +45,11 @@ class AttributesExporter extends AbstractExporter
                 }
 
                 //Injecting
-                $content = str_replace($replace, $inject ? ' ' . join(' ', $inject) : '', $content);
+                $content = str_replace(
+                    $replace,
+                    $inject ? ' ' . join(' ', $inject) : '',
+                    $content
+                );
             }
         }
 

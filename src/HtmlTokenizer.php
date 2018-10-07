@@ -15,7 +15,7 @@ use Spiral\Tokenizer\Isolator;
  * related operations. HtmlTokenizer is pretty slow! Please don't forget that this is tokenizer,
  * not parser.
  */
-class HtmlTokenizer
+final class HtmlTokenizer
 {
     /**
      * Current tokenizer position. Tokenizer is a linear processor (no regular expression is

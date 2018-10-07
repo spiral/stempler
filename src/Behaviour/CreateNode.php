@@ -13,11 +13,9 @@ use Spiral\Stempler\BehaviourInterface;
 /**
  * Defines new block.
  */
-class InnerBlock implements BehaviourInterface
+final class CreateNode implements BehaviourInterface
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $name = '';
 
     /**
@@ -29,11 +27,9 @@ class InnerBlock implements BehaviourInterface
     }
 
     /**
-     * Created block name.
-     *
      * @return string
      */
-    public function blockName(): string
+    public function getName(): string
     {
         return $this->name;
     }

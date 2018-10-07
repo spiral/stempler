@@ -6,16 +6,16 @@
  * @author    Anton Titov (Wolfy-J)
  */
 
-namespace Spiral\Stempler\Importer;
+namespace Spiral\Stempler\Import;
 
-use Spiral\Stempler\ImporterInterface;
+use Spiral\Stempler\ImportInterface;
 
 /**
  * Namespace importer provides ability to include multiple elements using common namespace prefix.
  *
  * Example: namespace:folder/* => namespace:folder/name
  */
-class Prefixer implements ImporterInterface
+class Prefix implements ImportInterface
 {
     /**
      * @var string
@@ -50,7 +50,7 @@ class Prefixer implements ImporterInterface
     /**
      * {@inheritdoc}
      */
-    public function resolvePath(string $element, array $token)
+    public function resolvePath(string $element, array $token): ?string
     {
         $element = substr($element, strlen($this->prefix));
 

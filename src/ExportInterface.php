@@ -13,12 +13,11 @@ namespace Spiral\Stempler;
  * source, for example it can convert all additional include attributes into valid tag attributes,
  * or create json/php array using them.
  */
-interface ExporterInterface
+interface ExportInterface
 {
     /**
      * @param string $content
      * @param array  $inject
-     *
      * @return string
      */
     public function mountBlocks(string $content, array $inject): string;

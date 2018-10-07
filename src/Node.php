@@ -8,17 +8,25 @@
 
 namespace Spiral\Stempler;
 
-use Spiral\Stempler\Behaviour\ExtendLayout;
-use Spiral\Stempler\Behaviour\IncludeBlock;
-use Spiral\Stempler\Behaviour\InnerBlock;
-use Spiral\Stempler\Exception\StrictModeException;
+use Spiral\Stempler\Behaviour\CreateNode;
+use Spiral\Stempler\Behaviour\ExtendParent;
+use Spiral\Stempler\Behaviour\ReplaceNode;
+use Spiral\Stempler\Exception\StrictSyntaxException;
 
 /**
  * Stempler Node represents simple XML like tree of blocks defined by behaviours provided by it's
  * supervisor. Node utilizes HtmlTokenizer to create set of tokens being feeded to supervisor.
  */
-class Node
+final class Node
 {
+    /**
+     * NodeSupervisor responsible for resolve tag behaviours.
+     *
+     * @invisible
+     * @var CompilerInterface
+     */
+    protected $compiler = null;
+
     /**
      * Node name (usually related to block name).
      *
@@ -51,21 +59,13 @@ class Node
     private $outers = [];
 
     /**
-     * NodeSupervisor responsible for resolve tag behaviours.
-     *
-     * @invisible
-     * @var SupervisorInterface
+     * @param CompilerInterface $supervisor
+     * @param string            $name
+     * @param string|array      $source String content or array of html tokens.
      */
-    protected $supervisor = null;
-
-    /**
-     * @param SupervisorInterface $supervisor
-     * @param string              $name
-     * @param string|array        $source String content or array of html tokens.
-     */
-    public function __construct(SupervisorInterface $supervisor, string $name, $source = [])
+    public function __construct(CompilerInterface $supervisor, string $name, $source = [])
     {
-        $this->supervisor = $supervisor;
+        $this->compiler = $supervisor;
         $this->name = $name;
 
         if (is_string($source)) {
@@ -77,11 +77,11 @@ class Node
     }
 
     /**
-     * @return SupervisorInterface
+     * @return CompilerInterface
      */
-    public function getSupervisor(): SupervisorInterface
+    public function getCompiler(): CompilerInterface
     {
-        return $this->supervisor;
+        return $this->compiler;
     }
 
     /**
@@ -95,7 +95,7 @@ class Node
      */
     public function mountBlock(string $name, $source, array $blocks = [], bool $replace = false)
     {
-        $node = new static($this->supervisor, $name, $source);
+        $node = new static($this->compiler, $name, $source);
 
         if (!empty($blocks)) {
             $node->nodes = $blocks;
@@ -135,7 +135,7 @@ class Node
      * @param string $name
      * @return Node|null
      */
-    public function findNode($name): ?Node
+    public function findNode(string $name): ?Node
     {
         foreach ($this->nodes as $node) {
             if ($node instanceof self && !empty($node->name)) {
@@ -159,7 +159,7 @@ class Node
      * @param array|null $compiled Internal complication memory (method called recursively)
      * @return string
      */
-    public function compile(&$dynamic = null, &$compiled = null): string
+    public function compile(array &$dynamic = null, array &$compiled = null): string
     {
         if (!is_array($dynamic)) {
             $dynamic = [];
@@ -215,7 +215,7 @@ class Node
      *
      * @param array $tokens
      *
-     * @throws StrictModeException
+     * @throws StrictSyntaxException
      */
     protected function parseTokens(array $tokens)
     {
@@ -244,9 +244,10 @@ class Node
                         break;
 
                     case HtmlTokenizer::TAG_CLOSE:
-                        if ($this->supervisor->getSyntax()->isStrict()) {
-                            throw new StrictModeException(
-                                "Unpaired close tag '{$token[HtmlTokenizer::TOKEN_NAME]}'.", $token
+                        if ($this->compiler->getSyntax()->isStrict()) {
+                            throw new StrictSyntaxException(
+                                "Unpaired close tag '{$token[HtmlTokenizer::TOKEN_NAME]}'.",
+                                $token
                             );
                         }
                         break;
@@ -301,7 +302,7 @@ class Node
      */
     protected function mountToken(array $token, array $content = [], array $closeToken = [])
     {
-        $behaviour = $this->supervisor->tokenBehaviour($token, $content, $this);
+        $behaviour = $this->compiler->defineToken($token, $content, $this);
 
         //Let's check token behaviour to understand how to handle this token
         if ($behaviour === BehaviourInterface::SKIP_TOKEN) {
@@ -346,8 +347,8 @@ class Node
             $content = $plainContent;
         }
 
-        //Looking for short tag definitions (${title|DEFAULT})
-        if (preg_match($this->supervisor->getSyntax()->shortTags(), $content, $matches)) {
+        $matches = $this->compiler->getSyntax()->parseBlock($content);
+        if (!empty($matches)) {
             $chunks = explode($matches[0], $content);
 
             //We expecting first chunk to be string (before block)
@@ -381,9 +382,9 @@ class Node
      */
     protected function applyBehaviour(BehaviourInterface $behaviour, array $content = [])
     {
-        if ($behaviour instanceof ExtendLayout) {
+        if ($behaviour instanceof ExtendParent) {
             //We have to copy nodes from parent
-            $this->nodes = $behaviour->parentNode()->nodes;
+            $this->nodes = $behaviour->getNode()->nodes;
 
             //Indication that this node has parent, meaning we have to handle blocks little
             //bit different way
@@ -396,19 +397,15 @@ class Node
             return;
         }
 
-        if ($behaviour instanceof InnerBlock) {
-            $this->mountBlock($behaviour->blockName(), $content);
+        if ($behaviour instanceof CreateNode) {
+            $this->mountBlock($behaviour->getName(), $content);
 
             return;
         }
 
-        if ($behaviour instanceof IncludeBlock) {
+        if ($behaviour instanceof ReplaceNode) {
             $this->nodes[] = $behaviour->createNode();
         }
-
-        /**
-         * More behaviours can be added over time.
-         */
     }
 
     /**

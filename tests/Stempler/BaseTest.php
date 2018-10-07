@@ -8,8 +8,8 @@
 namespace Spiral\Tests\Stempler;
 
 use PHPUnit\Framework\TestCase;
-use Spiral\Stempler\Stempler;
-use Spiral\Stempler\Syntax\DarkSyntax;
+use Spiral\Stempler\Compiler;
+use Spiral\Stempler\DarkSyntax;
 use Spiral\Views\ViewLoader;
 
 abstract class BaseTest extends TestCase
@@ -28,7 +28,7 @@ abstract class BaseTest extends TestCase
             'namespace' => [__DIR__ . '/fixtures/namespace/',]
         ]);
 
-        $stempler = new Stempler($loader->withExtension('php'), new DarkSyntax());
+        $stempler = new Compiler($loader->withExtension('php'), new DarkSyntax());
 
         $lines = explode("\n", self::normalizeEndings($stempler->compile($view)));
 
@@ -49,13 +49,12 @@ abstract class BaseTest extends TestCase
             'namespace' => [__DIR__ . '/fixtures/namespace/',]
         ]);
 
-        $stempler = new Stempler($loader->withExtension('php'), new DarkSyntax());
+        $stempler = new Compiler($loader->withExtension('php'), new DarkSyntax());
 
         $lines = explode("\n", self::normalizeEndings($stempler->compileString($string)));
 
         return array_values(array_map('trim', array_filter($lines, 'trim')));
     }
-
 
     /**
      * Normalize string endings to avoid EOL problem. Replace \n\r and multiply new lines with

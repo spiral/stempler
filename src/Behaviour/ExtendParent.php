@@ -10,32 +10,20 @@ namespace Spiral\Stempler\Behaviour;
 
 use Spiral\Stempler\BehaviourInterface;
 use Spiral\Stempler\HtmlTokenizer;
-use Spiral\Stempler\ImporterInterface;
 use Spiral\Stempler\Node;
-use Spiral\Stempler\Supervisor;
 
 /**
  * Points node to it's parent.
  */
-class ExtendLayout implements BehaviourInterface
+final class ExtendParent implements BehaviourInterface
 {
-    /**
-     * Parent (extended) node, treat it as page or element layout.
-     *
-     * @var Node
-     */
+    /** @var Node */
     private $parent = null;
 
-    /**
-     * Attributes defined using extends tag.
-     *
-     * @var array
-     */
+    /** @var array */
     private $attributes = [];
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $token = [];
 
     /**
@@ -54,24 +42,9 @@ class ExtendLayout implements BehaviourInterface
      *
      * @return Node
      */
-    public function parentNode(): Node
+    public function getNode(): Node
     {
         return $this->parent;
-    }
-
-    /**
-     * Every importer defined in parent (extended node).
-     *
-     * @return ImporterInterface[]
-     */
-    public function parentImports(): array
-    {
-        $supervisor = $this->parent->getSupervisor();
-        if (!$supervisor instanceof Supervisor) {
-            return [];
-        }
-
-        return $supervisor->getImporters();
     }
 
     /**

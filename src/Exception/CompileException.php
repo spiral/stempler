@@ -12,11 +12,9 @@ namespace Spiral\Stempler\Exception;
  * StemplerException has ability to specify context token which will can used to define location
  * of html code caused error.
  */
-class StemplerException extends \RuntimeException
+class CompileException extends \Spiral\Views\Exception\CompileException
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     private $token = [];
 
     /**
