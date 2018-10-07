@@ -1,7 +1,7 @@
 {
   "name": "spiral/stempler",
   "type": "library",
-  "description": "Stempler, html markup processor",
+  "description": "Stempler, HTML markup processor and template engine",
   "license": "MIT",
   "authors": [
     {
@@ -10,7 +10,7 @@
     }
   ],
   "require": {
-    "php": "^7.0",
+    "php": "^7.1",
     "spiral/common": "^1.0",
     "spiral/tokenizer": "^1.0"
   },
@@ -20,12 +20,12 @@
   },
   "autoload": {
     "psr-4": {
-      "Spiral\\": "source/Spiral/"
+      "Spiral\\Stempler\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Spiral\\Tests\\": "tests/"
+      "Spiral\\Stempler\\Tests\\": "tests/Stempler/"
     }
   }
 }
