@@ -14,6 +14,7 @@ use Spiral\Config\Patch\AppendPatch;
 use Spiral\Core\Bootloader\Bootloader;
 use Spiral\Core\FactoryInterface;
 use Spiral\Stempler\Config\StemplerConfig;
+use Spiral\Stempler\Processor\PrettifyProcessor;
 use Spiral\Stempler\StemplerCache;
 use Spiral\Stempler\StemplerEngine;
 use Spiral\Views\Config\ViewsConfig;
@@ -23,7 +24,7 @@ class StemplerBootloader extends Bootloader
 {
     const BOOT = true;
 
-    const BINDINGS = [
+    const SINGLETONS = [
         StemplerEngine::class => [self::class, 'stemplerEngine']
     ];
 
@@ -39,7 +40,7 @@ class StemplerBootloader extends Bootloader
                 ContextProcessor::class
             ],
             'postProcessors' => [
-
+                PrettifyProcessor::class
             ]
         ]);
 

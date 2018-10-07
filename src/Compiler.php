@@ -45,6 +45,14 @@ final class Compiler implements CompilerInterface
     }
 
     /**
+     * @return LoaderInterface
+     */
+    public function getLoader(): LoaderInterface
+    {
+        return $this->loader;
+    }
+
+    /**
      * Get unique placeholder name, unique names are required in some cases to correctly process
      * includes and etc.
      *

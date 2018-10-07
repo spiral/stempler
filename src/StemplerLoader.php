@@ -67,6 +67,8 @@ class StemplerLoader implements LoaderInterface
      */
     public function load(string $path): ViewSource
     {
+        // todo: change it to load only when needed
+
         return $this->process($this->loader->load($path), $this->context);
     }
 

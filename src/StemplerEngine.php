@@ -14,6 +14,7 @@ use Spiral\Views\Exception\EngineException;
 use Spiral\Views\LoaderInterface;
 use Spiral\Views\ProcessorInterface;
 use Spiral\Views\ViewInterface;
+use Spiral\Views\ViewSource;
 
 class StemplerEngine implements EngineInterface
 {
@@ -25,7 +26,7 @@ class StemplerEngine implements EngineInterface
     /** @var LoaderInterface|null */
     private $loader = null;
 
-    /** @var CompilerInterface|null */
+    /** @var Compiler|null */
     private $compiler = null;
 
     /** @var ProcessorInterface[] */
@@ -67,7 +68,7 @@ class StemplerEngine implements EngineInterface
         $engine->loader = $loader->withExtension(static::EXTENSION);
 
         $engine->compiler = new Compiler(
-            new StemplerLoader($loader, $this->processors),
+            new StemplerLoader($engine->loader, $this->processors),
             new Syntax()
         );
 
@@ -87,11 +88,40 @@ class StemplerEngine implements EngineInterface
     }
 
     /**
+     * Return compiler locked into specific context.
+     *
+     * @param ContextInterface $context
+     * @return CompilerInterface
+     */
+    public function getCompiler(ContextInterface $context): CompilerInterface
+    {
+        if (empty($this->compiler)) {
+            throw new EngineException("No associated compiler found.");
+        }
+
+        $this->compiler->getLoader()->setContext($context);
+
+        return $this->compiler;
+    }
+
+    /**
      * @inheritdoc
      */
     public function compile(string $path, ContextInterface $context)
     {
+        $source = $this->getLoader()->load($path);
 
+        $content = $this->getCompiler($context)->compile($this->normalize($source));
+
+        $source = $source->withCode($content);
+
+        foreach ($this->postProcessors as $processor) {
+            $source = $processor->process($source, $context);
+        }
+
+        return $source->getCode();
+
+        //todo: map exception
     }
 
     /**
@@ -99,7 +129,6 @@ class StemplerEngine implements EngineInterface
      */
     public function reset(string $path, ContextInterface $context)
     {
-
     }
 
     /**
@@ -107,6 +136,15 @@ class StemplerEngine implements EngineInterface
      */
     public function get(string $path, ContextInterface $context): ViewInterface
     {
-        return null;
+        return $this->compile($path, $context);
+    }
+
+    /**
+     * @param ViewSource $source
+     * @return string
+     */
+    protected function normalize(ViewSource $source): string
+    {
+        return sprintf("%s:%s", $source->getNamespace(), $source->getName());
     }
 }
