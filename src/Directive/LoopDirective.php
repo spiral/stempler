@@ -56,7 +56,7 @@ final class LoopDirective extends AbstractDirective
      * @param Directive $directive
      * @return string
      */
-    public static function renderForeach(Directive $directive): string
+    public function renderForeach(Directive $directive): string
     {
         return sprintf("<?php foreach(%s): ?>", $directive->body);
     }
@@ -65,7 +65,7 @@ final class LoopDirective extends AbstractDirective
      * @param Directive $directive
      * @return string
      */
-    public static function renderEndforeach(Directive $directive): string
+    public function renderEndforeach(Directive $directive): string
     {
         return '<?php endforeach; ?>';
     }
@@ -74,7 +74,7 @@ final class LoopDirective extends AbstractDirective
      * @param Directive $directive
      * @return string
      */
-    protected function renderBreak(Directive $directive): string
+    public function renderBreak(Directive $directive): string
     {
         if (isset($directive->values[0])) {
             return sprintf('<?php break %s; ?>', $directive->values[0]);
@@ -87,7 +87,7 @@ final class LoopDirective extends AbstractDirective
      * @param Directive $directive
      * @return string
      */
-    protected function renderContinue(Directive $directive): string
+    public function renderContinue(Directive $directive): string
     {
         if (isset($directive->values[0])) {
             return sprintf('<?php continue %s; ?>', $directive->values[0]);
