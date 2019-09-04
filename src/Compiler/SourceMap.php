@@ -30,6 +30,27 @@ final class SourceMap implements \Serializable
     private $sourceCache = null;
 
     /**
+     * Get all template paths involved in final template.
+     *
+     * @return array
+     */
+    public function getPaths(): array
+    {
+        $paths = [];
+
+        // We can scan top level only
+
+        /** @var Location $loc */
+        foreach ($this->lines as $line) {
+            if (!in_array($this->paths[$line[1]], $paths, true)) {
+                $paths[] = $this->paths[$line[1]];
+            }
+        }
+
+        return $paths;
+    }
+
+    /**
      * Calculate the location of all closest nodes based on a line number in generated source. Recursive until top root
      * template.
      *

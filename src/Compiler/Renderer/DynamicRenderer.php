@@ -28,13 +28,13 @@ final class DynamicRenderer implements Compiler\RendererInterface
     private $directives = [];
 
     /**
-     * DynamicRenderer constructor.
-     *
      * @param string $defaultFilter
+     * @param array  $directives
      */
-    public function __construct(string $defaultFilter = self::DEFAULT_FILTER)
+    public function __construct(string $defaultFilter = self::DEFAULT_FILTER, array $directives = [])
     {
         $this->defaultFilter = $defaultFilter;
+        $this->directives = $directives;
     }
 
     /**
