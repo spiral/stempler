@@ -147,7 +147,7 @@ final class SourceMap implements \Serializable
         return [
             array_search($location->grammar, $this->grammar),
             array_search($path, $this->paths),
-            Source::resolveLine($this->sourceCache[$location->path]->getContent(), $location->offset),
+            Source::resolveLine($this->sourceCache[$location->path]->getCode(), $location->offset),
             $location->parent === null ? null : $this->calculateLine($location->parent, $loader)
         ];
     }

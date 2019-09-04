@@ -118,7 +118,7 @@ final class Builder
     public function load(string $path): Template
     {
         $source = $this->loader->load($path);
-        $stream = new StringStream($source->getContent());
+        $stream = new StringStream($source->getCode());
 
         try {
             $tpl = $this->parser->withPath($path)->parse($stream);
@@ -185,7 +185,7 @@ final class Builder
 
         $e->setLocation(
             $source->getFilename(),
-            Source::resolveLine($source->getContent(), $e->getContext()->getToken()->offset)
+            Source::resolveLine($source->getCode(), $e->getContext()->getToken()->offset)
         );
 
         return $e;

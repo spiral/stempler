@@ -21,19 +21,19 @@ final class Source
     private $content;
 
     /**
-     * @param string      $content
+     * @param string      $code
      * @param string|null $filename
      */
-    public function __construct(string $content, string $filename = null)
+    public function __construct(string $code, string $filename = null)
     {
-        $this->content = $content;
+        $this->content = $code;
         $this->filename = $filename;
     }
 
     /**
      * @return string
      */
-    public function getContent(): string
+    public function getCode(): string
     {
         return $this->content;
     }
