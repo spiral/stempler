@@ -33,7 +33,7 @@ final class Source
     /**
      * @return string
      */
-    public function getCode(): string
+    public function getContent(): string
     {
         return $this->content;
     }
