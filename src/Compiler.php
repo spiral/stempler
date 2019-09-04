@@ -5,235 +5,57 @@
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+declare(strict_types=1);
 
 namespace Spiral\Stempler;
 
-use Spiral\Stempler\Behaviour\CreateNode;
-use Spiral\Stempler\Behaviour\ExtendParent;
-use Spiral\Stempler\Behaviour\ReplaceNode;
-use Spiral\Stempler\Exception\CompileException;
-use Spiral\Stempler\Export\AttributeExport;
-use Spiral\Stempler\Import\Stop;
-use Spiral\Views\LoaderInterface;
-use Spiral\Views\ViewSource;
+use Spiral\Stempler\Compiler\RendererInterface;
+use Spiral\Stempler\Compiler\Result;
+use Spiral\Stempler\Exception\CompilerException;
+use Spiral\Stempler\Node\NodeInterface;
 
 /**
- * Supervisors used to control node behaviours and syntax.
+ * Recursively compile node tree using set of handlers.
  */
-final class Compiler implements CompilerInterface
+final class Compiler
 {
-    /** @var int */
-    private static $uniqueID = 0;
-
-    /** @var ImportInterface[] */
-    private $imports = [];
-
-    /** @var SyntaxInterface */
-    protected $syntax = null;
-
-    /** @var LoaderInterface */
-    protected $loader = null;
+    /** @var RendererInterface[] */
+    private $renders = [];
 
     /**
-     * @param LoaderInterface $loader
-     * @param SyntaxInterface $syntax
+     * @param RendererInterface $renderer
      */
-    public function __construct(LoaderInterface $loader, SyntaxInterface $syntax)
+    public function addRenderer(RendererInterface $renderer)
     {
-        $this->loader = $loader;
-        $this->syntax = $syntax;
+        $this->renders[] = $renderer;
     }
 
     /**
-     * @return LoaderInterface
+     * @param NodeInterface|array $node
+     * @param Result|null         $result
+     * @return Result
      */
-    public function getLoader(): LoaderInterface
+    public function compile($node, Result $result = null): Result
     {
-        return $this->loader;
-    }
+        $result = $result ?? new Result();
 
-    /**
-     * Get unique placeholder name, unique names are required in some cases to correctly process
-     * includes and etc.
-     *
-     * @return string
-     */
-    public function generateID(): string
-    {
-        return md5(self::$uniqueID++);
-    }
+        if (is_array($node)) {
+            foreach ($node as $child) {
+                $this->compile($child, $result);
+            }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getSyntax(): SyntaxInterface
-    {
-        return $this->syntax;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function compile(string $path): string
-    {
-        return $this->createNode($path)->compile();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function compileString(string $source): string
-    {
-        $node = new Node($this, 'root', $source);
-
-        return $node->compile();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function createNode(string $path, array $token = []): Node
-    {
-        //We support dots!
-        if (!empty($token)) {
-            $path = str_replace('.', '/', $path);
+            return $result;
         }
 
-
-        $context = $this->loader->load($path);
-
-
-        try {
-            //In isolation
-            return new Node(clone $this, $this->generateID(), $context->getCode());
-        } catch (CompileException $e) {
-            //Wrapping to clarify location of error
-            throw $this->clarifyException($context, $e);
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getImports(): array
-    {
-        return $this->imports;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getExports(): array
-    {
-        return [new AttributeExport()];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function defineToken(array $token, array $content, Node $node)
-    {
-        switch ($this->syntax->tokenType($token, $name)) {
-            case SyntaxInterface::TYPE_BLOCK:
-                //Tag declares block (section)
-                return new CreateNode($name);
-
-            case SyntaxInterface::TYPE_EXTENDS:
-                //Declares parent extending
-                $extends = new ExtendParent(
-                    $this->createNode($this->syntax->fetchPath($token), $token),
-                    $token
-                );
-
-                //We have to combine parent imports with local one (this is why uses has to be defined
-                //after extends tag!)
-                $this->imports = $extends->getNode()->getCompiler()->getImports();
-
-                //Sending command to extend parent
-                return $extends;
-
-            case SyntaxInterface::TYPE_IMPORTER:
-                //Implementation specific
-                $this->addImport($this->syntax->createImport($token, $this));
-
-                //No need to include import tag into source
-                return BehaviourInterface::SKIP_TOKEN;
-        }
-
-        //We now have to decide if element points to external view (source) to be imported
-        foreach ($this->imports as $import) {
-            if ($import->importable($name, $token)) {
-                if ($import instanceof Stop) {
-                    //Native import tells us to treat this element as simple html
-                    break;
-                }
-
-                //Let's include!
-                return new ReplaceNode(
-                    $this,
-                    $import->resolvePath($name, $token),
-                    $content,
-                    $token
-                );
+        foreach ($this->renders as $renderer) {
+            if ($renderer->render($this, $result, $node)) {
+                return $result;
             }
         }
 
-        return BehaviourInterface::SIMPLE_TAG;
-    }
-
-    /**
-     * Reset all imports in copied compiler.
-     */
-    public function __clone()
-    {
-        $this->imports = [];
-    }
-
-    /**
-     * Register new view import.
-     *
-     * @param ImportInterface $import
-     */
-    protected function addImport(ImportInterface $import)
-    {
-        array_unshift($this->imports, $import);
-    }
-
-    /**
-     * Clarify exception with it's actual location.
-     *
-     * @param ViewSource       $source
-     * @param CompileException $exception
-     *
-     * @return CompileException
-     */
-    protected function clarifyException(
-        ViewSource $source,
-        CompileException $exception
-    ): CompileException {
-        if (empty($exception->getToken())) {
-            //Unable to locate
-            return $exception;
-        }
-
-        //We will need only first tag line
-        $target = explode("\n", $exception->getToken()[HtmlTokenizer::TOKEN_CONTENT])[0];
-
-        //Let's try to locate place where exception was used
-        $lines = explode("\n", $source->getCode());
-
-        foreach ($lines as $number => $line) {
-            if (strpos($line, $target) !== false) {
-                //We found where token were used (!!)
-                $exception->setLocation(
-                    $source->getFilename(),
-                    $number + 1
-                );
-
-                break;
-            }
-        }
-
-        return $exception;
+        throw new CompilerException(
+            sprintf("Unable to compile %s, no renderer found", get_class($node)),
+            $node->getContext()
+        );
     }
 }

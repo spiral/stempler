@@ -1,1 +1,0 @@
-<tag name="${name}" node:attributes="exclude:name">${context}</tag>
