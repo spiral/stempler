@@ -81,7 +81,7 @@ final class ResolveImports implements VisitorInterface
             $import = $importCtx->resolve($this->builder, $node->name);
         } catch (\Throwable $e) {
             throw new ImportException(
-                "Unable to resolve import",
+                "Unable to resolve import `{$node->name}`",
                 $node->getContext(),
                 $e
             );
