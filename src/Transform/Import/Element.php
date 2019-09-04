@@ -35,7 +35,12 @@ final class Element implements ImportInterface
     public function __construct(string $path, string $alias = null, Context $context = null)
     {
         $this->path = $path;
-        $this->alias = $alias ?? substr($path, strrpos($path, '/') + 1);
+        $this->alias = $alias ?? $path;
+
+        if ($alias === null && strrpos($this->alias, '/') !== false) {
+            $this->alias = substr($this->alias, strrpos($this->alias, '/') + 1);
+        }
+
         $this->context = $context;
     }
 
