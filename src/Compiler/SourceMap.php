@@ -21,9 +21,6 @@ final class SourceMap implements \Serializable
     private $paths = [];
 
     /** @var array */
-    private $grammar = [];
-
-    /** @var array */
     private $lines = [];
 
     /** @var Source[] */
@@ -42,8 +39,8 @@ final class SourceMap implements \Serializable
 
         /** @var Location $loc */
         foreach ($this->lines as $line) {
-            if (!in_array($this->paths[$line[1]], $paths, true)) {
-                $paths[] = $this->paths[$line[1]];
+            if (!in_array($this->paths[$line[0]], $paths, true)) {
+                $paths[] = $this->paths[$line[0]];
             }
         }
 
@@ -84,9 +81,8 @@ final class SourceMap implements \Serializable
     public function serialize()
     {
         return json_encode([
-            'paths'     => $this->paths,
-            'grammar'   => $this->grammar,
-            'locations' => $this->lines
+            'paths' => $this->paths,
+            'lines' => $this->lines
         ]);
     }
 
@@ -98,8 +94,7 @@ final class SourceMap implements \Serializable
         $data = json_decode($serialized, true);
 
         $this->paths = $data['paths'];
-        $this->grammar = $data['grammar'];
-        $this->lines = $data['locations'];
+        $this->lines = $data['lines'];
     }
 
     /**
@@ -109,47 +104,22 @@ final class SourceMap implements \Serializable
     private function unpack(array &$result, array $line)
     {
         $result[] = [
-            'file'    => $this->paths[$line[1]],
-            'line'    => $line[2],
-            'grammar' => $this->grammar[$line[0]],
+            'file' => $this->paths[$line[0]],
+            'line' => $line[1],
         ];
 
-        if ($line[3] !== null) {
-            $this->unpack($result, $line[3]);
+        if ($line[2] !== null) {
+            $this->unpack($result, $line[2]);
         }
-    }
-
-    /**
-     * @param string          $content
-     * @param array           $locations
-     * @param LoaderInterface $loader
-     * @return SourceMap
-     */
-    public static function calculate(string $content, array $locations, LoaderInterface $loader): SourceMap
-    {
-        $map = new self;
-
-        foreach ($locations as $offset => $location) {
-            $line = Source::resolveLine($content, $offset);
-            if (isset($map->lines[$line])) {
-                // PHP can only identify the line in case of the exception, overlap on next line
-                $line++;
-            }
-
-            $map->lines[$line] = $map->calculateLine($location, $loader);
-        }
-
-        $map->sourceCache = null;
-
-        return $map;
     }
 
     /**
      * @param Location        $location
      * @param LoaderInterface $loader
+     * @param string          $rootFilename
      * @return array
      */
-    private function calculateLine(Location $location, LoaderInterface $loader): array
+    private function calculateLine(Location $location, LoaderInterface $loader, string $rootFilename = null): array
     {
         if (!isset($this->sourceCache[$location->path])) {
             $this->sourceCache[$location->path] = $loader->load($location->path);
@@ -157,19 +127,53 @@ final class SourceMap implements \Serializable
 
         $path = $this->sourceCache[$location->path]->getFilename() ?? $location->path;
 
-        if (!in_array($location->grammar, $this->grammar, true)) {
-            $this->grammar[] = $location->grammar;
-        }
-
         if (!in_array($path, $this->paths, true)) {
             $this->paths[] = $path;
         }
 
+        if ($location->parent !== null && $rootFilename !== null) {
+            if ($loader->load($location->parent->path)->getFilename() === $rootFilename) {
+                // do not jump over parent if parent is root
+                $location->parent->parent = null;
+            }
+        }
+
         return [
-            array_search($location->grammar, $this->grammar),
             array_search($path, $this->paths),
             Source::resolveLine($this->sourceCache[$location->path]->getContent(), $location->offset),
-            $location->parent === null ? null : $this->calculateLine($location->parent, $loader)
+            $location->parent === null ? null : $this->calculateLine($location->parent, $loader),
         ];
+    }
+
+    /**
+     * @param string          $content
+     * @param array           $locations
+     * @param LoaderInterface $loader
+     * @param string|null     $rootPath
+     * @return SourceMap
+     */
+    public static function calculate(
+        string $content,
+        array $locations,
+        LoaderInterface $loader,
+        string $rootPath = null
+    ): SourceMap {
+        $map = new self;
+
+        $rootFilename = null;
+        if ($rootPath !== null) {
+            $rootFilename = $loader->load($rootPath)->getFilename();
+        }
+
+        foreach ($locations as $offset => $location) {
+            $line = Source::resolveLine($content, $offset);
+            if (!isset($map->lines[$line])) {
+                $map->lines[$line] = $map->calculateLine($location, $loader, $rootFilename);
+            }
+        }
+
+        $map->sourceCache = null;
+
+        return $map;
     }
 }

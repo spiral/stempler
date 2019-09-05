@@ -10,6 +10,7 @@ declare(strict_types=1);
 namespace Spiral\Stempler\Transform;
 
 use Spiral\Stempler\Node\Block;
+use Spiral\Stempler\Node\HTML\Attr;
 use Spiral\Stempler\Node\HTML\Tag;
 use Spiral\Stempler\Node\NodeInterface;
 
@@ -29,7 +30,7 @@ final class BlockFetcher
         $blocks = ['context' => []];
 
         foreach ($caller->attrs as $attr) {
-            if ($attr->name instanceof NodeInterface) {
+            if (!$attr instanceof Attr || $attr->name instanceof NodeInterface) {
                 // ignore name when attribute is dynamic
                 $blocks[sprintf("attr-%s", count($blocks))] = $attr;
                 continue;

@@ -11,8 +11,6 @@ namespace Spiral\Stempler\Tests;
 
 use Spiral\Stempler\Builder;
 use Spiral\Stempler\Directive\LoopDirective;
-use Spiral\Stempler\Lexer\Grammar\DynamicGrammar;
-use Spiral\Stempler\Lexer\Grammar\PHPGrammar;
 use Spiral\Stempler\Loader\LoaderInterface;
 use Spiral\Stempler\Tests\Transform\BaseTest;
 use Spiral\Stempler\Transform\Finalizer\DynamicToPHP;
@@ -71,12 +69,18 @@ class SourcemapTest extends BaseTest
     {
         $res = $this->getBuilder($this->getFixtureLoader())->compile('import-php');
 
-        $sm = $res->makeSourceMap(
-            $this->getFixtureLoader(),
-            [PHPGrammar::class, DynamicGrammar::class]
-        );
+        $sm = $res->makeSourceMap($this->getFixtureLoader());
 
         $stack = $sm->getStack(6);
+        $this->assertCount(3, $stack);
+    }
+
+    public function testTripeImportAndExtend()
+    {
+        $res = $this->getBuilder($this->getFixtureLoader())->compile('demo-import');
+        $sm = $res->makeSourceMap($this->getFixtureLoader(), 'demo-import');
+
+        $stack = $sm->getStack(12);
         $this->assertCount(3, $stack);
     }
 

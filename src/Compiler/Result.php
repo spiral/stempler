@@ -94,21 +94,17 @@ final class Result
      * Generates sourcemap for exception handling and cache invalidation.
      *
      * @param LoaderInterface $loader
-     * @param array           $grammar
+     * @param string          $rootPath
      * @return SourceMap
      */
-    public function makeSourceMap(LoaderInterface $loader, array $grammar = []): SourceMap
+    public function makeSourceMap(LoaderInterface $loader, string $rootPath = null): SourceMap
     {
         $locations = [];
 
         foreach ($this->locations as $offset => $location) {
-            if ($grammar !== [] && !in_array($location->grammar, $grammar, true)) {
-                continue;
-            }
-
             $locations[$offset] = $location;
         }
 
-        return SourceMap::calculate($this->content, $locations, $loader);
+        return SourceMap::calculate($this->content, $locations, $loader, $rootPath);
     }
 }
