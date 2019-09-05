@@ -116,26 +116,17 @@ final class SourceMap implements \Serializable
     /**
      * @param Location        $location
      * @param LoaderInterface $loader
-     * @param string          $rootFilename
      * @return array
      */
-    private function calculateLine(Location $location, LoaderInterface $loader, string $rootFilename = null): array
+    private function calculateLine(Location $location, LoaderInterface $loader): array
     {
         if (!isset($this->sourceCache[$location->path])) {
             $this->sourceCache[$location->path] = $loader->load($location->path);
         }
-
-        $path = $this->sourceCache[$location->path]->getFilename() ?? $location->path;
+        $path = $this->sourceCache[$location->path]->getFilename();
 
         if (!in_array($path, $this->paths, true)) {
             $this->paths[] = $path;
-        }
-
-        if ($location->parent !== null && $rootFilename !== null) {
-            if ($loader->load($location->parent->path)->getFilename() === $rootFilename) {
-                // do not jump over parent if parent is root
-                $location->parent->parent = null;
-            }
         }
 
         return [
@@ -149,26 +140,16 @@ final class SourceMap implements \Serializable
      * @param string          $content
      * @param array           $locations
      * @param LoaderInterface $loader
-     * @param string|null     $rootPath
      * @return SourceMap
      */
-    public static function calculate(
-        string $content,
-        array $locations,
-        LoaderInterface $loader,
-        string $rootPath = null
-    ): SourceMap {
+    public static function calculate(string $content, array $locations, LoaderInterface $loader): SourceMap
+    {
         $map = new self;
-
-        $rootFilename = null;
-        if ($rootPath !== null) {
-            $rootFilename = $loader->load($rootPath)->getFilename();
-        }
 
         foreach ($locations as $offset => $location) {
             $line = Source::resolveLine($content, $offset);
             if (!isset($map->lines[$line])) {
-                $map->lines[$line] = $map->calculateLine($location, $loader, $rootFilename);
+                $map->lines[$line] = $map->calculateLine($location, $loader);
             }
         }
 

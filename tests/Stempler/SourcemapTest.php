@@ -58,7 +58,7 @@ class SourcemapTest extends BaseTest
     {
         $res = $this->getBuilder($this->getFixtureLoader())->compile('import-php');
 
-        $sm = $res->makeSourceMap($this->getFixtureLoader());
+        $sm = $res->getSourceMap($this->getFixtureLoader());
 
         $sm2 = unserialize(serialize($sm));
 
@@ -69,7 +69,7 @@ class SourcemapTest extends BaseTest
     {
         $res = $this->getBuilder($this->getFixtureLoader())->compile('import-php');
 
-        $sm = $res->makeSourceMap($this->getFixtureLoader());
+        $sm = $res->getSourceMap($this->getFixtureLoader());
 
         $stack = $sm->getStack(6);
         $this->assertCount(3, $stack);
@@ -78,10 +78,11 @@ class SourcemapTest extends BaseTest
     public function testTripeImportAndExtend()
     {
         $res = $this->getBuilder($this->getFixtureLoader())->compile('demo-import');
-        $sm = $res->makeSourceMap($this->getFixtureLoader(), 'demo-import');
+
+        $sm = $res->getSourceMap($this->getFixtureLoader());
 
         $stack = $sm->getStack(12);
-        $this->assertCount(3, $stack);
+        $this->assertCount(5, $stack);
     }
 
     protected function getBuilder(LoaderInterface $loader, array $visitors = []): Builder
