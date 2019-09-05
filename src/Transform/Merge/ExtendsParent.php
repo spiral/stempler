@@ -84,14 +84,14 @@ final class ExtendsParent implements VisitorInterface
                 $extends->nodes[] = $child;
             }
 
+            $path = 'undefined';
             try {
-                return $this->merger->merge(
-                    $this->builder->load($this->getPath($extends)),
-                    $extends
-                );
+                $path = $this->getPath($extends);
+
+                return $this->merger->merge($this->builder->load($path), $extends);
             } catch (\Throwable $e) {
                 throw new ExtendsException(
-                    "Unable to extend parent",
+                    "Unable to extend parent `{$path}`: {$e->getMessage()}",
                     $extends->getContext(),
                     $e
                 );
