@@ -4,7 +4,7 @@
 [![Codecov](https://codecov.io/gh/spiral/stempler/branch/master/graph/badge.svg)](https://codecov.io/gh/spiral/stempler/)
 
 Template engine framework with layered multi-grammar support and AST processing. Supports compile-time template composition,
-inheritance, context aware escaping, blade directives.
+inheritance, context aware escaping, blade directives. Debug tools included with source-map support.
 
 ## Example
 ```php
