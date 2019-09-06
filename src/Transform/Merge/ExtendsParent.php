@@ -91,7 +91,7 @@ final class ExtendsParent implements VisitorInterface
                 return $this->merger->merge($this->builder->load($path), $extends);
             } catch (\Throwable $e) {
                 throw new ExtendsException(
-                    "Unable to extend parent `{$path}`: {$e->getMessage()}",
+                    "Unable to extend parent `{$path}`",
                     $extends->getContext(),
                     $e
                 );
