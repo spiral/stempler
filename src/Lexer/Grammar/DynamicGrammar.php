@@ -62,8 +62,8 @@ final class DynamicGrammar implements GrammarInterface
         );
 
         $this->raw = new BracesGrammar(
-            '{!',
-            '!}',
+            '{!!',
+            '!!}',
             self::TYPE_OPEN_RAW_TAG,
             self::TYPE_CLOSE_RAW_TAG
         );

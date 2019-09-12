@@ -168,7 +168,7 @@ class AttributesTest extends BaseTest
         $loader = $loader ?? new StringLoader();
         $loader->set(
             'root',
-            '<use:element path="element" as="element"/><element href="google.com" {! $value ? "checked" : "" !}/>'
+            '<use:element path="element" as="element"/><element href="google.com" {!! $value ? "checked" : "" !!}/>'
         );
         $loader->set(
             'element',

@@ -29,7 +29,7 @@ class LoopTest extends BaseTest
 
     public function testWhileEndWhile()
     {
-        $doc = $this->parse('@while(true) {! "OK" !} @endwhile');
+        $doc = $this->parse('@while(true) {!! "OK" !!} @endwhile');
 
         $this->assertSame(
             "<?php while(true): ?> <?php echo \"OK\"; ?> <?php endwhile; ?>",
@@ -39,7 +39,7 @@ class LoopTest extends BaseTest
 
     public function testForEndFor()
     {
-        $doc = $this->parse('@for($i=0; $i<100; $i++) {! $i !} @endfor');
+        $doc = $this->parse('@for($i=0; $i<100; $i++) {!! $i !!} @endfor');
 
         $this->assertSame(
             "<?php for(\$i=0; \$i<100; \$i++): ?> <?php echo \$i; ?> <?php endfor; ?>",

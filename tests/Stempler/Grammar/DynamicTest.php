@@ -55,11 +55,11 @@ class DynamicTest extends BaseTest
     {
         $this->assertTokens(
             [
-                new Token(DynamicGrammar::TYPE_OPEN_RAW_TAG, 0, '{!'),
-                new Token(DynamicGrammar::TYPE_BODY, 2, ' $var '),
-                new Token(DynamicGrammar::TYPE_CLOSE_RAW_TAG, 8, '!}')
+                new Token(DynamicGrammar::TYPE_OPEN_RAW_TAG, 0, '{!!'),
+                new Token(DynamicGrammar::TYPE_BODY, 3, ' $var '),
+                new Token(DynamicGrammar::TYPE_CLOSE_RAW_TAG, 9, '!!}')
             ],
-            ('{! $var !}')
+            ('{!! $var !!}')
         );
     }
 
@@ -97,9 +97,9 @@ class DynamicTest extends BaseTest
     {
         $this->assertTokens(
             [
-                new Token(Token::TYPE_RAW, 1, '{! $var !}'),
+                new Token(Token::TYPE_RAW, 1, '{!! $var !!}'),
             ],
-            ('@{! $var !}')
+            ('@{!! $var !!}')
         );
     }
 

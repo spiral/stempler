@@ -64,7 +64,7 @@ class DynamicTest extends BaseTest
 
     public function testRawOutput()
     {
-        $doc = $this->parse('{! $name !}');
+        $doc = $this->parse('{!! $name !!}');
 
         $this->assertInstanceOf(Output::class, $doc->nodes[0]);
         $this->assertSame(true, $doc->nodes[0]->rawOutput);
