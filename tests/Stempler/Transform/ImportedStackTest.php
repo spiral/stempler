@@ -141,7 +141,8 @@ class ImportedStackTest extends BaseTest
     <grid:cell title="ID">value</grid:cell>
     <grid:cell title="Title">value</grid:cell>
 </grid:render>
-');
+'
+        );
 
         $loader->set(
             'grid' . DIRECTORY_SEPARATOR . 'render',
@@ -155,14 +156,16 @@ class ImportedStackTest extends BaseTest
 </tbody>
 <hidden>${context}</hidden>
 </table>
-');
+'
+        );
 
         $loader->set(
             'grid' . DIRECTORY_SEPARATOR . 'cell',
             '
 <stack:push name="head"><tr>${title}</tr></stack:push>
 <stack:push name="body"><td>${context}</td></stack:push>
-');
+'
+        );
 
         $builder = $this->getBuilder($loader, []);
 

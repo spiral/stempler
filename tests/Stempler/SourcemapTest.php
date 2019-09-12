@@ -45,13 +45,15 @@ class SourcemapTest extends BaseTest
     {
         $res = $this->getBuilder($this->getFixtureLoader())->compile('import-php');
 
-        $this->assertSame(preg_replace("/\s+/", "", '
+        $this->assertSame(
+            preg_replace("/\s+/", "", '
 <div>                                                                                   
     <?php foreach ([\'a\', \'b\', \'c\'] as $value): ?>                                                                                                              
     <b><?php echo htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?></b>                                                                                    
     <?php endforeach; ?>                                                                   
 </div>'),
-            preg_replace("/\s+/", "", $res->getContent()));
+            preg_replace("/\s+/", "", $res->getContent())
+        );
     }
 
     public function testCompress()

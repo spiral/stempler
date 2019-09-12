@@ -99,7 +99,6 @@ final class HTMLGrammar implements GrammarInterface
 
             switch ($n->char) {
                 case '"':
-                    // no break
                 case "'":
                     $chunks[] = $n;
 
@@ -185,7 +184,6 @@ final class HTMLGrammar implements GrammarInterface
 
             switch ($n->char) {
                 case '"':
-                    // no break
                 case "'":
                     $this->flush();
                     $this->attribute[] = $n;
@@ -271,7 +269,6 @@ final class HTMLGrammar implements GrammarInterface
                     continue 2;
 
                 case self::TYPE_ATTRIBUTE:
-                    // no break
                 case self::TYPE_EQUAL:
                     return false;
 

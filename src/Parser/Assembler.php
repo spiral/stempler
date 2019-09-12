@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace Spiral\Stempler\Parser;
 
-
 use Spiral\Stempler\Node\NodeInterface;
 
 /**

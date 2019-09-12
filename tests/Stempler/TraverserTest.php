@@ -37,8 +37,7 @@ class TraverserTest extends BaseTest implements VisitorInterface
         $doc = $this->parse('<a href="url"></a>');
 
         $t = new Traverser();
-        $t->addVisitor(new class implements VisitorInterface
-        {
+        $t->addVisitor(new class implements VisitorInterface {
             public function enterNode($node, VisitorContext $ctx)
             {
                 if ($node instanceof Tag && $node->name == 'a') {
@@ -64,11 +63,9 @@ class TraverserTest extends BaseTest implements VisitorInterface
         $doc = $this->parse('<a href="url"></a>');
 
         $t = new Traverser();
-        $t->addVisitor(new class implements VisitorInterface
-        {
+        $t->addVisitor(new class implements VisitorInterface {
             public function enterNode($node, VisitorContext $ctx)
             {
-
             }
 
             public function leaveNode($node, VisitorContext $ctx)
@@ -98,8 +95,7 @@ class TraverserTest extends BaseTest implements VisitorInterface
         $doc = $this->parse('<a href="url"><b></b>hello</a>');
 
         $t = new Traverser();
-        $t->addVisitor(new class implements VisitorInterface
-        {
+        $t->addVisitor(new class implements VisitorInterface {
             public function enterNode($node, VisitorContext $ctx)
             {
             }

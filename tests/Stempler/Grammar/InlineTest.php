@@ -150,5 +150,4 @@ class InlineTest extends BaseTest
             ('${name| default }')
         );
     }
-
 }

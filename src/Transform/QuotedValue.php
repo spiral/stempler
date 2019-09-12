@@ -60,11 +60,7 @@ final class QuotedValue
         $nodes = $value->nodes;
 
         $quote = null;
-        if (
-            count($nodes) >= 3
-            && $nodes[0] instanceof Raw
-            && $nodes[count($nodes) - 1] instanceof Raw
-        ) {
+        if (count($nodes) >= 3 && $nodes[0] instanceof Raw && $nodes[count($nodes) - 1] instanceof Raw) {
             $quote = $nodes[0]->content[0];
             if (!in_array($quote, ['"', '\''])) {
                 return $nodes;

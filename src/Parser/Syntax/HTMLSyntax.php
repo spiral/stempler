@@ -110,10 +110,8 @@ final class HTMLSyntax implements SyntaxInterface
                     throw new SyntaxException('unexpected attribute token', $token);
                 }
 
-                if (
-                    strpos($this->attr->name, 'on') === 0
-                    || in_array($this->attr->name, self::VERBATIM_ATTRIBUTES, true)
-                ) {
+                if (strpos($this->attr->name, 'on') === 0 ||
+                    in_array($this->attr->name, self::VERBATIM_ATTRIBUTES, true)) {
                     $this->attr->value = $this->parseVerbatim($parser, $token);
                 } else {
                     $this->attr->value = $this->parseToken($parser, $token);

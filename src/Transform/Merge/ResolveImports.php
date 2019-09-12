@@ -111,7 +111,6 @@ final class ResolveImports implements VisitorInterface
 
         switch (strtolower($tag->name)) {
             case 'use':
-                // no break
             case 'use:element':
                 $this->assertHasOption('path', $options, $tag);
 

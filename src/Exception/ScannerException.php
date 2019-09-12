@@ -11,5 +11,4 @@ namespace Spiral\Stempler\Exception;
 
 class ScannerException extends \RuntimeException
 {
-
 }

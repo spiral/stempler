@@ -82,7 +82,6 @@ final class InlineGrammar implements GrammarInterface
 
             switch ($n->char) {
                 case '"':
-                    // no break
                 case "'":
                     if ($this->default === null) {
                         // " and ' not allowed in names

@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace Spiral\Stempler\Tests\Compiler;
 
-
 use PHPUnit\Framework\TestCase;
 use Spiral\Stempler\Compiler;
 use Spiral\Stempler\Lexer\StringStream;

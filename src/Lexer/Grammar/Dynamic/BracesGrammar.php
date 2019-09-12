@@ -149,7 +149,6 @@ final class BracesGrammar
 
             switch ($n->char) {
                 case '"':
-                    // no break
                 case "'":
                     $this->body[] = $n;
                     while ($nn = $src->next()) {
@@ -175,7 +174,6 @@ final class BracesGrammar
                     );
 
                     break 2;
-                // no break
                 default:
                     $this->body[] = $n;
             }

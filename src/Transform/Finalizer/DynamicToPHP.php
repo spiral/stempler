@@ -144,11 +144,7 @@ final class DynamicToPHP implements VisitorInterface
         }
 
         // php {{ }} in javascript code (variable passing), use {! !} to bypass the filter
-        if (
-            $context[0] instanceof Verbatim
-            && $context[1] instanceof Tag
-            && $context[1]->name === 'script'
-        ) {
+        if ($context[0] instanceof Verbatim && $context[1] instanceof Tag && $context[1]->name === 'script') {
             return sprintf(
                 'json_encode(%s, %s, %s)',
                 '%s',
@@ -158,11 +154,7 @@ final class DynamicToPHP implements VisitorInterface
         }
 
         // in on* and other attributes
-        if (
-            $context[0] instanceof Verbatim
-            && $context[1] instanceof Attr
-            && $context[1]->name !== 'style'
-        ) {
+        if ($context[0] instanceof Verbatim && $context[1] instanceof Attr && $context[1]->name !== 'style') {
             return sprintf("'%s', %s, '%s'", '&quot;', $this->defaultFilter, '&quot;');
         }
 
