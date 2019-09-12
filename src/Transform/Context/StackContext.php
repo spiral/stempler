@@ -57,9 +57,10 @@ final class StackContext
             foreach ($child->nodes as $child) {
                 if (!in_array($child, $stack->nodes)) {
                     $stack->nodes[] = $child;
-                    return true;
                 }
             }
+
+            return true;
         }
 
         return false;
@@ -80,9 +81,10 @@ final class StackContext
             foreach ($child->nodes as $child) {
                 if (!in_array($child, $stack->nodes)) {
                     array_unshift($stack->nodes, $child);
-                    return true;
                 }
             }
+
+            return true;
         }
 
         return false;
