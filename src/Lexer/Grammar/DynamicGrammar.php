@@ -87,6 +87,7 @@ final class DynamicGrammar implements GrammarInterface
                     continue;
                 }
 
+                // todo: allow disabling
                 $directive = new DirectiveGrammar();
                 if ($directive->parse($src, $n->offset)) {
                     if (strtolower($directive->getKeyword()) === self::DECLARE_DIRECTIVE) {
@@ -146,8 +147,8 @@ final class DynamicGrammar implements GrammarInterface
                     if ($value === 'default') {
                         $this->echo->setStartSequence('{{');
                         $this->echo->setEndSequence('}}');
-                        $this->raw->setStartSequence('{!');
-                        $this->raw->setStartSequence('!}');
+                        $this->raw->setStartSequence('{!!');
+                        $this->raw->setStartSequence('!!}');
                     }
                     break;
 
