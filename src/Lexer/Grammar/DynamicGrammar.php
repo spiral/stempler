@@ -81,13 +81,12 @@ final class DynamicGrammar implements GrammarInterface
             }
 
             if ($n->char === DirectiveGrammar::DIRECTIVE_CHAR) {
-                if ($this->echo->nextToken($src) || $this->raw->nextToken($src)) {
+                if ($this->echo->nextToken($src) || $this->raw->nextToken($src) || $src->lookaheadByte() === DirectiveGrammar::DIRECTIVE_CHAR) {
                     // escaped echo sequence, hide directive byte
                     yield $src->next();
                     continue;
                 }
 
-                // todo: allow disabling
                 $directive = new DirectiveGrammar();
                 if ($directive->parse($src, $n->offset)) {
                     if (strtolower($directive->getKeyword()) === self::DECLARE_DIRECTIVE) {
