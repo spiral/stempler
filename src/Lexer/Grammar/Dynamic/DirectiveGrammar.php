@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace Spiral\Stempler\Lexer\Grammar\Dynamic;
 
+use Spiral\Stempler\Exception\SyntaxException;
 use Spiral\Stempler\Lexer\Buffer;
 use Spiral\Stempler\Lexer\Byte;
 use Spiral\Stempler\Lexer\Grammar\DynamicGrammar;
@@ -132,7 +133,7 @@ final class DirectiveGrammar implements \IteratorAggregate
             }
         }
 
-        throw new \LogicException("Directive not parsed");
+        throw new SyntaxException("Directive not parsed", $this->tokens[0]);
     }
 
     /**
