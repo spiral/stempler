@@ -51,7 +51,7 @@ final class InjectAttributes implements VisitorInterface
                 continue;
             }
 
-            $value = $this->blocks->claim($alias);
+            $value = $this->blocks->claim($name);
 
             if ($value instanceof QuotedValue) {
                 $node->nodes[] = new Attr($alias, $value->getValue());
@@ -81,7 +81,7 @@ final class InjectAttributes implements VisitorInterface
      */
     private function wrapValue($value)
     {
-        if ($value === [] || $value instanceof Nil) {
+        if ($value === [] || $value === null || $value instanceof Nil) {
             return new Nil();
         }
 

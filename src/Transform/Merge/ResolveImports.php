@@ -132,11 +132,10 @@ final class ResolveImports implements VisitorInterface
 
             case 'use:bundle':
                 $this->assertHasOption('path', $options, $tag);
-                $this->assertHasOption('ns', $options, $tag);
 
                 return new Bundle(
                     $options['path'],
-                    $options['ns'],
+                    $options['ns'] ?? null,
                     $tag->getContext()
                 );
 

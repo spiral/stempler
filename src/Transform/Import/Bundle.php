@@ -28,7 +28,7 @@ final class Bundle implements ImportInterface
     /** @var Template */
     private $template;
 
-    /** @var string */
+    /** @var string|null */
     private $prefix;
 
     /**
@@ -36,10 +36,10 @@ final class Bundle implements ImportInterface
      * @param string       $prefix
      * @param Context|null $context
      */
-    public function __construct(string $path, string $prefix, Context $context = null)
+    public function __construct(string $path, string $prefix = null, Context $context = null)
     {
         $this->path = $path;
-        $this->prefix = $prefix ?? substr($path, strrpos($path, '/') + 1);
+        $this->prefix = $prefix;
         $this->context = $context;
     }
 
@@ -52,7 +52,10 @@ final class Bundle implements ImportInterface
             $this->template = $builder->load($this->path);
         }
 
-        $path = substr($name, strlen($this->prefix) + 1);
+        $path = $name;
+        if ($this->prefix !== null) {
+            $path = substr($path, strlen($this->prefix) + 1);
+        }
 
         /** @var ImportInterface $import */
         foreach ($this->template->getAttribute(ImportContext::class, []) as $import) {
