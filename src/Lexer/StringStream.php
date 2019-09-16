@@ -55,7 +55,7 @@ final class StringStream implements StreamInterface
             return null;
         }
 
-        return $this->source{$this->offset++};
+        return $this->source[$this->offset++];
     }
 
     /**
