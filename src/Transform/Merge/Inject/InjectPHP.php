@@ -56,7 +56,12 @@ final class InjectPHP implements VisitorInterface
 
         foreach ($this->blocks->getNames() as $name) {
             if ($php->has($name)) {
-                $php->set($name, $this->trimPHP($this->blocks->claim($name)));
+                $block = $this->trimPHP($this->blocks->claim($name));
+                if ($block === '') {
+                    $block = 'null';
+                }
+
+                $php->set($name, $block);
             }
         }
 
