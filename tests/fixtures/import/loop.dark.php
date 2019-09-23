@@ -1,5 +1,5 @@
 <div>
-    @foreach(value('source', []) as value('as'))
+    @foreach(inject('source', []) as inject('as'))
     ${context}
     @endforeach
 </div>

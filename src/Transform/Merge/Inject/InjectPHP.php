@@ -26,7 +26,7 @@ use Spiral\Stempler\VisitorInterface;
 final class InjectPHP implements VisitorInterface
 {
     // php marcos to inject values into
-    private const PHP_MACRO_FUNCTION = 'value';
+    private const PHP_MACRO_FUNCTION = 'inject';
 
     /** @var BlockClaims */
     private $blocks;
@@ -53,15 +53,9 @@ final class InjectPHP implements VisitorInterface
         }
 
         $php = new PHPMixin($node->tokens, self::PHP_MACRO_FUNCTION);
-
         foreach ($this->blocks->getNames() as $name) {
             if ($php->has($name)) {
-                $block = $this->trimPHP($this->blocks->claim($name));
-                if ($block === '') {
-                    $block = 'null';
-                }
-
-                $php->set($name, $block);
+                $php->set($name, $this->trimPHP($this->blocks->claim($name)));
             }
         }
 

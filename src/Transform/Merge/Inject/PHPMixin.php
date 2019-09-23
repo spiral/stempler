@@ -155,6 +155,7 @@ final class PHPMixin
                 case '(':
                     if ($start !== null) {
                         $level++;
+                        $value .= $token[1];
                     }
                     break;
                 case ')':
@@ -163,6 +164,7 @@ final class PHPMixin
                     }
 
                     $level--;
+                    $value .= $token[1];
                     if ($level === 0) {
                         $this->blocks[$name] = [
                             'start' => $start,
@@ -177,7 +179,7 @@ final class PHPMixin
                 case T_STRING:
                     if ($token[1] === $func) {
                         $start = $position;
-                        $value = '';
+                        $value = $token[1];
                         break;
                     }
 
@@ -192,15 +194,11 @@ final class PHPMixin
 
                     if ($name === null) {
                         $name = stripcslashes(substr($token[1], 1, -1));
-                    } else {
-                        $value .= $token[1];
                     }
+                    $value .= $token[1];
                     break;
                 case ',':
-                    if ($level !== 1) {
-                        $value .= $token[1];
-                    }
-
+                    $value .= $token[1];
                     break;
                 default:
                     if ($start !== null) {

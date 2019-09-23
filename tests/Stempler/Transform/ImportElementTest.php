@@ -93,7 +93,7 @@ class ImportElementTest extends BaseTest
             'root',
             '<use:element path="import" as="url"/><url href="{{ $url }}">hello world</url>'
         );
-        $loader->set('import', '<a href="${href}">{{ strtoupper(value(\'context\')) }}</a>');
+        $loader->set('import', '<a href="${href}">{{ strtoupper(inject(\'context\')) }}</a>');
 
         $builder = $this->getBuilder($loader, []);
 
@@ -112,7 +112,7 @@ class ImportElementTest extends BaseTest
             'root',
             '<use:element path="import" as="url"/><url href="{{ $url }}" value="<?php echo \'bad\'?>">abc</url>'
         );
-        $loader->set('import', '<a href="${href}">{{ strtoupper(value(\'value\')) }}</a>');
+        $loader->set('import', '<a href="${href}">{{ strtoupper(inject(\'value\')) }}</a>');
 
         $builder = $this->getBuilder($loader, []);
 
@@ -131,7 +131,7 @@ class ImportElementTest extends BaseTest
             'root',
             '<use:element path="import" as="url"/><url href="{{ $url }}" value="{{ \'OK\' }}">abc</url>'
         );
-        $loader->set('import', '<a href="${href}">{{ strtoupper(value(\'value\')) }}</a>');
+        $loader->set('import', '<a href="${href}">{{ strtoupper(inject(\'value\')) }}</a>');
 
         $builder = $this->getBuilder($loader, []);
 
@@ -150,7 +150,7 @@ class ImportElementTest extends BaseTest
             'root',
             '<use:element path="import" as="url"/><url href="{{ $url }}" value="hello {{ \'OK\' }}">abc</url>'
         );
-        $loader->set('import', '<a href="${href}">{{ strtoupper(value(\'value\')) }}</a>');
+        $loader->set('import', '<a href="${href}">{{ strtoupper(inject(\'value\')) }}</a>');
 
         $builder = $this->getBuilder($loader, []);
 
@@ -169,7 +169,7 @@ class ImportElementTest extends BaseTest
             'root',
             '<use:element path="import" as="url"/><url href="{{ $url }}" value="{{ \'OK\' }}  {{ \'cool\' }}">abc</url>'
         );
-        $loader->set('import', '<a href="${href}">{{ strtoupper(value(\'value\')) }}</a>');
+        $loader->set('import', '<a href="${href}">{{ strtoupper(inject(\'value\')) }}</a>');
 
         $builder = $this->getBuilder($loader, []);
 
@@ -188,7 +188,7 @@ class ImportElementTest extends BaseTest
             'root',
             '<use:element path="import" as="url"/><url href="{{ $url }}" value=" {{ \'OK\' }} {{ \'cool\' }} ">abc</url>'
         );
-        $loader->set('import', '<a href="${href}">{{ strtoupper(value(\'value\')) }}</a>');
+        $loader->set('import', '<a href="${href}">{{ strtoupper(inject(\'value\')) }}</a>');
 
         $builder = $this->getBuilder($loader, []);
 
@@ -207,13 +207,13 @@ class ImportElementTest extends BaseTest
             'root',
             '<use:element path="import" as="url"/><url href="{{ $url }}"></url>'
         );
-        $loader->set('import', '<a href="${href}">{{ strtoupper(value(\'value\', \'default\'.\'xxx\')) }}</a>');
+        $loader->set('import', '<a href="${href}">{{ strtoupper(inject(\'value\', \'default\'.\'xxx\')) }}</a>');
 
         $builder = $this->getBuilder($loader, []);
 
         $this->assertSame(
             '<a href="<?php echo htmlspecialchars($url, ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>">'
-            . '<?php echo htmlspecialchars(strtoupper(\'default\'.\'xxx\'), ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>'
+            . '<?php echo htmlspecialchars(strtoupper(inject(\'value\', \'default\'.\'xxx\')), ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>'
             . '</a>',
             $builder->compile('root')->getContent()
         );
@@ -226,13 +226,13 @@ class ImportElementTest extends BaseTest
             'root',
             '<use:element path="import" as="url"/><url href="{{ $url }}"></url>'
         );
-        $loader->set('import', '<a href="${href}">{{ strtoupper(value(\'value\', [\'abc\'])) }}</a>');
+        $loader->set('import', '<a href="${href}">{{ strtoupper(inject(\'value\', [\'abc\'])) }}</a>');
 
         $builder = $this->getBuilder($loader, []);
 
         $this->assertSame(
             '<a href="<?php echo htmlspecialchars($url, ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>">'
-            . '<?php echo htmlspecialchars(strtoupper([\'abc\']), ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>'
+            . '<?php echo htmlspecialchars(strtoupper(inject(\'value\', [\'abc\'])), ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>'
             . '</a>',
             $builder->compile('root')->getContent()
         );
