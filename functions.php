@@ -7,7 +7,7 @@
  */
 declare(strict_types=1);
 
-if (!function_exists('value')) {
+if (!function_exists('inject')) {
     /**
      * Macro function to be replaced by the injected value.
      *
@@ -15,7 +15,7 @@ if (!function_exists('value')) {
      * @param mixed  $default
      * @return mixed
      */
-    function value(string $name, $default = null)
+    function inject(string $name, $default = null)
     {
         return $default;
     }
