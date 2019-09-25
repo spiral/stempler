@@ -50,7 +50,7 @@ final class InjectBlocks implements VisitorInterface
      */
     public function leaveNode($node, VisitorContext $ctx)
     {
-        if (!$node instanceof Block || !$this->blocks->has($node->name)) {
+        if (!$node instanceof Block || $node->name === null || !$this->blocks->has($node->name)) {
             return null;
         }
 

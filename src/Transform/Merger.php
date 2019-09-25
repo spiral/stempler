@@ -13,6 +13,7 @@ use DeepCopy\DeepCopy;
 use Spiral\Stempler\Node\HTML\Tag;
 use Spiral\Stempler\Node\NodeInterface;
 use Spiral\Stempler\Node\Template;
+use Spiral\Stempler\Transform\Finalizer\IsolateBlocks;
 use Spiral\Stempler\Transform\Merge\Inject;
 use Spiral\Stempler\Traverser;
 use Spiral\Stempler\VisitorInterface;
@@ -61,11 +62,22 @@ final class Merger
         $target = $this->deepCopy->copy($target);
         $target->setContext($source->getContext());
 
-        $target->nodes = $this->inject($target->nodes, new Inject\InjectBlocks($blocks));
-        $target->nodes = $this->inject($target->nodes, new Inject\InjectPHP($blocks));
-        $target->nodes = $this->inject($target->nodes, new Inject\InjectAttributes($blocks));
+        $target->nodes = $this->traverse($target->nodes, new Inject\InjectBlocks($blocks));
+        $target->nodes = $this->traverse($target->nodes, new Inject\InjectPHP($blocks));
+        $target->nodes = $this->traverse($target->nodes, new Inject\InjectAttributes($blocks));
 
         return $target;
+    }
+
+    /**
+     * @param Template $node
+     * @return Template
+     */
+    public function isolateNodes(Template $node): Template
+    {
+        $node->nodes = $this->traverse($node->nodes, new IsolateBlocks());
+
+        return $node;
     }
 
     /**
@@ -73,7 +85,7 @@ final class Merger
      * @param VisitorInterface $visitor
      * @return array|NodeInterface[]
      */
-    protected function inject(array $nodes, VisitorInterface $visitor)
+    protected function traverse(array $nodes, VisitorInterface $visitor)
     {
         $traverser = new Traverser();
         $traverser->addVisitor($visitor);
