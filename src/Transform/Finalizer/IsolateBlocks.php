@@ -30,6 +30,5 @@ final class IsolateBlocks implements VisitorInterface
      */
     public function leaveNode($node, VisitorContext $ctx)
     {
-
     }
 }
