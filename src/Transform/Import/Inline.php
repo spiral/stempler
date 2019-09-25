@@ -48,6 +48,9 @@ final class Inline implements ImportInterface
             return null;
         }
 
-        return new Template($this->nodes);
+        $tpl = new Template($this->nodes);
+        $tpl->setContext($this->context);
+
+        return $tpl;
     }
 }

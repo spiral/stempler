@@ -90,7 +90,7 @@ final class ResolveImports implements VisitorInterface
         if ($import !== null) {
             $node = $this->merger->merge($import, $node);
 
-            return $this->merger->isolateNodes($node);
+            return $this->merger->isolateNodes($node, $import->getContext()->getPath());
         }
 
         return null;

@@ -71,11 +71,12 @@ final class Merger
 
     /**
      * @param Template $node
+     * @param string   $path
      * @return Template
      */
-    public function isolateNodes(Template $node): Template
+    public function isolateNodes(Template $node, string $path): Template
     {
-        $node->nodes = $this->traverse($node->nodes, new IsolateBlocks());
+        $node->nodes = $this->traverse($node->nodes, new IsolateBlocks($path));
 
         return $node;
     }

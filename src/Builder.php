@@ -15,9 +15,11 @@ use Spiral\Stempler\Exception\ContextExceptionInterface;
 use Spiral\Stempler\Exception\LoaderException;
 use Spiral\Stempler\Exception\ParserException;
 use Spiral\Stempler\Lexer\StringStream;
+use Spiral\Stempler\Lexer\Token;
 use Spiral\Stempler\Loader\LoaderInterface;
 use Spiral\Stempler\Loader\Source;
 use Spiral\Stempler\Node\Template;
+use Spiral\Stempler\Parser\Context;
 
 /**
  * Builds and compiles templates using set given compiler. Template is passed thought the set of
@@ -122,6 +124,10 @@ final class Builder
 
         try {
             $tpl = $this->parser->withPath($path)->parse($stream);
+            $tpl->setContext(new Context(
+                new Token(Token::TYPE_RAW, 0, ''),
+                $path
+            ));
         } catch (ParserException $e) {
             throw $this->mapException($e);
         }

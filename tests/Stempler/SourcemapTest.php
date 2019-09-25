@@ -74,7 +74,7 @@ class SourcemapTest extends BaseTest
         $sm = $res->getSourceMap($this->getFixtureLoader());
 
         $stack = $sm->getStack(6);
-        $this->assertCount(3, $stack);
+        $this->assertCount(4, $stack);
     }
 
     public function testTripeImportAndExtend()
