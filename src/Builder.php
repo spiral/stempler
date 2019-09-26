@@ -104,6 +104,17 @@ final class Builder
     {
         $tpl = $this->load($path);
 
+        return $this->compileTemplate($tpl);
+    }
+
+    /**
+     * @param Template $tpl
+     * @return Result
+     * @throws ContextExceptionInterface
+     * @throws \Throwable
+     */
+    public function compileTemplate(Template $tpl): Result
+    {
         try {
             return $this->compiler->compile($tpl);
         } catch (CompilerException $e) {
@@ -142,36 +153,6 @@ final class Builder
     }
 
     /**
-     * Set exception path and line.
-     *
-     * @param ContextExceptionInterface $e
-     * @return ContextExceptionInterface
-     */
-    public function mapException(ContextExceptionInterface $e): ContextExceptionInterface
-    {
-        if ($e->getContext()->getPath() === null) {
-            return $e;
-        }
-
-        try {
-            $source = $this->loader->load($e->getContext()->getPath());
-        } catch (LoaderException $te) {
-            return $e;
-        }
-
-        if ($source->getFilename() === null) {
-            return $e;
-        }
-
-        $e->setLocation(
-            $source->getFilename(),
-            Source::resolveLine($source->getContent(), $e->getContext()->getToken()->offset)
-        );
-
-        return $e;
-    }
-
-    /**
      * @param Template $template
      * @return Template
      *
@@ -195,5 +176,35 @@ final class Builder
         }
 
         return $template;
+    }
+
+    /**
+     * Set exception path and line.
+     *
+     * @param ContextExceptionInterface $e
+     * @return ContextExceptionInterface
+     */
+    private function mapException(ContextExceptionInterface $e): ContextExceptionInterface
+    {
+        if ($e->getContext()->getPath() === null) {
+            return $e;
+        }
+
+        try {
+            $source = $this->loader->load($e->getContext()->getPath());
+        } catch (LoaderException $te) {
+            return $e;
+        }
+
+        if ($source->getFilename() === null) {
+            return $e;
+        }
+
+        $e->setLocation(
+            $source->getFilename(),
+            Source::resolveLine($source->getContent(), $e->getContext()->getToken()->offset)
+        );
+
+        return $e;
     }
 }
