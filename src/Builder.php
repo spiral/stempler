@@ -31,6 +31,7 @@ final class Builder
     public const STAGE_PREPARE   = 0;
     public const STAGE_TRANSFORM = 1;
     public const STAGE_FINALIZE  = 2;
+    public const STAGE_COMPILE   = 3;
 
     /** @var LoaderInterface */
     private $loader;
@@ -116,6 +117,11 @@ final class Builder
     public function compileTemplate(Template $tpl): Result
     {
         try {
+            if (isset($this->visitors[self::STAGE_COMPILE])) {
+                $traverser = new Traverser($this->visitors[self::STAGE_COMPILE]);
+                $tpl = $traverser->traverse([$tpl])[0];
+            }
+
             return $this->compiler->compile($tpl);
         } catch (CompilerException $e) {
             throw $this->mapException($e);
