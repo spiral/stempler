@@ -196,5 +196,4 @@ final class Builder
 
         return $template;
     }
-
 }
