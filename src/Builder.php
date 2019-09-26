@@ -142,38 +142,12 @@ final class Builder
     }
 
     /**
-     * @param Template $template
-     * @return Template
-     *
-     * @throws \Throwable
-     */
-    protected function process(Template $template): Template
-    {
-        if (isset($this->visitors[self::STAGE_PREPARE])) {
-            $traverser = new Traverser($this->visitors[self::STAGE_PREPARE]);
-            $template = $traverser->traverse([$template])[0];
-        }
-
-        if (isset($this->visitors[self::STAGE_TRANSFORM])) {
-            $traverser = new Traverser($this->visitors[self::STAGE_TRANSFORM]);
-            $template = $traverser->traverse([$template])[0];
-        }
-
-        if (isset($this->visitors[self::STAGE_FINALIZE])) {
-            $traverser = new Traverser($this->visitors[self::STAGE_FINALIZE]);
-            $template = $traverser->traverse([$template])[0];
-        }
-
-        return $template;
-    }
-
-    /**
      * Set exception path and line.
      *
      * @param ContextExceptionInterface $e
      * @return ContextExceptionInterface
      */
-    private function mapException(ContextExceptionInterface $e): ContextExceptionInterface
+    public function mapException(ContextExceptionInterface $e): ContextExceptionInterface
     {
         if ($e->getContext()->getPath() === null) {
             return $e;
@@ -196,4 +170,31 @@ final class Builder
 
         return $e;
     }
+
+    /**
+     * @param Template $template
+     * @return Template
+     *
+     * @throws \Throwable
+     */
+    private function process(Template $template): Template
+    {
+        if (isset($this->visitors[self::STAGE_PREPARE])) {
+            $traverser = new Traverser($this->visitors[self::STAGE_PREPARE]);
+            $template = $traverser->traverse([$template])[0];
+        }
+
+        if (isset($this->visitors[self::STAGE_TRANSFORM])) {
+            $traverser = new Traverser($this->visitors[self::STAGE_TRANSFORM]);
+            $template = $traverser->traverse([$template])[0];
+        }
+
+        if (isset($this->visitors[self::STAGE_FINALIZE])) {
+            $traverser = new Traverser($this->visitors[self::STAGE_FINALIZE]);
+            $template = $traverser->traverse([$template])[0];
+        }
+
+        return $template;
+    }
+
 }
