@@ -144,7 +144,7 @@ final class BracesGrammar
         while ($n = $src->next()) {
             if (!$n instanceof Byte) {
                 // no other grammars are allowed
-                return null;
+                break;
             }
 
             switch ($n->char) {

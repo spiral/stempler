@@ -52,7 +52,7 @@ final class DirectiveGrammar implements \IteratorAggregate
         while ($n = $src->next()) {
             if (!$n instanceof Byte) {
                 // no other grammars are allowed
-                return false;
+                break;
             }
 
             switch ($n->char) {
