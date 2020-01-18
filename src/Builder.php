@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler;
@@ -87,7 +89,7 @@ final class Builder
      * @param VisitorInterface $visitor
      * @param int              $stage
      */
-    public function addVisitor(VisitorInterface $visitor, int $stage = self::STAGE_PREPARE)
+    public function addVisitor(VisitorInterface $visitor, int $stage = self::STAGE_PREPARE): void
     {
         $this->visitors[$stage][] = $visitor;
     }

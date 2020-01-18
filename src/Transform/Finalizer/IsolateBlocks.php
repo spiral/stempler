@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Transform\Finalizer;
@@ -32,7 +34,7 @@ final class IsolateBlocks implements VisitorInterface
     /**
      * @inheritDoc
      */
-    public function enterNode($node, VisitorContext $ctx)
+    public function enterNode($node, VisitorContext $ctx): void
     {
         if ($node instanceof Block && $node->getContext()->getPath() === $this->path) {
             $node->name = null;
@@ -42,7 +44,7 @@ final class IsolateBlocks implements VisitorInterface
     /**
      * @inheritDoc
      */
-    public function leaveNode($node, VisitorContext $ctx)
+    public function leaveNode($node, VisitorContext $ctx): void
     {
     }
 }

@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Directive;
@@ -14,7 +16,7 @@ use Spiral\Stempler\Node\Dynamic\Directive;
 /**
  * @see https://github.com/laravel/framework/tree/6.x/src/Illuminate/View/Compilers/Concerns
  */
-final class ConditionalDirective extends AbstractDirective
+final class ConditionalDirective extends AbstractDirectiveRenderer
 {
     /** @var bool */
     private $firstSwitchCase = false;

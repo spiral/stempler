@@ -1,14 +1,17 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Lexer\Grammar;
 
+use Spiral\Stempler\Directive\DirectiveRendererInterface;
 use Spiral\Stempler\Lexer\Buffer;
 use Spiral\Stempler\Lexer\Byte;
 use Spiral\Stempler\Lexer\Grammar\Dynamic\BracesGrammar;
@@ -23,6 +26,8 @@ use Spiral\Stempler\Lexer\Token;
 /**
  * Similar to Laravel blade, this grammar defines the ability to echo PHP variables using {{ $var }} statements
  * Grammar also support various component support using @directive(options) pattern.
+ *
+ * Attention, the syntaxt will treat all @sequnce() as directive unless DirectiveRendererInterface is provided.
  */
 final class DynamicGrammar implements GrammarInterface
 {
@@ -43,6 +48,9 @@ final class DynamicGrammar implements GrammarInterface
     // grammar control directive
     public const DECLARE_DIRECTIVE = 'declare';
 
+    /** @var DirectiveRendererInterface */
+    private $directiveRenderer;
+
     /** @var BracesGrammar */
     private $echo;
 
@@ -50,10 +58,12 @@ final class DynamicGrammar implements GrammarInterface
     private $raw;
 
     /**
-     * DynamicGrammar constructor.
+     * @param DirectiveRendererInterface|null $directiveRenderer
      */
-    public function __construct()
+    public function __construct(DirectiveRendererInterface $directiveRenderer = null)
     {
+        $this->directiveRenderer = $directiveRenderer;
+
         $this->echo = new BracesGrammar(
             '{{',
             '}}',
@@ -81,9 +91,11 @@ final class DynamicGrammar implements GrammarInterface
             }
 
             if ($n->char === DirectiveGrammar::DIRECTIVE_CHAR) {
-                if ($this->echo->nextToken($src) ||
+                if (
+                    $this->echo->nextToken($src) ||
                     $this->raw->nextToken($src) ||
-                    $src->lookaheadByte() === DirectiveGrammar::DIRECTIVE_CHAR) {
+                    $src->lookaheadByte() === DirectiveGrammar::DIRECTIVE_CHAR
+                ) {
                     // escaped echo sequence, hide directive byte
                     yield $src->next();
                     continue;
@@ -130,9 +142,37 @@ final class DynamicGrammar implements GrammarInterface
     }
 
     /**
+     * @codeCoverageIgnore
+     * @inheritDoc
+     */
+    public static function tokenName(int $token): string
+    {
+        switch ($token) {
+            case self::TYPE_OPEN_TAG:
+                return 'DYNAMIC:OPEN_TAG';
+            case self::TYPE_CLOSE_TAG:
+                return 'DYNAMIC:CLOSE_TAG';
+            case self::TYPE_OPEN_RAW_TAG:
+                return 'DYNAMIC:OPEN_RAW_TAG';
+            case self::TYPE_CLOSE_RAW_TAG:
+                return 'DYNAMIC:CLOSE_RAW_TAG';
+            case self::TYPE_BODY:
+                return 'DYNAMIC:BODY';
+            case self::TYPE_DIRECTIVE:
+                return 'DYNAMIC:DIRECTIVE';
+            case self::TYPE_KEYWORD:
+                return 'DYNAMIC:KEYWORD';
+            case self::TYPE_WHITESPACE:
+                return 'DYNAMIC:WHITESPACE';
+            default:
+                return 'DYNAMIC:UNDEFINED';
+        }
+    }
+
+    /**
      * @param string $body
      */
-    private function declare(?string $body)
+    private function declare(?string $body): void
     {
         if ($body === null) {
             return;
@@ -215,33 +255,5 @@ final class DynamicGrammar implements GrammarInterface
         }
 
         return $options;
-    }
-
-    /**
-     * @codeCoverageIgnore
-     * @inheritDoc
-     */
-    public static function tokenName(int $token): string
-    {
-        switch ($token) {
-            case self::TYPE_OPEN_TAG:
-                return "DYNAMIC:OPEN_TAG";
-            case self::TYPE_CLOSE_TAG:
-                return "DYNAMIC:CLOSE_TAG";
-            case self::TYPE_OPEN_RAW_TAG:
-                return "DYNAMIC:OPEN_RAW_TAG";
-            case self::TYPE_CLOSE_RAW_TAG:
-                return "DYNAMIC:CLOSE_RAW_TAG";
-            case self::TYPE_BODY:
-                return "DYNAMIC:BODY";
-            case self::TYPE_DIRECTIVE:
-                return "DYNAMIC:DIRECTIVE";
-            case self::TYPE_KEYWORD:
-                return "DYNAMIC:KEYWORD";
-            case self::TYPE_WHITESPACE:
-                return "DYNAMIC:WHITESPACE";
-            default:
-                return "DYNAMIC:UNDEFINED";
-        }
     }
 }

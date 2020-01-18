@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler;
@@ -77,7 +79,7 @@ final class Parser
      * @param GrammarInterface $grammar
      * @param SyntaxInterface  $generator
      */
-    public function addSyntax(GrammarInterface $grammar, SyntaxInterface $generator)
+    public function addSyntax(GrammarInterface $grammar, SyntaxInterface $generator): void
     {
         $this->lexer->addGrammar($grammar);
         $this->syntax[get_class($grammar)] = $generator;
@@ -115,7 +117,7 @@ final class Parser
      *
      * @throws SyntaxException
      */
-    public function parseTokens(Assembler $asm, iterable $tokens)
+    public function parseTokens(Assembler $asm, iterable $tokens): void
     {
         $node = $asm->getNode();
 
@@ -126,7 +128,7 @@ final class Parser
 
         foreach ($tokens as $token) {
             if (!isset($syntax[$token->grammar])) {
-                throw new SyntaxException("Undefined token", $token);
+                throw new SyntaxException('Undefined token', $token);
             }
 
             $syntax[$token->grammar]->handle($this, $asm, $token);
@@ -134,7 +136,7 @@ final class Parser
 
         if ($asm->getNode() !== $node) {
             throw new SyntaxException(
-                "Invalid node hierarchy, unclosed " . $asm->getStackPath(),
+                'Invalid node hierarchy, unclosed ' . $asm->getStackPath(),
                 $asm->getNode()->getContext()->getToken()
             );
         }

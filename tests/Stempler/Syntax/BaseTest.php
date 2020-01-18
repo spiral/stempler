@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Tests\Syntax;
@@ -29,7 +31,7 @@ abstract class BaseTest extends TestCase
         $parser = new Parser();
 
         foreach (static::GRAMMARS as $grammar => $syntax) {
-            $parser->addSyntax(new $grammar, new $syntax);
+            $parser->addSyntax(new $grammar(), new $syntax());
         }
 
         return $parser->parse(new Lexer\StringStream($string));

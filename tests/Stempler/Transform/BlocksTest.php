@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Tests\Transform;
@@ -14,7 +16,7 @@ use Spiral\Stempler\Transform\Visitor\DefineBlocks;
 
 class BlocksTest extends BaseTest
 {
-    public function testDefineBlock()
+    public function testDefineBlock(): void
     {
         $doc = $this->parse('<block:world>hello</block:world>');
         $this->assertInstanceOf(Block::class, $doc->nodes[0]);
@@ -22,7 +24,7 @@ class BlocksTest extends BaseTest
         $this->assertSame('hello', $doc->nodes[0]->nodes[0]->content);
     }
 
-    public function testDefineShortBlock()
+    public function testDefineShortBlock(): void
     {
         $doc = $this->parse('<block:world/>');
         $this->assertInstanceOf(Block::class, $doc->nodes[0]);

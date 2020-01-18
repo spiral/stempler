@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Tests\Transform;
@@ -15,26 +17,26 @@ use Spiral\Stempler\Transform\Finalizer\TrimRaw;
 
 class TrimRawTest extends BaseTest
 {
-    public function testNotEmpty()
+    public function testNotEmpty(): void
     {
         $doc = $this->parse('<a>hello world</a>abc');
 
         $this->assertInstanceOf(Raw::class, $doc->nodes[1]);
     }
 
-    public function testEmpty()
+    public function testEmpty(): void
     {
         $doc = $this->parse('
-            <a>hello world</a> 
+            <a>hello world</a>
         ');
 
         $this->assertCount(1, $doc->nodes);
     }
 
-    public function testKeepAttribute()
+    public function testKeepAttribute(): void
     {
         $doc = $this->parse('
-            <a href=" ${name} ${other} ">hello world</a> 
+            <a href=" ${name} ${other} ">hello world</a>
         ');
 
         $this->assertCount(1, $doc->nodes);

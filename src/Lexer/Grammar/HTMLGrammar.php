@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Lexer\Grammar;
@@ -79,6 +81,38 @@ final class HTMLGrammar implements GrammarInterface
             }
 
             yield from $tag;
+        }
+    }
+
+    /**
+     * @codeCoverageIgnore
+     * @inheritDoc
+     */
+    public static function tokenName(int $token): string
+    {
+        switch ($token) {
+            case self::TYPE_RAW:
+                return 'HTML:RAW';
+            case self::TYPE_KEYWORD:
+                return 'HTML:KEYWORD';
+            case self::TYPE_OPEN:
+                return 'HTML:OPEN_TAG';
+            case self::TYPE_OPEN_SHORT:
+                return 'HTML:OPEN_SHORT_TAG';
+            case self::TYPE_CLOSE:
+                return 'HTML:CLOSE_TAG';
+            case self::TYPE_CLOSE_SHORT:
+                return 'HTML:CLOSE_SHORT_TAG';
+            case self::TYPE_EQUAL:
+                return 'HTML:EQUAL';
+            case self::TYPE_ATTRIBUTE:
+                return 'HTML:ATTRIBUTE';
+            case self::TYPE_WHITESPACE:
+                return 'HTML:WHITESPACE';
+            case self::TYPE_VERBATIM:
+                return 'HTML:VERBATIM';
+            default:
+                return 'HTML:UNDEFINED';
         }
     }
 
@@ -227,9 +261,9 @@ final class HTMLGrammar implements GrammarInterface
                         $this->flushKeyword();
                         $this->whitespace[] = $n;
                         break;
-                    } else {
-                        $this->flushWhitespace();
                     }
+                        $this->flushWhitespace();
+
 
                     if (!preg_match(self::REGEXP_KEYWORD, $n->char)) {
                         // unexpected char
@@ -283,7 +317,7 @@ final class HTMLGrammar implements GrammarInterface
     /**
      * Flush whitespace or keyword tokens.
      */
-    private function flush()
+    private function flush(): void
     {
         $this->flushWhitespace();
         $this->flushKeyword();
@@ -292,7 +326,7 @@ final class HTMLGrammar implements GrammarInterface
     /**
      * Flush keyword content.
      */
-    private function flushWhitespace()
+    private function flushWhitespace(): void
     {
         if ($this->whitespace === []) {
             return;
@@ -305,7 +339,7 @@ final class HTMLGrammar implements GrammarInterface
     /**
      * Flush keyword content.
      */
-    private function flushKeyword()
+    private function flushKeyword(): void
     {
         if ($this->keyword === []) {
             return;
@@ -318,7 +352,7 @@ final class HTMLGrammar implements GrammarInterface
     /**
      * Flush attribute content.
      */
-    private function flushAttribute()
+    private function flushAttribute(): void
     {
         if ($this->attribute === []) {
             return;
@@ -326,37 +360,5 @@ final class HTMLGrammar implements GrammarInterface
 
         $this->tokens[] = $this->packToken($this->attribute, self::TYPE_ATTRIBUTE);
         $this->attribute = [];
-    }
-
-    /**
-     * @codeCoverageIgnore
-     * @inheritDoc
-     */
-    public static function tokenName(int $token): string
-    {
-        switch ($token) {
-            case self::TYPE_RAW:
-                return "HTML:RAW";
-            case self::TYPE_KEYWORD:
-                return "HTML:KEYWORD";
-            case self::TYPE_OPEN:
-                return "HTML:OPEN_TAG";
-            case self::TYPE_OPEN_SHORT:
-                return "HTML:OPEN_SHORT_TAG";
-            case self::TYPE_CLOSE:
-                return "HTML:CLOSE_TAG";
-            case self::TYPE_CLOSE_SHORT:
-                return "HTML:CLOSE_SHORT_TAG";
-            case self::TYPE_EQUAL:
-                return "HTML:EQUAL";
-            case self::TYPE_ATTRIBUTE:
-                return "HTML:ATTRIBUTE";
-            case self::TYPE_WHITESPACE:
-                return "HTML:WHITESPACE";
-            case self::TYPE_VERBATIM:
-                return "HTML:VERBATIM";
-            default:
-                return "HTML:UNDEFINED";
-        }
     }
 }

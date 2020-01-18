@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Tests;
@@ -28,7 +30,7 @@ use Spiral\Stempler\Transform\Visitor\DefineBlocks;
 
 class ExceptionTest extends BaseTest
 {
-    public function testSimpleLoad()
+    public function testSimpleLoad(): void
     {
         $builder = $this->getBuilder($this->getFixtureLoader());
 
@@ -38,7 +40,7 @@ class ExceptionTest extends BaseTest
         );
     }
 
-    public function testSyntaxException()
+    public function testSyntaxException(): void
     {
         $builder = $this->getBuilder($this->getFixtureLoader());
 
@@ -51,7 +53,7 @@ class ExceptionTest extends BaseTest
         }
     }
 
-    public function testExceptionInElementImport()
+    public function testExceptionInElementImport(): void
     {
         $builder = $this->getBuilder($this->getFixtureLoader());
 
@@ -63,7 +65,7 @@ class ExceptionTest extends BaseTest
         }
     }
 
-    public function testExceptionInElementImport3rdLine()
+    public function testExceptionInElementImport3rdLine(): void
     {
         $builder = $this->getBuilder($this->getFixtureLoader());
 
@@ -75,7 +77,7 @@ class ExceptionTest extends BaseTest
         }
     }
 
-    public function testExceptionInDirImport()
+    public function testExceptionInDirImport(): void
     {
         $builder = $this->getBuilder($this->getFixtureLoader());
 
@@ -87,7 +89,7 @@ class ExceptionTest extends BaseTest
         }
     }
 
-    public function testExceptionInDirImport2()
+    public function testExceptionInDirImport2(): void
     {
         $builder = $this->getBuilder($this->getFixtureLoader());
 
@@ -99,7 +101,7 @@ class ExceptionTest extends BaseTest
         }
     }
 
-    public function testDirectiveException()
+    public function testDirectiveException(): void
     {
         $builder = $this->getBuilder($this->getFixtureLoader());
 
@@ -111,7 +113,7 @@ class ExceptionTest extends BaseTest
         }
     }
 
-    public function testExceptionInImport()
+    public function testExceptionInImport(): void
     {
         $builder = $this->getBuilder($this->getFixtureLoader());
 
@@ -128,7 +130,7 @@ class ExceptionTest extends BaseTest
         }
     }
 
-    public function testSyntaxExceptionInImport()
+    public function testSyntaxExceptionInImport(): void
     {
         $builder = $this->getBuilder($this->getFixtureLoader());
 
@@ -146,7 +148,7 @@ class ExceptionTest extends BaseTest
         }
     }
 
-    public function testBadExtends()
+    public function testBadExtends(): void
     {
         $builder = $this->getBuilder($this->getFixtureLoader());
 
@@ -160,7 +162,7 @@ class ExceptionTest extends BaseTest
         }
     }
 
-    public function testBadExtendsDueToSyntax()
+    public function testBadExtendsDueToSyntax(): void
     {
         $builder = $this->getBuilder($this->getFixtureLoader());
 

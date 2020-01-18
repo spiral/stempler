@@ -1,16 +1,18 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Transform\Finalizer;
 
 use Spiral\Stempler\Compiler\Renderer\DynamicRenderer;
-use Spiral\Stempler\Directive\DirectiveInterface;
+use Spiral\Stempler\Directive\DirectiveRendererInterface;
 use Spiral\Stempler\Exception\DirectiveException;
 use Spiral\Stempler\Node\Dynamic\Directive;
 use Spiral\Stempler\Node\Dynamic\Output;
@@ -32,7 +34,7 @@ final class DynamicToPHP implements VisitorInterface
     /** @var string */
     private $defaultFilter = '';
 
-    /** @var DirectiveInterface[] */
+    /** @var DirectiveRendererInterface[] */
     private $directives = [];
 
     /**
@@ -48,9 +50,9 @@ final class DynamicToPHP implements VisitorInterface
     /**
      * Add new directive(s) compiler.
      *
-     * @param DirectiveInterface $directiveCompiler
+     * @param DirectiveRendererInterface $directiveCompiler
      */
-    public function addDirective(DirectiveInterface $directiveCompiler)
+    public function addDirective(DirectiveRendererInterface $directiveCompiler): void
     {
         $this->directives[] = $directiveCompiler;
     }
@@ -58,7 +60,7 @@ final class DynamicToPHP implements VisitorInterface
     /**
      * @inheritDoc
      */
-    public function enterNode($node, VisitorContext $ctx)
+    public function enterNode($node, VisitorContext $ctx): void
     {
     }
 
@@ -110,7 +112,7 @@ final class DynamicToPHP implements VisitorInterface
          */
 
         if ($node->rawOutput) {
-            $result = sprintf("<?php echo %s; ?>", trim($node->body));
+            $result = sprintf('<?php echo %s; ?>', trim($node->body));
         } else {
             $filter = $node->filter ?? $this->getFilterContext($ctx);
 

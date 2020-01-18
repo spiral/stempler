@@ -1,22 +1,25 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Directive;
 
+use ReflectionObject;
 use Spiral\Stempler\Node\Dynamic\Directive;
 
 /**
  * Automatically invokes methods associated with directive name.
  */
-abstract class AbstractDirective implements DirectiveInterface
+abstract class AbstractDirectiveRenderer implements DirectiveRendererInterface
 {
-    /** @var \ReflectionObject */
+    /** @var ReflectionObject */
     private $r;
 
     /**
@@ -24,7 +27,16 @@ abstract class AbstractDirective implements DirectiveInterface
      */
     public function __construct()
     {
-        $this->r = new \ReflectionObject($this);
+        $this->r = new ReflectionObject($this);
+    }
+
+    /**
+     * @param string $name
+     * @return bool
+     */
+    public function hasDirective(string $name): bool
+    {
+        return $this->r->hasMethod('render' . ucfirst($name));
     }
 
     /**
@@ -33,7 +45,7 @@ abstract class AbstractDirective implements DirectiveInterface
      */
     public function render(Directive $directive): ?string
     {
-        if (!$this->r->hasMethod('render' . ucfirst($directive->name))) {
+        if (!$this->hasDirective($directive->name)) {
             return null;
         }
 

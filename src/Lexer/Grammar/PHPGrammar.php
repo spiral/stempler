@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Lexer\Grammar;
@@ -43,6 +45,15 @@ final class PHPGrammar implements GrammarInterface
     }
 
     /**
+     * @codeCoverageIgnore
+     * @inheritDoc
+     */
+    public static function tokenName(int $token): string
+    {
+        return 'PHP:CODE';
+    }
+
+    /**
      * @param string $content
      * @param int    $offset
      * @return Token|null
@@ -73,9 +84,8 @@ final class PHPGrammar implements GrammarInterface
             if (!is_array($token)) {
                 $buffer .= $token;
                 continue;
-            } else {
-                $buffer .= $token[1];
             }
+            $buffer .= $token[1];
         }
 
         $token = new Token(self::TYPE_CODE, $offset, $buffer);
@@ -96,14 +106,5 @@ final class PHPGrammar implements GrammarInterface
         }
 
         return in_array($token[0], $type);
-    }
-
-    /**
-     * @codeCoverageIgnore
-     * @inheritDoc
-     */
-    public static function tokenName(int $token): string
-    {
-        return "PHP:CODE";
     }
 }

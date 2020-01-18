@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Lexer\Grammar\Dynamic;
@@ -60,7 +62,7 @@ final class BracesGrammar
     /**
      * Disable braces grammar.
      */
-    public function disable()
+    public function disable(): void
     {
         $this->active = false;
     }
@@ -68,7 +70,7 @@ final class BracesGrammar
     /**
      * Enable braces grammar.
      */
-    public function enable()
+    public function enable(): void
     {
         $this->active = true;
     }
@@ -76,7 +78,7 @@ final class BracesGrammar
     /**
      * @param string $startSequence
      */
-    public function setStartSequence(string $startSequence)
+    public function setStartSequence(string $startSequence): void
     {
         $this->startSequence = $startSequence;
     }
@@ -84,7 +86,7 @@ final class BracesGrammar
     /**
      * @param string $endSequence
      */
-    public function setEndSequence(string $endSequence)
+    public function setEndSequence(string $endSequence): void
     {
         $this->endSequence = $endSequence;
     }
@@ -94,7 +96,7 @@ final class BracesGrammar
      *
      * @param bool $active
      */
-    public function setActive(bool $active)
+    public function setActive(bool $active): void
     {
         $this->active = $active;
     }
@@ -218,7 +220,7 @@ final class BracesGrammar
     /**
      * Pack name token.
      */
-    private function flushBody()
+    private function flushBody(): void
     {
         if ($this->body === []) {
             return;

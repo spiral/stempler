@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Tests\Transform;
@@ -21,7 +23,7 @@ use Spiral\Stempler\Transform\Visitor\DefineBlocks;
 
 class ImportBundleTest extends BaseTest
 {
-    public function testNoImport()
+    public function testNoImport(): void
     {
         $loader = $loader ?? new StringLoader();
         $loader->set('root', '<url href="google.com">hello world</url>');
@@ -35,7 +37,7 @@ class ImportBundleTest extends BaseTest
         );
     }
 
-    public function testInlineBundle()
+    public function testInlineBundle(): void
     {
         $loader = $loader ?? new StringLoader();
         $loader->set('root', '
@@ -59,7 +61,7 @@ class ImportBundleTest extends BaseTest
         );
     }
 
-    public function testImportElementViaBundle()
+    public function testImportElementViaBundle(): void
     {
         $loader = $loader ?? new StringLoader();
         $loader->set('root', '

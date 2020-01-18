@@ -1,16 +1,18 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Compiler\Renderer;
 
 use Spiral\Stempler\Compiler;
-use Spiral\Stempler\Directive\DirectiveInterface;
+use Spiral\Stempler\Directive\DirectiveRendererInterface;
 use Spiral\Stempler\Exception\DirectiveException;
 use Spiral\Stempler\Node\Dynamic\Directive;
 use Spiral\Stempler\Node\Dynamic\Output;
@@ -24,27 +26,19 @@ final class DynamicRenderer implements Compiler\RendererInterface
     /** @var string */
     private $defaultFilter = '';
 
-    /** @var DirectiveInterface[] */
-    private $directives = [];
+    /** @var DirectiveRendererInterface|null */
+    private $directiveRenderer;
 
     /**
-     * @param string $defaultFilter
-     * @param array  $directives
+     * @param DirectiveRendererInterface $directiveRenderer
+     * @param string                     $defaultFilter
      */
-    public function __construct(string $defaultFilter = self::DEFAULT_FILTER, array $directives = [])
-    {
+    public function __construct(
+        DirectiveRendererInterface $directiveRenderer = null,
+        string $defaultFilter = self::DEFAULT_FILTER
+    ) {
+        $this->directiveRenderer = $directiveRenderer;
         $this->defaultFilter = $defaultFilter;
-        $this->directives = $directives;
-    }
-
-    /**
-     * Add new directive(s) compiler.
-     *
-     * @param DirectiveInterface $directiveCompiler
-     */
-    public function addDirective(DirectiveInterface $directiveCompiler)
-    {
-        $this->directives[] = $directiveCompiler;
     }
 
     /**
@@ -70,10 +64,10 @@ final class DynamicRenderer implements Compiler\RendererInterface
      *
      * @throws DirectiveException
      */
-    private function directive(Compiler\Result $source, Directive $directive)
+    private function directive(Compiler\Result $source, Directive $directive): void
     {
-        foreach ($this->directives as $renderer) {
-            $result = $renderer->render($directive);
+        if ($this->directiveRenderer !== null) {
+            $result = $this->directiveRenderer->render($directive);
             if ($result !== null) {
                 $source->push($result, $directive->getContext());
                 return;
@@ -90,10 +84,10 @@ final class DynamicRenderer implements Compiler\RendererInterface
      * @param Compiler\Result $source
      * @param Output          $output
      */
-    private function output(Compiler\Result $source, Output $output)
+    private function output(Compiler\Result $source, Output $output): void
     {
         if ($output->rawOutput) {
-            $source->push(sprintf("<?php echo %s; ?>", trim($output->body)), $output->getContext());
+            $source->push(sprintf('<?php echo %s; ?>', trim($output->body)), $output->getContext());
             return;
         }
 

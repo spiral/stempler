@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Tests\Compiler;
@@ -17,7 +19,7 @@ class RawTest extends BaseTest
         CoreRenderer::class,
     ];
 
-    public function testCompileRaw()
+    public function testCompileRaw(): void
     {
         $doc = $this->parse('hello world');
 

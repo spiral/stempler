@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Directive;
@@ -14,7 +16,7 @@ use Spiral\Stempler\Node\Dynamic\Directive;
 /**
  * Render loops and their commands.
  */
-final class LoopDirective extends AbstractDirective
+final class LoopDirective extends AbstractDirectiveRenderer
 {
     /**
      * @param Directive $directive
@@ -22,7 +24,7 @@ final class LoopDirective extends AbstractDirective
      */
     public function renderFor(Directive $directive): string
     {
-        return sprintf("<?php for(%s): ?>", $directive->body);
+        return sprintf('<?php for(%s): ?>', $directive->body);
     }
 
     /**
@@ -38,27 +40,9 @@ final class LoopDirective extends AbstractDirective
      * @param Directive $directive
      * @return string
      */
-    protected function renderWhile(Directive $directive): string
-    {
-        return sprintf("<?php while(%s): ?>", $directive->body);
-    }
-
-    /**
-     * @param Directive $directive
-     * @return string
-     */
-    protected function renderEndwhile(Directive $directive): string
-    {
-        return '<?php endwhile; ?>';
-    }
-
-    /**
-     * @param Directive $directive
-     * @return string
-     */
     public function renderForeach(Directive $directive): string
     {
-        return sprintf("<?php foreach(%s): ?>", $directive->body);
+        return sprintf('<?php foreach(%s): ?>', $directive->body);
     }
 
     /**
@@ -94,5 +78,23 @@ final class LoopDirective extends AbstractDirective
         }
 
         return '<?php continue; ?>';
+    }
+
+    /**
+     * @param Directive $directive
+     * @return string
+     */
+    protected function renderWhile(Directive $directive): string
+    {
+        return sprintf('<?php while(%s): ?>', $directive->body);
+    }
+
+    /**
+     * @param Directive $directive
+     * @return string
+     */
+    protected function renderEndwhile(Directive $directive): string
+    {
+        return '<?php endwhile; ?>';
     }
 }

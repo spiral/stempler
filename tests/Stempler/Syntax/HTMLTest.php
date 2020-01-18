@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Tests\Syntax;
@@ -22,7 +24,7 @@ class HTMLTest extends BaseTest
         HTMLGrammar::class => HTMLSyntax::class,
     ];
 
-    public function testRaw()
+    public function testRaw(): void
     {
         $doc = $this->parse('raw');
 
@@ -30,7 +32,7 @@ class HTMLTest extends BaseTest
         $this->assertSame('raw', $doc->nodes[0]->content);
     }
 
-    public function testNode()
+    public function testNode(): void
     {
         $doc = $this->parse('<a href="google.com">hello world</a>');
 
@@ -41,12 +43,12 @@ class HTMLTest extends BaseTest
 
         $this->assertInstanceOf(Attr::class, $doc->nodes[0]->attrs[0]);
 
-        $this->assertSame("href", $doc->nodes[0]->attrs[0]->name);
+        $this->assertSame('href', $doc->nodes[0]->attrs[0]->name);
         $this->assertSame('"google.com"', $doc->nodes[0]->attrs[0]->value);
-        $this->assertSame("hello world", $doc->nodes[0]->nodes[0]->content);
+        $this->assertSame('hello world', $doc->nodes[0]->nodes[0]->content);
     }
 
-    public function testShortNode()
+    public function testShortNode(): void
     {
         $doc = $this->parse('<br>');
 
@@ -58,7 +60,7 @@ class HTMLTest extends BaseTest
         $this->assertSame([], $doc->nodes[0]->nodes);
     }
 
-    public function testShortNode2()
+    public function testShortNode2(): void
     {
         $doc = $this->parse('<embed url="google.com"/>');
 
@@ -67,7 +69,7 @@ class HTMLTest extends BaseTest
         $this->assertSame('embed', $doc->nodes[0]->name);
         $this->assertSame(true, $doc->nodes[0]->void);
 
-        $this->assertSame("url", $doc->nodes[0]->attrs[0]->name);
+        $this->assertSame('url', $doc->nodes[0]->attrs[0]->name);
         $this->assertSame('"google.com"', $doc->nodes[0]->attrs[0]->value);
 
         $this->assertSame([], $doc->nodes[0]->nodes);
@@ -76,7 +78,7 @@ class HTMLTest extends BaseTest
     /**
      * @expectedException \Spiral\Stempler\Exception\ParserException
      */
-    public function testBrokenNode()
+    public function testBrokenNode(): void
     {
         $this->parse('<a href="">');
     }
@@ -84,12 +86,12 @@ class HTMLTest extends BaseTest
     /**
      * @expectedException \Spiral\Stempler\Exception\ParserException
      */
-    public function testBrokenNested()
+    public function testBrokenNested(): void
     {
         $this->parse('<a href=""></b>');
     }
 
-    public function testVerbatimAttribute()
+    public function testVerbatimAttribute(): void
     {
         $doc = $this->parse('<a style="color: blue" onclick="alert(1);"></a>');
 
@@ -99,8 +101,8 @@ class HTMLTest extends BaseTest
         $this->assertInstanceOf(Attr::class, $doc->nodes[0]->attrs[0]);
         $this->assertInstanceOf(Attr::class, $doc->nodes[0]->attrs[1]);
 
-        $this->assertSame("style", $doc->nodes[0]->attrs[0]->name);
-        $this->assertSame("onclick", $doc->nodes[0]->attrs[1]->name);
+        $this->assertSame('style', $doc->nodes[0]->attrs[0]->name);
+        $this->assertSame('onclick', $doc->nodes[0]->attrs[1]->name);
 
         $this->assertInstanceOf(Verbatim::class, $doc->nodes[0]->attrs[0]->value);
         $this->assertInstanceOf(Verbatim::class, $doc->nodes[0]->attrs[1]->value);

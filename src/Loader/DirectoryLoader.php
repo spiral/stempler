@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Loader;
@@ -41,7 +43,7 @@ final class DirectoryLoader implements LoaderInterface
     public function load(string $path): Source
     {
         $filename = sprintf(
-            "%s%s%s%s",
+            '%s%s%s%s',
             $this->directory,
             DIRECTORY_SEPARATOR,
             $path,

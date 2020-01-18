@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Tests\Directive;
@@ -17,12 +19,12 @@ class PHPTest extends BaseTest
         PHPDirective::class
     ];
 
-    public function testPHP()
+    public function testPHP(): void
     {
         $doc = $this->parse('@php echo 1; @endphp');
 
         $this->assertSame(
-            "<?php echo 1; ?>",
+            '<?php echo 1; ?>',
             $this->compile($doc)
         );
     }

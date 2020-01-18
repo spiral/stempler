@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Tests;
@@ -32,20 +34,20 @@ class TraverserTest extends BaseTest implements VisitorInterface
         HTMLGrammar::class => HTMLSyntax::class,
     ];
 
-    public function testAlterNode()
+    public function testAlterNode(): void
     {
         $doc = $this->parse('<a href="url"></a>');
 
         $t = new Traverser();
-        $t->addVisitor(new class implements VisitorInterface {
-            public function enterNode($node, VisitorContext $ctx)
+        $t->addVisitor(new class() implements VisitorInterface {
+            public function enterNode($node, VisitorContext $ctx): void
             {
                 if ($node instanceof Tag && $node->name == 'a') {
                     $node->name = 'b';
                 }
             }
 
-            public function leaveNode($node, VisitorContext $ctx)
+            public function leaveNode($node, VisitorContext $ctx): void
             {
             }
         });
@@ -58,13 +60,13 @@ class TraverserTest extends BaseTest implements VisitorInterface
         );
     }
 
-    public function testReplaceNode()
+    public function testReplaceNode(): void
     {
         $doc = $this->parse('<a href="url"></a>');
 
         $t = new Traverser();
-        $t->addVisitor(new class implements VisitorInterface {
-            public function enterNode($node, VisitorContext $ctx)
+        $t->addVisitor(new class() implements VisitorInterface {
+            public function enterNode($node, VisitorContext $ctx): void
             {
             }
 
@@ -90,13 +92,13 @@ class TraverserTest extends BaseTest implements VisitorInterface
         );
     }
 
-    public function testRemoveNode()
+    public function testRemoveNode(): void
     {
         $doc = $this->parse('<a href="url"><b></b>hello</a>');
 
         $t = new Traverser();
-        $t->addVisitor(new class implements VisitorInterface {
-            public function enterNode($node, VisitorContext $ctx)
+        $t->addVisitor(new class() implements VisitorInterface {
+            public function enterNode($node, VisitorContext $ctx): void
             {
             }
 
@@ -116,7 +118,7 @@ class TraverserTest extends BaseTest implements VisitorInterface
         );
     }
 
-    public function testVisitorContext()
+    public function testVisitorContext(): void
     {
         $doc = $this->parse('<a href="url"><b>hello</b></a>');
 
@@ -126,7 +128,7 @@ class TraverserTest extends BaseTest implements VisitorInterface
         $doc->nodes = $t->traverse($doc->nodes);
     }
 
-    public function enterNode($node, VisitorContext $ctx)
+    public function enterNode($node, VisitorContext $ctx): void
     {
         if ($ctx->getCurrentNode() instanceof Raw) {
             $this->assertInstanceOf(Tag::class, $ctx->getParentNode());
@@ -137,7 +139,7 @@ class TraverserTest extends BaseTest implements VisitorInterface
         }
     }
 
-    public function leaveNode($node, VisitorContext $ctx)
+    public function leaveNode($node, VisitorContext $ctx): void
     {
     }
 }

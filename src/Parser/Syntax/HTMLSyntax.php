@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Parser\Syntax;
@@ -110,8 +112,10 @@ final class HTMLSyntax implements SyntaxInterface
                     throw new SyntaxException('unexpected attribute token', $token);
                 }
 
-                if (strpos($this->attr->name, 'on') === 0 ||
-                    in_array($this->attr->name, self::VERBATIM_ATTRIBUTES, true)) {
+                if (
+                    strpos($this->attr->name, 'on') === 0 ||
+                    in_array($this->attr->name, self::VERBATIM_ATTRIBUTES, true)
+                ) {
                     $this->attr->value = $this->parseVerbatim($parser, $token);
                 } else {
                     $this->attr->value = $this->parseToken($parser, $token);
@@ -167,7 +171,7 @@ final class HTMLSyntax implements SyntaxInterface
     /**
      * Flush open nodes and tokens.
      */
-    private function flush()
+    private function flush(): void
     {
         $this->node = null;
         $this->token = null;

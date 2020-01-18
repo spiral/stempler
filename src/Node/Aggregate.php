@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Node;
@@ -44,7 +46,7 @@ final class Aggregate implements NodeInterface
      */
     public function accepts(string $name): ?string
     {
-        if ($this->pattern === "" || $this->pattern === '*') {
+        if ($this->pattern === '' || $this->pattern === '*') {
             // accept everything
             return $name;
         }
@@ -56,7 +58,7 @@ final class Aggregate implements NodeInterface
                 continue;
             }
 
-            [$option, $value] = explode(":", trim($condition));
+            [$option, $value] = explode(':', trim($condition));
             $conditions[$option] = $value;
         }
 

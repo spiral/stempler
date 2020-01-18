@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Tests\Transform;
@@ -19,7 +21,7 @@ use Spiral\Stempler\Transform\Visitor\DefineStacks;
 
 class StackTest extends BaseTest
 {
-    public function testEmptyStack()
+    public function testEmptyStack(): void
     {
         $doc = $this->parse('<stack:collect name="css"/>');
 
@@ -27,7 +29,7 @@ class StackTest extends BaseTest
         $this->assertSame([], $doc->nodes[0]->nodes);
     }
 
-    public function testDefaultStack()
+    public function testDefaultStack(): void
     {
         $doc = $this->parse('<stack:collect name="css">css</stack:collect>');
 
@@ -36,7 +38,7 @@ class StackTest extends BaseTest
         $this->assertSame('css', $doc->nodes[0]->nodes[0]->content);
     }
 
-    public function testStackPushAfter()
+    public function testStackPushAfter(): void
     {
         $doc = $this->parse('<stack:collect name="css"/><stack:push name="css">css</stack:push>');
 
@@ -45,9 +47,12 @@ class StackTest extends BaseTest
         $this->assertSame('css', $doc->nodes[0]->nodes[0]->content);
     }
 
-    public function testStackPushAfterOrder()
+    public function testStackPushAfterOrder(): void
     {
-        $doc = $this->parse('<stack:collect name="css"/><stack:push name="css">css</stack:push><stack:push name="css">css2</stack:push>');
+        $doc = $this->parse(
+            '<stack:collect name="css"/><stack:push name="css">css</stack:push>'
+            . '<stack:push name="css">css2</stack:push>'
+        );
 
         $this->assertInstanceOf(Aggregate::class, $doc->nodes[0]);
         $this->assertCount(1, $doc->nodes);
@@ -59,9 +64,12 @@ class StackTest extends BaseTest
         $this->assertSame('css2', $doc->nodes[0]->nodes[1]->content);
     }
 
-    public function testPushBefore()
+    public function testPushBefore(): void
     {
-        $doc = $this->parse('<stack:push name="css">css2</stack:push><stack:collect name="css"/><stack:push name="css">css</stack:push>');
+        $doc = $this->parse(
+            '<stack:push name="css">css2</stack:push><stack:collect name="css"/>'
+            . '<stack:push name="css">css</stack:push>'
+        );
 
         $this->assertInstanceOf(Aggregate::class, $doc->nodes[0]);
         $this->assertCount(1, $doc->nodes);
@@ -73,9 +81,12 @@ class StackTest extends BaseTest
         $this->assertSame('css', $doc->nodes[0]->nodes[1]->content);
     }
 
-    public function testPrepend()
+    public function testPrepend(): void
     {
-        $doc = $this->parse('<stack:push name="css">css2</stack:push><stack:collect name="css"/><stack:prepend name="css">css</stack:prepend>');
+        $doc = $this->parse(
+            '<stack:push name="css">css2</stack:push><stack:collect name="css"/>'
+            . '<stack:prepend name="css">css</stack:prepend>'
+        );
 
         $this->assertInstanceOf(Aggregate::class, $doc->nodes[0]);
         $this->assertCount(1, $doc->nodes);
@@ -87,13 +98,15 @@ class StackTest extends BaseTest
         $this->assertSame('css2', $doc->nodes[0]->nodes[1]->content);
     }
 
-    public function testPushFromTheSubtag()
+    public function testPushFromTheSubtag(): void
     {
-        $doc = $this->parse('
+        $doc = $this->parse(
+            '
         <div><stack:push name="css">css2</stack:push></div>
         <stack:collect name="css"/>
         <div><stack:prepend name="css">css</stack:prepend></div>
-        ');
+        '
+        );
 
         $this->assertInstanceOf(Aggregate::class, $doc->nodes[1]);
         $this->assertCount(3, $doc->nodes);
@@ -105,67 +118,77 @@ class StackTest extends BaseTest
         $this->assertSame('css2', $doc->nodes[1]->nodes[1]->content);
     }
 
-    public function testPushIntoSubtagOutofScope()
+    public function testPushIntoSubtagOutofScope(): void
     {
         $this->assertSame(
             '<div></div><stack:push name="css">css2</stack:push>',
-            $this->compile('<div><stack:collect name="css"/></div>
-            <stack:push name="css">css2</stack:push>')->getContent()
+            $this->compile(
+                '<div><stack:collect name="css"/></div>
+            <stack:push name="css">css2</stack:push>'
+            )->getContent()
         );
     }
 
-    public function testPushIntoSubtagInTheScope()
+    public function testPushIntoSubtagInTheScope(): void
     {
         $this->assertSame(
             '<div>css2</div>',
-            $this->compile('
+            $this->compile(
+                '
             <div><stack:collect name="css" level="1"/></div>
             <stack:push name="css">css2</stack:push>
-            ')->getContent()
+            '
+            )->getContent()
         );
     }
 
-    public function testMultipleScopes()
+    public function testMultipleScopes(): void
     {
         $this->assertSame(
             'css2<div>css1</div>',
-            $this->compile('
+            $this->compile(
+                '
 <stack:collect name="css"/>
 <div>
     <stack:collect name="css"/>
     <stack:push name="css">css1</stack:push>
 </div>
-<stack:push name="css">css2</stack:push>')->getContent()
+<stack:push name="css">css2</stack:push>'
+            )->getContent()
         );
     }
 
-    public function testScopeOverlap1()
+    public function testScopeOverlap1(): void
     {
         $this->assertSame(
             '<div><div>css1</div></div><stack:push name="css">css2</stack:push>',
-            $this->compile('
+            $this->compile(
+                '
 <div>
     <div>
         <stack:collect name="css" level="1"/>
     </div>
     <stack:push name="css">css1</stack:push>
 </div>
-<stack:push name="css">css2</stack:push>')->getContent()
+<stack:push name="css">css2</stack:push>'
+            )->getContent()
         );
     }
 
-    public function testScopeOverlap2()
+    public function testScopeOverlap2(): void
     {
         $this->assertSame(
             '<div><div>css1css2</div></div>',
-            $this->compile('
+            $this->compile(
+                '
 <div>
     <div>
         <stack:collect name="css" level="2"/>
     </div>
     <stack:push name="css">css1</stack:push>
 </div>
-<stack:push name="css">css2</stack:push>')->getContent()
+<stack:push name="css">css2</stack:push>'
+            )->getContent()
         );
     }
 

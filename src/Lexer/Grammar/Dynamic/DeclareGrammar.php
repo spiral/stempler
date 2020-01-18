@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Lexer\Grammar\Dynamic;
@@ -101,15 +103,15 @@ final class DeclareGrammar implements GrammarInterface
     {
         switch ($token) {
             case self::TYPE_KEYWORD:
-                return "DECLARE:KEYWORD";
+                return 'DECLARE:KEYWORD';
             case self::TYPE_EQUAL:
-                return "DECLARE:EQUAL";
+                return 'DECLARE:EQUAL';
             case self::TYPE_COMMA:
-                return "DECLARE:COMMA";
+                return 'DECLARE:COMMA';
             case self::TYPE_QUOTED:
-                return "DECLARE:QUOTED";
+                return 'DECLARE:QUOTED';
             default:
-                return "DECLARE:UNDEFINED";
+                return 'DECLARE:UNDEFINED';
         }
     }
 }

@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Tests;
@@ -21,7 +23,7 @@ use Spiral\Stempler\Transform\Visitor\DefineBlocks;
 
 class SourcemapTest extends BaseTest
 {
-    public function testSimpleLoad()
+    public function testSimpleLoad(): void
     {
         $res = $this->getBuilder($this->getFixtureLoader())->compile('bundle-import');
 
@@ -31,7 +33,7 @@ class SourcemapTest extends BaseTest
         );
     }
 
-    public function testGetTemplates()
+    public function testGetTemplates(): void
     {
         $res = $this->getBuilder($this->getFixtureLoader())->compile('bundle-import');
 
@@ -41,22 +43,22 @@ class SourcemapTest extends BaseTest
         ], $res->getPaths());
     }
 
-    public function testPHPImportResult()
+    public function testPHPImportResult(): void
     {
         $res = $this->getBuilder($this->getFixtureLoader())->compile('import-php');
 
         $this->assertSame(
-            preg_replace("/\s+/", "", '
-<div>                                                                                   
-    <?php foreach ([\'a\', \'b\', \'c\'] as $value): ?>                                                                                                              
-    <b><?php echo htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?></b>                                                                                    
-    <?php endforeach; ?>                                                                   
+            preg_replace("/\s+/", '', '
+<div>
+    <?php foreach ([\'a\', \'b\', \'c\'] as $value): ?>
+    <b><?php echo htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?></b>
+    <?php endforeach; ?>
 </div>'),
-            preg_replace("/\s+/", "", $res->getContent())
+            preg_replace("/\s+/", '', $res->getContent())
         );
     }
 
-    public function testCompress()
+    public function testCompress(): void
     {
         $res = $this->getBuilder($this->getFixtureLoader())->compile('import-php');
 
@@ -67,7 +69,7 @@ class SourcemapTest extends BaseTest
         $this->assertEquals($sm, $sm2);
     }
 
-    public function testGetStack()
+    public function testGetStack(): void
     {
         $res = $this->getBuilder($this->getFixtureLoader())->compile('import-php');
 
@@ -77,7 +79,7 @@ class SourcemapTest extends BaseTest
         $this->assertCount(4, $stack);
     }
 
-    public function testTripeImportAndExtend()
+    public function testTripeImportAndExtend(): void
     {
         $res = $this->getBuilder($this->getFixtureLoader())->compile('demo-import');
 

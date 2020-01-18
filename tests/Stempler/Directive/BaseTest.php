@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Tests\Directive;
@@ -12,6 +14,7 @@ namespace Spiral\Stempler\Tests\Directive;
 use Spiral\Stempler\Compiler;
 use Spiral\Stempler\Compiler\Renderer\CoreRenderer;
 use Spiral\Stempler\Compiler\Renderer\HTMLRenderer;
+use Spiral\Stempler\Directive\DirectiveRendererGroup;
 use Spiral\Stempler\Lexer\Grammar\DynamicGrammar;
 use Spiral\Stempler\Lexer\Grammar\HTMLGrammar;
 use Spiral\Stempler\Node\Template;
@@ -40,15 +43,15 @@ abstract class BaseTest extends \Spiral\Stempler\Tests\Compiler\BaseTest
     {
         $compiler = new Compiler();
         foreach (static::RENDERS as $renderer) {
-            $compiler->addRenderer(new $renderer);
+            $compiler->addRenderer(new $renderer());
         }
 
-        $dynamic = new Compiler\Renderer\DynamicRenderer();
+        $directiveGroup = new DirectiveRendererGroup();
         foreach (static::DIRECTIVES as $directive) {
-            $dynamic->addDirective(new $directive);
+            $directiveGroup->addDirective(new $directive());
         }
 
-        $compiler->addRenderer($dynamic);
+        $compiler->addRenderer(new Compiler\Renderer\DynamicRenderer($directiveGroup));
 
         return $compiler->compile($document)->getContent();
     }

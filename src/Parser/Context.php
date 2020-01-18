@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Parser;
@@ -16,13 +18,12 @@ use Spiral\Stempler\Lexer\Token;
  */
 final class Context
 {
+    public $parent;
     /** @var Token */
     private $token;
 
     /** @var string|null */
     private $path;
-
-    public $parent;
 
     /**
      * @param Token       $token

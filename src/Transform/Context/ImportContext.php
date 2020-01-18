@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Transform\Context;
@@ -36,12 +38,12 @@ final class ImportContext
     /**
      * @param ImportInterface $import
      */
-    public function add(ImportInterface $import)
+    public function add(ImportInterface $import): void
     {
         $node = $this->ctx->getParentNode();
         if (!$node instanceof AttributedInterface) {
             throw new LogicException(sprintf(
-                "Unable to create import on node without attribute storage (%s)",
+                'Unable to create import on node without attribute storage (%s)',
                 is_object($node) ? get_class($node) : gettype($node)
             ));
         }

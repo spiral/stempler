@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Transform\Visitor;
@@ -38,7 +40,7 @@ final class DefineStacks implements VisitorInterface
     /**
      * @inheritDoc
      */
-    public function leaveNode($node, VisitorContext $ctx)
+    public function leaveNode($node, VisitorContext $ctx): void
     {
     }
 
@@ -55,7 +57,7 @@ final class DefineStacks implements VisitorInterface
         }
 
         $stack = new Aggregate($node->getContext());
-        $stack->pattern = sprintf("include:%s", $name);
+        $stack->pattern = sprintf('include:%s', $name);
         $stack->nodes = $node->nodes;
 
         $ctx->register($stack, $this->stackLevel($node));

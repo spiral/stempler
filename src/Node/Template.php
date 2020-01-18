@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Node;
@@ -18,7 +20,8 @@ use Spiral\Stempler\Parser\Context;
  */
 final class Template implements NodeInterface, AttributedInterface
 {
-    use AttributeTrait, ContextTrait;
+    use AttributeTrait;
+    use ContextTrait;
 
     /** @var NodeInterface[] */
     public $nodes = [];
@@ -34,7 +37,7 @@ final class Template implements NodeInterface, AttributedInterface
     /**
      * @param Context|null $context
      */
-    public function setContext(Context $context = null)
+    public function setContext(Context $context = null): void
     {
         $this->context = $context;
     }

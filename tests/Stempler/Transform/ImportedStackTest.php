@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Tests\Transform;
@@ -26,7 +28,7 @@ use Spiral\Stempler\Transform\Visitor\DefineStacks;
 
 class ImportedStackTest extends BaseTest
 {
-    public function testEmptyStack()
+    public function testEmptyStack(): void
     {
         $doc = $this->parse('<stack:collect name="css"/>');
 
@@ -34,7 +36,7 @@ class ImportedStackTest extends BaseTest
         $this->assertSame([], $doc->nodes[0]->nodes);
     }
 
-    public function testImportedStack()
+    public function testImportedStack(): void
     {
         $loader = $loader ?? new StringLoader();
         $loader->set(
@@ -57,7 +59,7 @@ class ImportedStackTest extends BaseTest
         );
     }
 
-    public function testStackDefinedInParent()
+    public function testStackDefinedInParent(): void
     {
         $loader = $loader ?? new StringLoader();
         $loader->set(
@@ -92,7 +94,7 @@ class ImportedStackTest extends BaseTest
         );
     }
 
-    public function testStackDefinedInParentWithChild()
+    public function testStackDefinedInParentWithChild(): void
     {
         $loader = $loader ?? new StringLoader();
         $loader->set(
@@ -129,7 +131,7 @@ class ImportedStackTest extends BaseTest
         );
     }
 
-    public function testGrid()
+    public function testGrid(): void
     {
         $loader = $loader ?? new StringLoader();
         $loader->set(

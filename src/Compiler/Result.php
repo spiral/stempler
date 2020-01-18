@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Compiler;
@@ -33,7 +35,7 @@ final class Result
      * @param Context|null $ctx
      * @param callable     $body
      */
-    public function withinContext(?Context $ctx, callable $body)
+    public function withinContext(?Context $ctx, callable $body): void
     {
         if ($ctx === null || $ctx->getPath() === null) {
             $body($this);
@@ -52,7 +54,7 @@ final class Result
      * @param string       $content
      * @param Context|null $ctx
      */
-    public function push(string $content, Context $ctx = null)
+    public function push(string $content, Context $ctx = null): void
     {
         if ($ctx !== null && $ctx->getPath() !== null) {
             $this->locations[strlen($this->content)] = Location::fromContext($ctx, $this->parent);

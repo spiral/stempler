@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Tests\Transform;
@@ -15,14 +17,14 @@ use Spiral\Stempler\Transform\Finalizer\DynamicToPHP;
 
 class DynamicToPHPTest extends BaseTest
 {
-    public function testOutput()
+    public function testOutput(): void
     {
         $doc = $this->parse('{{ $name }}');
 
         $this->assertInstanceOf(PHP::class, $doc->nodes[0]);
     }
 
-    public function testDirective()
+    public function testDirective(): void
     {
         $doc = $this->parse('@foreach($users as $u) @endforeach');
 
@@ -30,7 +32,7 @@ class DynamicToPHPTest extends BaseTest
         $this->assertInstanceOf(PHP::class, $doc->nodes[2]);
     }
 
-    public function testContextAwareEscapeSimpleEcho()
+    public function testContextAwareEscapeSimpleEcho(): void
     {
         $this->assertSame(
             '<?php echo htmlspecialchars("hello world", ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>',
@@ -43,10 +45,11 @@ class DynamicToPHPTest extends BaseTest
         );
     }
 
-    public function testContextAwareEscapeAttribute()
+    public function testContextAwareEscapeAttribute(): void
     {
         $this->assertSame(
-            '<a href="<?php echo htmlspecialchars("hello world", ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>"></a>',
+            '<a href="<?php echo htmlspecialchars'
+            . '("hello world", ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>"></a>',
             $res = $this->compile('<a href="{{ "hello world" }}"></a>')->getContent()
         );
 
@@ -56,10 +59,11 @@ class DynamicToPHPTest extends BaseTest
         );
     }
 
-    public function testVerbatim()
+    public function testVerbatim(): void
     {
         $this->assertSame(
-            '<a style="color: <?php echo htmlspecialchars("hello world", ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>"></a>',
+            '<a style="color: <?php echo htmlspecialchars'
+            . '("hello world", ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>"></a>',
             $res = $this->compile('<a style="color: {{ "hello world" }}"></a>')->getContent()
         );
 
@@ -69,10 +73,11 @@ class DynamicToPHPTest extends BaseTest
         );
     }
 
-    public function testVerbatim2()
+    public function testVerbatim2(): void
     {
         $this->assertSame(
-            '<a onclick="alert(<?php echo \'&quot;\', htmlspecialchars("hello world", ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'), \'&quot;\'; ?>)"></a>',
+            '<a onclick="alert(<?php echo \'&quot;\', '
+            . 'htmlspecialchars("hello world", ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'), \'&quot;\'; ?>)"></a>',
             $res = $this->compile('<a onclick="alert({{ "hello world" }})"></a>')->getContent()
         );
 
@@ -82,10 +87,11 @@ class DynamicToPHPTest extends BaseTest
         );
     }
 
-    public function testVerbatim3()
+    public function testVerbatim3(): void
     {
         $this->assertSame(
-            '<script>alert(<?php echo json_encode("hello world", JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT, 512); ?>)</script>',
+            '<script>alert(<?php echo json_encode'
+            . '("hello world", JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT, 512); ?>)</script>',
             $res = $this->compile('<script>alert({{ "hello world" }})</script>')->getContent()
         );
 
@@ -95,10 +101,11 @@ class DynamicToPHPTest extends BaseTest
         );
     }
 
-    public function testVerbatim4()
+    public function testVerbatim4(): void
     {
         $this->assertSame(
-            '<script>alert(<?php echo json_encode("hello\' \'world", JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT, 512); ?>)</script>',
+            '<script>alert(<?php echo json_encode' .
+            '("hello\' \'world", JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT, 512); ?>)</script>',
             $res = $this->compile('<script>alert({{ "hello\' \'world" }})</script>')->getContent()
         );
 

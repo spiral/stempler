@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler;
@@ -25,7 +27,7 @@ final class Compiler
     /**
      * @param RendererInterface $renderer
      */
-    public function addRenderer(RendererInterface $renderer)
+    public function addRenderer(RendererInterface $renderer): void
     {
         $this->renders[] = $renderer;
     }
@@ -54,7 +56,7 @@ final class Compiler
         }
 
         throw new CompilerException(
-            sprintf("Unable to compile %s, no renderer found", get_class($node)),
+            sprintf('Unable to compile %s, no renderer found', get_class($node)),
             $node->getContext()
         );
     }

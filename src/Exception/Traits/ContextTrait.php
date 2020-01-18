@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Exception\Traits;
@@ -42,7 +44,7 @@ trait ContextTrait
      * @param string $filename
      * @param int    $line
      */
-    public function setLocation(string $filename, int $line)
+    public function setLocation(string $filename, int $line): void
     {
         $this->file = $filename;
         $this->line = $line;

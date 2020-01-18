@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Tests\Grammar;
@@ -16,7 +18,7 @@ class HTMLTest extends BaseTest
 {
     protected const GRAMMARS = [HTMLGrammar::class];
 
-    public function testRaw()
+    public function testRaw(): void
     {
         $this->assertTokens(
             [
@@ -26,7 +28,7 @@ class HTMLTest extends BaseTest
         );
     }
 
-    public function testTag()
+    public function testTag(): void
     {
         $this->assertTokens(
             [
@@ -38,7 +40,7 @@ class HTMLTest extends BaseTest
         );
     }
 
-    public function testTagOffset()
+    public function testTagOffset(): void
     {
         $this->assertTokens(
             [
@@ -51,7 +53,7 @@ class HTMLTest extends BaseTest
         );
     }
 
-    public function testTagCloseShort()
+    public function testTagCloseShort(): void
     {
         $this->assertTokens(
             [
@@ -63,7 +65,7 @@ class HTMLTest extends BaseTest
         );
     }
 
-    public function testTagAttribute()
+    public function testTagAttribute(): void
     {
         $this->assertTokens(
             [
@@ -79,7 +81,7 @@ class HTMLTest extends BaseTest
         );
     }
 
-    public function testInvalidTag()
+    public function testInvalidTag(): void
     {
         $this->assertTokens(
             [
@@ -89,7 +91,7 @@ class HTMLTest extends BaseTest
         );
     }
 
-    public function testInvalidTag2()
+    public function testInvalidTag2(): void
     {
         $this->assertTokens(
             [
@@ -99,7 +101,7 @@ class HTMLTest extends BaseTest
         );
     }
 
-    public function testInvalidTag3()
+    public function testInvalidTag3(): void
     {
         $this->assertTokens(
             [
@@ -109,7 +111,7 @@ class HTMLTest extends BaseTest
         );
     }
 
-    public function testInvalidTag4()
+    public function testInvalidTag4(): void
     {
         $this->assertTokens(
             [
@@ -119,7 +121,7 @@ class HTMLTest extends BaseTest
         );
     }
 
-    public function testInvalidTag5()
+    public function testInvalidTag5(): void
     {
         $this->assertTokens(
             [
@@ -132,7 +134,7 @@ class HTMLTest extends BaseTest
         );
     }
 
-    public function testInvalidTag6()
+    public function testInvalidTag6(): void
     {
         $this->assertTokens(
             [
@@ -142,7 +144,7 @@ class HTMLTest extends BaseTest
         );
     }
 
-    public function testInvalidTag7()
+    public function testInvalidTag7(): void
     {
         $this->assertTokens(
             [
@@ -152,7 +154,7 @@ class HTMLTest extends BaseTest
         );
     }
 
-    public function testInvalidTag8()
+    public function testInvalidTag8(): void
     {
         $this->assertTokens(
             [
@@ -162,7 +164,7 @@ class HTMLTest extends BaseTest
         );
     }
 
-    public function testInvalidTag9()
+    public function testInvalidTag9(): void
     {
         $this->assertTokens(
             [
@@ -172,7 +174,7 @@ class HTMLTest extends BaseTest
         );
     }
 
-    public function testInvalidTag10()
+    public function testInvalidTag10(): void
     {
         $this->assertTokens(
             [
@@ -182,7 +184,7 @@ class HTMLTest extends BaseTest
         );
     }
 
-    public function testTagWhitespace()
+    public function testTagWhitespace(): void
     {
         $this->assertTokens(
             [
@@ -196,7 +198,7 @@ class HTMLTest extends BaseTest
         );
     }
 
-    public function testDoubleWhitespace()
+    public function testDoubleWhitespace(): void
     {
         $this->assertTokens(
             [
@@ -210,7 +212,7 @@ class HTMLTest extends BaseTest
         );
     }
 
-    public function testTagOpenShort()
+    public function testTagOpenShort(): void
     {
         $this->assertTokens(
             [
@@ -222,7 +224,7 @@ class HTMLTest extends BaseTest
         );
     }
 
-    public function testTagWithBody()
+    public function testTagWithBody(): void
     {
         $this->assertTokens(
             [
@@ -238,7 +240,7 @@ class HTMLTest extends BaseTest
         );
     }
 
-    public function testScript()
+    public function testScript(): void
     {
         $this->assertTokens(
             [

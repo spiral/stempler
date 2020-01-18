@@ -1,12 +1,13 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
-declare(strict_types=1);
 
+declare(strict_types=1);
 
 namespace Spiral\Stempler\Tests\Syntax;
 
@@ -21,7 +22,7 @@ class InlineTest extends BaseTest
         InlineGrammar::class => InlineSyntax::class,
     ];
 
-    public function testRaw()
+    public function testRaw(): void
     {
         $doc = $this->parse('raw');
 
@@ -29,7 +30,7 @@ class InlineTest extends BaseTest
         $this->assertSame('raw', $doc->nodes[0]->content);
     }
 
-    public function testInline()
+    public function testInline(): void
     {
         $doc = $this->parse('${name}');
 
@@ -38,7 +39,7 @@ class InlineTest extends BaseTest
         $this->assertSame(null, $doc->nodes[0]->value);
     }
 
-    public function testInlineDefault()
+    public function testInlineDefault(): void
     {
         $doc = $this->parse('${name|default}');
 

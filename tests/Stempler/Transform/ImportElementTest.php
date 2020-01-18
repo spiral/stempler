@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Tests\Transform;
@@ -21,7 +23,7 @@ use Spiral\Stempler\Transform\Visitor\DefineBlocks;
 
 class ImportElementTest extends BaseTest
 {
-    public function testNoImport()
+    public function testNoImport(): void
     {
         $loader = $loader ?? new StringLoader();
         $loader->set('root', '<url href="google.com">hello world</url>');
@@ -35,7 +37,7 @@ class ImportElementTest extends BaseTest
         );
     }
 
-    public function testSimpleImport()
+    public function testSimpleImport(): void
     {
         $loader = $loader ?? new StringLoader();
         $loader->set(
@@ -52,7 +54,7 @@ class ImportElementTest extends BaseTest
         );
     }
 
-    public function testImportWithPHP()
+    public function testImportWithPHP(): void
     {
         $loader = $loader ?? new StringLoader();
         $loader->set(
@@ -69,7 +71,7 @@ class ImportElementTest extends BaseTest
         );
     }
 
-    public function testImportWithOutput()
+    public function testImportWithOutput(): void
     {
         $loader = $loader ?? new StringLoader();
         $loader->set(
@@ -81,12 +83,13 @@ class ImportElementTest extends BaseTest
         $builder = $this->getBuilder($loader, []);
 
         $this->assertSame(
-            '<a href="<?php echo htmlspecialchars($url, ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>">hello world</a>',
+            '<a href="<?php echo htmlspecialchars($url, ENT_QUOTES |'
+            . ' ENT_SUBSTITUTE, \'utf-8\'); ?>">hello world</a>',
             $builder->compile('root')->getContent()
         );
     }
 
-    public function testStringValueIntoPHP()
+    public function testStringValueIntoPHP(): void
     {
         $loader = $loader ?? new StringLoader();
         $loader->set(
@@ -105,7 +108,7 @@ class ImportElementTest extends BaseTest
         );
     }
 
-    public function testOutputValueIntoPHPFromAttribute()
+    public function testOutputValueIntoPHPFromAttribute(): void
     {
         $loader = $loader ?? new StringLoader();
         $loader->set(
@@ -124,7 +127,7 @@ class ImportElementTest extends BaseTest
         );
     }
 
-    public function testOutputValueIntoPHPFromAttributeUsingOutput()
+    public function testOutputValueIntoPHPFromAttributeUsingOutput(): void
     {
         $loader = $loader ?? new StringLoader();
         $loader->set(
@@ -143,7 +146,7 @@ class ImportElementTest extends BaseTest
         );
     }
 
-    public function testValueIntoPHPFromMultiValue()
+    public function testValueIntoPHPFromMultiValue(): void
     {
         $loader = $loader ?? new StringLoader();
         $loader->set(
@@ -162,7 +165,7 @@ class ImportElementTest extends BaseTest
         );
     }
 
-    public function testValueIntoPHPFromMultiValueWithSpacing()
+    public function testValueIntoPHPFromMultiValueWithSpacing(): void
     {
         $loader = $loader ?? new StringLoader();
         $loader->set(
@@ -175,18 +178,20 @@ class ImportElementTest extends BaseTest
 
         $this->assertSame(
             '<a href="<?php echo htmlspecialchars($url, ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>">'
-            . '<?php echo htmlspecialchars(strtoupper(\'OK\'.\'  \'.\'cool\'), ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>'
+            . '<?php echo htmlspecialchars(strtoupper(\'OK\'.\' '
+            . ' \'.\'cool\'), ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>'
             . '</a>',
             $builder->compile('root')->getContent()
         );
     }
 
-    public function testValueIntoPHPFromMultiValueWithSpacingAround()
+    public function testValueIntoPHPFromMultiValueWithSpacingAround(): void
     {
         $loader = $loader ?? new StringLoader();
         $loader->set(
             'root',
-            '<use:element path="import" as="url"/><url href="{{ $url }}" value=" {{ \'OK\' }} {{ \'cool\' }} ">abc</url>'
+            '<use:element path="import" as="url"/>'
+            . '<url href="{{ $url }}" value=" {{ \'OK\' }} {{ \'cool\' }} ">abc</url>'
         );
         $loader->set('import', '<a href="${href}">{{ strtoupper(inject(\'value\')) }}</a>');
 
@@ -194,13 +199,14 @@ class ImportElementTest extends BaseTest
 
         $this->assertSame(
             '<a href="<?php echo htmlspecialchars($url, ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>">'
-            . '<?php echo htmlspecialchars(strtoupper(\' \'.\'OK\'.\' \'.\'cool\'.\' \'), ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>'
+            . '<?php echo htmlspecialchars(strtoupper'
+            . '(\' \'.\'OK\'.\' \'.\'cool\'.\' \'), ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>'
             . '</a>',
             $builder->compile('root')->getContent()
         );
     }
 
-    public function testDefaultPHPValue()
+    public function testDefaultPHPValue(): void
     {
         $loader = $loader ?? new StringLoader();
         $loader->set(
@@ -213,13 +219,14 @@ class ImportElementTest extends BaseTest
 
         $this->assertSame(
             '<a href="<?php echo htmlspecialchars($url, ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>">'
-            . '<?php echo htmlspecialchars(strtoupper(inject(\'value\', \'default\'.\'xxx\')), ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>'
+            . '<?php echo htmlspecialchars(strtoupper(inject(\'value\', '
+            . '\'default\'.\'xxx\')), ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>'
             . '</a>',
             $builder->compile('root')->getContent()
         );
     }
 
-    public function testDefaultPHPValueArray()
+    public function testDefaultPHPValueArray(): void
     {
         $loader = $loader ?? new StringLoader();
         $loader->set(
@@ -232,13 +239,14 @@ class ImportElementTest extends BaseTest
 
         $this->assertSame(
             '<a href="<?php echo htmlspecialchars($url, ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>">'
-            . '<?php echo htmlspecialchars(strtoupper(inject(\'value\', [\'abc\'])), ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>'
+            . '<?php echo htmlspecialchars(strtoupper(inject(\'value\', '
+            . '[\'abc\'])), ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>'
             . '</a>',
             $builder->compile('root')->getContent()
         );
     }
 
-    public function testParentBlock()
+    public function testParentBlock(): void
     {
         $loader = $loader ?? new StringLoader();
         $loader->set(
@@ -254,7 +262,7 @@ class ImportElementTest extends BaseTest
         );
     }
 
-    public function testParentBlockShort()
+    public function testParentBlockShort(): void
     {
         $loader = $loader ?? new StringLoader();
         $loader->set(
@@ -272,11 +280,11 @@ class ImportElementTest extends BaseTest
         );
     }
 
-    public function testElementPathAndAlias()
+    public function testElementPathAndAlias(): void
     {
-        $element = new Element("path/to/import");
-        $this->assertSame("path/to/import", $element->getPath());
-        $this->assertSame("import", $element->getAlias());
+        $element = new Element('path/to/import');
+        $this->assertSame('path/to/import', $element->getPath());
+        $this->assertSame('import', $element->getAlias());
     }
 
     protected function getBuilder(LoaderInterface $loader, array $visitors): Builder

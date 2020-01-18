@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Tests\Grammar;
@@ -17,7 +19,7 @@ class RawTest extends BaseTest
 {
     protected const GRAMMARS = [];
 
-    public function testRaw()
+    public function testRaw(): void
     {
         $this->assertTokens(
             [
@@ -27,7 +29,7 @@ class RawTest extends BaseTest
         );
     }
 
-    protected function assertTokens(array $tokens, string $source)
+    protected function assertTokens(array $tokens, string $source): void
     {
         $parsed = $this->tokens($source);
 

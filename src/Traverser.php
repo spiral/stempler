@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler;
@@ -39,7 +41,7 @@ final class Traverser
      *
      * @param VisitorInterface $visitor
      */
-    public function addVisitor(VisitorInterface $visitor)
+    public function addVisitor(VisitorInterface $visitor): void
     {
         $this->visitors[] = $visitor;
     }
@@ -47,7 +49,7 @@ final class Traverser
     /**
      * @param VisitorInterface $visitor
      */
-    public function removeVisitor(VisitorInterface $visitor)
+    public function removeVisitor(VisitorInterface $visitor): void
     {
         foreach ($this->visitors as $index => $added) {
             if ($added === $visitor) {

@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Tests\Transform;
@@ -19,7 +21,7 @@ use Spiral\Stempler\Transform\Visitor\DefineBlocks;
 
 class AttributesTest extends BaseTest
 {
-    public function testAggregatedAttribute()
+    public function testAggregatedAttribute(): void
     {
         $loader = $loader ?? new StringLoader();
         $loader->set(
@@ -36,10 +38,10 @@ class AttributesTest extends BaseTest
         /** @var Aggregate $aggr */
         $aggr = $doc->nodes[0]->attrs[1];
 
-        $this->assertSame("style", $aggr->accepts("style"));
+        $this->assertSame('style', $aggr->accepts('style'));
     }
 
-    public function testAggregatedAttributePattern()
+    public function testAggregatedAttributePattern(): void
     {
         $loader = $loader ?? new StringLoader();
         $loader->set(
@@ -56,11 +58,11 @@ class AttributesTest extends BaseTest
         /** @var Aggregate $aggr */
         $aggr = $doc->nodes[0]->attrs[1];
 
-        $this->assertSame(null, $aggr->accepts("style"));
-        $this->assertSame("style", $aggr->accepts("a-style"));
+        $this->assertSame(null, $aggr->accepts('style'));
+        $this->assertSame('style', $aggr->accepts('a-style'));
     }
 
-    public function testAggregateInclude()
+    public function testAggregateInclude(): void
     {
         $loader = $loader ?? new StringLoader();
         $loader->set(
@@ -77,11 +79,11 @@ class AttributesTest extends BaseTest
         /** @var Aggregate $aggr */
         $aggr = $doc->nodes[0]->attrs[1];
 
-        $this->assertSame("style", $aggr->accepts("style"));
-        $this->assertSame(null, $aggr->accepts("another"));
+        $this->assertSame('style', $aggr->accepts('style'));
+        $this->assertSame(null, $aggr->accepts('another'));
     }
 
-    public function testAggregateExclude()
+    public function testAggregateExclude(): void
     {
         $loader = $loader ?? new StringLoader();
         $loader->set(
@@ -98,11 +100,11 @@ class AttributesTest extends BaseTest
         /** @var Aggregate $aggr */
         $aggr = $doc->nodes[0]->attrs[1];
 
-        $this->assertSame(null, $aggr->accepts("style"));
-        $this->assertSame("another", $aggr->accepts("another"));
+        $this->assertSame(null, $aggr->accepts('style'));
+        $this->assertSame('another', $aggr->accepts('another'));
     }
 
-    public function testAggregateSimple()
+    public function testAggregateSimple(): void
     {
         $loader = $loader ?? new StringLoader();
         $loader->set(
@@ -123,7 +125,7 @@ class AttributesTest extends BaseTest
         );
     }
 
-    public function testAggregateVoid()
+    public function testAggregateVoid(): void
     {
         $loader = $loader ?? new StringLoader();
         $loader->set(
@@ -143,12 +145,13 @@ class AttributesTest extends BaseTest
         );
     }
 
-    public function testAggregateBlock()
+    public function testAggregateBlock(): void
     {
         $loader = $loader ?? new StringLoader();
         $loader->set(
             'root',
-            '<use:element path="element" as="element"/><element href="google.com" blue><block:green>orange</block:green></element>'
+            '<use:element path="element" as="element"/>'
+            . '<element href="google.com" blue><block:green>orange</block:green></element>'
         );
         $loader->set(
             'element',
@@ -163,12 +166,13 @@ class AttributesTest extends BaseTest
         );
     }
 
-    public function testAggregatePHP()
+    public function testAggregatePHP(): void
     {
         $loader = $loader ?? new StringLoader();
         $loader->set(
             'root',
-            '<use:element path="element" as="element"/><element href="google.com" {!! $value ? "checked" : "" !!}/>'
+            '<use:element path="element" as="element"/>'
+            . '<element href="google.com" {!! $value ? "checked" : "" !!}/>'
         );
         $loader->set(
             'element',
@@ -183,7 +187,7 @@ class AttributesTest extends BaseTest
         );
     }
 
-    public function testAggregateVerbatim()
+    public function testAggregateVerbatim(): void
     {
         $loader = $loader ?? new StringLoader();
         $loader->set(
@@ -203,7 +207,7 @@ class AttributesTest extends BaseTest
         );
     }
 
-    public function testEqualsToPHP()
+    public function testEqualsToPHP(): void
     {
         $loader = $loader ?? new StringLoader();
         $loader->set(

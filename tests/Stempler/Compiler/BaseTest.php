@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Tests\Compiler;
@@ -33,7 +35,7 @@ abstract class BaseTest extends TestCase
     {
         $compiler = new Compiler();
         foreach (static::RENDERS as $renderer) {
-            $compiler->addRenderer(new $renderer);
+            $compiler->addRenderer(new $renderer());
         }
 
         return $compiler->compile($document)->getContent();
@@ -48,7 +50,7 @@ abstract class BaseTest extends TestCase
         $parser = new Parser();
 
         foreach (static::GRAMMARS as $grammar => $syntax) {
-            $parser->addSyntax(new $grammar, new $syntax);
+            $parser->addSyntax(new $grammar(), new $syntax());
         }
 
         return $parser->parse(new StringStream($string));

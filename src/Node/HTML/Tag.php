@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Node\HTML;
@@ -21,7 +23,8 @@ use Spiral\Stempler\Parser\Context;
  */
 final class Tag implements NodeInterface, AttributedInterface
 {
-    use ContextTrait, AttributeTrait;
+    use ContextTrait;
+    use AttributeTrait;
 
     /** @var bool */
     public $void = false;

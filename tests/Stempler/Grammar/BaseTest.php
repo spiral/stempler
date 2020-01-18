@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Tests\Grammar;
@@ -21,7 +23,7 @@ abstract class BaseTest extends TestCase
      * @param array  $tokens
      * @param string $source
      */
-    protected function assertTokens(array $tokens, string $source)
+    protected function assertTokens(array $tokens, string $source): void
     {
         $parsed = $this->tokens($source);
 
@@ -40,7 +42,7 @@ abstract class BaseTest extends TestCase
     {
         $lexer = new Lexer();
         foreach (static::GRAMMARS as $grammar) {
-            $lexer->addGrammar(new $grammar);
+            $lexer->addGrammar(new $grammar());
         }
 
         $tokens = [];

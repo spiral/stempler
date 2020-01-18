@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Tests;
@@ -14,7 +16,7 @@ use Spiral\Stempler\Lexer\StringStream;
 
 class ScannerTest extends TestCase
 {
-    public function testPeakNull()
+    public function testPeakNull(): void
     {
         $src = new StringStream('abc');
         $this->assertSame('a', $src->peak());
@@ -24,7 +26,7 @@ class ScannerTest extends TestCase
         $this->assertSame(null, $src->peak());
     }
 
-    public function testOffsetEOF()
+    public function testOffsetEOF(): void
     {
         $src = new StringStream('abc');
 

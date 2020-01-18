@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Tests\Transform;
@@ -15,6 +17,7 @@ use Spiral\Stempler\Compiler\Renderer\CoreRenderer;
 use Spiral\Stempler\Compiler\Renderer\DynamicRenderer;
 use Spiral\Stempler\Compiler\Renderer\HTMLRenderer;
 use Spiral\Stempler\Compiler\Renderer\PHPRenderer;
+use Spiral\Stempler\Directive\DirectiveRendererGroup;
 use Spiral\Stempler\Lexer\Grammar\DynamicGrammar;
 use Spiral\Stempler\Lexer\Grammar\HTMLGrammar;
 use Spiral\Stempler\Lexer\Grammar\InlineGrammar;
@@ -63,7 +66,7 @@ abstract class BaseTest extends TestCase
 
         $builder->getCompiler()->addRenderer(new CoreRenderer());
         $builder->getCompiler()->addRenderer(new PHPRenderer());
-        $builder->getCompiler()->addRenderer(new DynamicRenderer());
+        $builder->getCompiler()->addRenderer(new DynamicRenderer(new DirectiveRendererGroup()));
         $builder->getCompiler()->addRenderer(new HTMLRenderer());
 
         foreach ($this->getVisitors() as $visitor) {

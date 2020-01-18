@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Compiler;
@@ -89,7 +91,7 @@ final class SourceMap implements \Serializable
     /**
      * @param string $serialized
      */
-    public function unserialize($serialized)
+    public function unserialize($serialized): void
     {
         $data = json_decode($serialized, true);
 
@@ -98,10 +100,32 @@ final class SourceMap implements \Serializable
     }
 
     /**
+     * @param string          $content
+     * @param array           $locations
+     * @param LoaderInterface $loader
+     * @return SourceMap
+     */
+    public static function calculate(string $content, array $locations, LoaderInterface $loader): SourceMap
+    {
+        $map = new self();
+
+        foreach ($locations as $offset => $location) {
+            $line = Source::resolveLine($content, $offset);
+            if (!isset($map->lines[$line])) {
+                $map->lines[$line] = $map->calculateLine($location, $loader);
+            }
+        }
+
+        $map->sourceCache = null;
+
+        return $map;
+    }
+
+    /**
      * @param array $result
      * @param array $line
      */
-    private function unpack(array &$result, array $line)
+    private function unpack(array &$result, array $line): void
     {
         $result[] = [
             'file' => $this->paths[$line[0]],
@@ -134,27 +158,5 @@ final class SourceMap implements \Serializable
             Source::resolveLine($this->sourceCache[$location->path]->getContent(), $location->offset),
             $location->parent === null ? null : $this->calculateLine($location->parent, $loader),
         ];
-    }
-
-    /**
-     * @param string          $content
-     * @param array           $locations
-     * @param LoaderInterface $loader
-     * @return SourceMap
-     */
-    public static function calculate(string $content, array $locations, LoaderInterface $loader): SourceMap
-    {
-        $map = new self;
-
-        foreach ($locations as $offset => $location) {
-            $line = Source::resolveLine($content, $offset);
-            if (!isset($map->lines[$line])) {
-                $map->lines[$line] = $map->calculateLine($location, $loader);
-            }
-        }
-
-        $map->sourceCache = null;
-
-        return $map;
     }
 }

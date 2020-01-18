@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Lexer\Grammar;
@@ -55,6 +57,6 @@ final class RawGrammar implements GrammarInterface
      */
     public static function tokenName(int $token): string
     {
-        return "RAW:RAW";
+        return 'RAW:RAW';
     }
 }

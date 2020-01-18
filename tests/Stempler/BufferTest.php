@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Tests;
@@ -17,7 +19,7 @@ use Spiral\Stempler\Lexer\StringStream;
 
 class BufferTest extends TestCase
 {
-    public function testNext()
+    public function testNext(): void
     {
         $src = $this->buffer('abc');
         $this->assertEquals(new Byte(0, 'a'), $src->next());
@@ -26,7 +28,7 @@ class BufferTest extends TestCase
         $this->assertEquals(null, $src->next());
     }
 
-    public function testIterate()
+    public function testIterate(): void
     {
         $out = '';
         foreach ($this->buffer('abc') as $n) {
@@ -36,7 +38,7 @@ class BufferTest extends TestCase
         $this->assertEquals('abc', $out);
     }
 
-    public function testGetBytes()
+    public function testGetBytes(): void
     {
         $src = $this->buffer('abc');
         $this->assertEquals('abc', $src->nextBytes());
@@ -44,7 +46,7 @@ class BufferTest extends TestCase
         $this->assertEquals('', $src->nextBytes());
     }
 
-    public function testLookahead()
+    public function testLookahead(): void
     {
         $src = $this->buffer('abc');
         $this->assertEquals('a', $src->lookahead()->char);
@@ -79,7 +81,7 @@ class BufferTest extends TestCase
         $this->assertEquals(null, $src->next());
     }
 
-    public function testLookaheadByte()
+    public function testLookaheadByte(): void
     {
         $src = $this->buffer('abc');
         $this->assertEquals('a', $src->lookaheadByte());
@@ -94,7 +96,7 @@ class BufferTest extends TestCase
         $this->assertEquals(null, $src->lookaheadByte());
     }
 
-    public function testReplay()
+    public function testReplay(): void
     {
         $src = $this->buffer('abc');
         $this->assertEquals(new Byte(0, 'a'), $a = $src->next());
@@ -112,7 +114,7 @@ class BufferTest extends TestCase
         $this->assertEquals(null, $src->next());
     }
 
-    public function testOffset()
+    public function testOffset(): void
     {
         $src = $this->buffer('abc');
         $this->assertEquals(0, $src->getOffset());
@@ -127,7 +129,7 @@ class BufferTest extends TestCase
         $this->assertEquals(2, $src->getOffset());
     }
 
-    public function testLookupBytes()
+    public function testLookupBytes(): void
     {
         $src = $this->buffer('abc');
         $this->assertEquals(0, $src->getOffset());

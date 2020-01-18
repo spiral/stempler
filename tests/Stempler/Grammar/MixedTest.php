@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Tests\Grammar;
@@ -18,7 +20,7 @@ class MixedTest extends BaseTest
 {
     protected const GRAMMARS = [PHPGrammar::class, InlineGrammar::class, HTMLGrammar::class];
 
-    public function testPHPTag()
+    public function testPHPTag(): void
     {
         $this->assertTokens(
             [
@@ -30,7 +32,7 @@ class MixedTest extends BaseTest
         );
     }
 
-    public function testNotPHPTag()
+    public function testNotPHPTag(): void
     {
         $this->assertTokens(
             [
@@ -40,7 +42,7 @@ class MixedTest extends BaseTest
         );
     }
 
-    public function testPHPAttribute()
+    public function testPHPAttribute(): void
     {
         $this->assertTokens(
             [
@@ -54,7 +56,7 @@ class MixedTest extends BaseTest
         );
     }
 
-    public function testScriptWithPHP()
+    public function testScriptWithPHP(): void
     {
         $this->assertTokens(
             [
@@ -70,7 +72,7 @@ class MixedTest extends BaseTest
         );
     }
 
-    public function testTagWithInlineValue()
+    public function testTagWithInlineValue(): void
     {
         $this->assertTokens(
             [
@@ -86,7 +88,7 @@ class MixedTest extends BaseTest
         );
     }
 
-    public function testTagWithPHPAndInline()
+    public function testTagWithPHPAndInline(): void
     {
         $this->assertTokens(
             [

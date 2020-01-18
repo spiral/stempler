@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Tests\Compiler;
@@ -25,28 +27,28 @@ class HTMLTest extends BaseTest
         HTMLGrammar::class => HTMLSyntax::class,
     ];
 
-    public function testCompileRaw()
+    public function testCompileRaw(): void
     {
         $doc = $this->parse('<a href="google.com">click me</a>');
 
         $this->assertSame('<a href="google.com">click me</a>', $this->compile($doc));
     }
 
-    public function testCompileNested()
+    public function testCompileNested(): void
     {
         $doc = $this->parse('<a href="google.com"><b>click me</b></a>');
 
         $this->assertSame('<a href="google.com"><b>click me</b></a>', $this->compile($doc));
     }
 
-    public function testCompileVoid()
+    public function testCompileVoid(): void
     {
         $doc = $this->parse('<br>');
 
         $this->assertSame('<br/>', $this->compile($doc));
     }
 
-    public function testCompileScript()
+    public function testCompileScript(): void
     {
         $doc = $this->parse('<script>alert("hello <b>name</b>");</script>');
 

@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Exception;
@@ -28,7 +30,7 @@ class SyntaxException extends \RuntimeException
     {
         $this->token = $context;
 
-        $message = sprintf("%s at offset %s", $message, $context->offset);
+        $message = sprintf('%s at offset %s', $message, $context->offset);
         parent::__construct($message, 0, null);
     }
 

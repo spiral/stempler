@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Tests\Compiler;
@@ -30,7 +32,7 @@ class DynamicTest extends BaseTest
         HTMLGrammar::class    => HTMLSyntax::class
     ];
 
-    public function testOutput()
+    public function testOutput(): void
     {
         $doc = $this->parse('{{ $name }}');
 
@@ -40,14 +42,14 @@ class DynamicTest extends BaseTest
         );
     }
 
-    public function testOutputEscapeOptions()
+    public function testOutputEscapeOptions(): void
     {
         $doc = $this->parse('{{ $name }}');
 
         $doc->nodes[0]->filter = 'e(%s)';
 
         $this->assertSame(
-            "<?php echo e(\$name); ?>",
+            '<?php echo e($name); ?>',
             $this->compile($doc)
         );
     }

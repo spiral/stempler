@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Tests\Syntax;
@@ -21,7 +23,7 @@ class DynamicTest extends BaseTest
         DynamicGrammar::class => DynamicSyntax::class,
     ];
 
-    public function testRaw()
+    public function testRaw(): void
     {
         $doc = $this->parse('raw');
 
@@ -29,7 +31,7 @@ class DynamicTest extends BaseTest
         $this->assertSame('raw', $doc->nodes[0]->content);
     }
 
-    public function testEmptyDirective()
+    public function testEmptyDirective(): void
     {
         $doc = $this->parse('@directive');
 
@@ -38,7 +40,7 @@ class DynamicTest extends BaseTest
         $this->assertSame(null, $doc->nodes[0]->body);
     }
 
-    public function testDirectiveWithBody()
+    public function testDirectiveWithBody(): void
     {
         $doc = $this->parse('@directive(100, [])');
 
@@ -47,13 +49,13 @@ class DynamicTest extends BaseTest
         $this->assertSame('100, []', $doc->nodes[0]->body);
     }
 
-    public function testDeclareSkip()
+    public function testDeclareSkip(): void
     {
         $doc = $this->parse('@declare');
         $this->assertCount(0, $doc->nodes);
     }
 
-    public function testOutput()
+    public function testOutput(): void
     {
         $doc = $this->parse('{{ $name }}');
 
@@ -62,7 +64,7 @@ class DynamicTest extends BaseTest
         $this->assertSame(' $name ', $doc->nodes[0]->body);
     }
 
-    public function testRawOutput()
+    public function testRawOutput(): void
     {
         $doc = $this->parse('{!! $name !!}');
 

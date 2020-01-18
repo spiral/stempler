@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Transform\Merge;
@@ -160,7 +162,7 @@ final class ResolveImports implements VisitorInterface
      * @param array  $options
      * @param Tag    $tag
      */
-    private function assertHasOption(string $option, array $options, Tag $tag)
+    private function assertHasOption(string $option, array $options, Tag $tag): void
     {
         if (!isset($options[$option])) {
             throw new ImportException("Missing `{$option}` option", $tag->getContext());

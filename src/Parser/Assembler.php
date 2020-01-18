@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Parser;
@@ -53,13 +55,13 @@ final class Assembler
             $path[] = $this->nodeName($tuple[0]);
         }
 
-        return join(".", array_reverse($path));
+        return join('.', array_reverse($path));
     }
 
     /**
      * @param NodeInterface $node
      */
-    public function push(NodeInterface $node)
+    public function push(NodeInterface $node): void
     {
         $this->node->{$this->path}[] = $node;
     }
@@ -68,7 +70,7 @@ final class Assembler
      * @param NodeInterface $node
      * @param string        $path
      */
-    public function open(NodeInterface $node, string $path)
+    public function open(NodeInterface $node, string $path): void
     {
         $this->push($node);
 
@@ -80,7 +82,7 @@ final class Assembler
     /**
      * Close stack.
      */
-    public function close()
+    public function close(): void
     {
         [$this->node, $this->path] = array_pop($this->stack);
     }

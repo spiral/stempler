@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Lexer;
@@ -151,7 +153,7 @@ final class Buffer implements \IteratorAggregate
      *
      * @param int $offset
      */
-    public function replay(int $offset)
+    public function replay(int $offset): void
     {
         foreach ($this->buffer as $n) {
             if ($n->offset > $offset) {

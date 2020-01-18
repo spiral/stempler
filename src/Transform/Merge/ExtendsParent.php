@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Transform\Merge;
@@ -65,7 +67,7 @@ final class ExtendsParent implements VisitorInterface
             $parent = $ctx->getParentNode();
             if (!$parent instanceof AttributedInterface) {
                 throw new LogicException(sprintf(
-                    "Unable to extend non attributable node (%s)",
+                    'Unable to extend non attributable node (%s)',
                     is_object($node) ? get_class($node) : gettype($node)
                 ));
             }
@@ -121,7 +123,7 @@ final class ExtendsParent implements VisitorInterface
 
         // might be non existed
         throw new SyntaxException(
-            "Unable to extend parent without specified path",
+            'Unable to extend parent without specified path',
             $tag->getContext()->getToken()
         );
     }

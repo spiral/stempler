@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Loader;
@@ -20,7 +22,7 @@ final class StringLoader implements LoaderInterface
      * @param string $path
      * @param string $content
      */
-    public function set(string $path, string $content)
+    public function set(string $path, string $content): void
     {
         $this->paths[$path] = $content;
     }

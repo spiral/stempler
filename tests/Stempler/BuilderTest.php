@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Tests;
@@ -15,6 +17,7 @@ use Spiral\Stempler\Compiler\Renderer\CoreRenderer;
 use Spiral\Stempler\Compiler\Renderer\DynamicRenderer;
 use Spiral\Stempler\Compiler\Renderer\HTMLRenderer;
 use Spiral\Stempler\Compiler\Renderer\PHPRenderer;
+use Spiral\Stempler\Directive\DirectiveRendererGroup;
 use Spiral\Stempler\Lexer\Grammar\DynamicGrammar;
 use Spiral\Stempler\Lexer\Grammar\HTMLGrammar;
 use Spiral\Stempler\Lexer\Grammar\InlineGrammar;
@@ -28,7 +31,7 @@ use Spiral\Stempler\Parser\Syntax\PHPSyntax;
 
 class BuilderTest extends TestCase
 {
-    public function testRaw()
+    public function testRaw(): void
     {
         $builder = $this->getBuilder(new StringLoader());
         $builder->getLoader()->set('home', 'hello world');
@@ -39,7 +42,7 @@ class BuilderTest extends TestCase
     /**
      * @expectedException \Spiral\Stempler\Exception\LoaderException
      */
-    public function testInvalidPath()
+    public function testInvalidPath(): void
     {
         $builder = $this->getBuilder(new StringLoader());
         $builder->compile('missing');
@@ -57,7 +60,7 @@ class BuilderTest extends TestCase
 
         $builder->getCompiler()->addRenderer(new CoreRenderer());
         $builder->getCompiler()->addRenderer(new PHPRenderer());
-        $builder->getCompiler()->addRenderer(new DynamicRenderer());
+        $builder->getCompiler()->addRenderer(new DynamicRenderer(new DirectiveRendererGroup()));
         $builder->getCompiler()->addRenderer(new HTMLRenderer());
 
         return $builder;

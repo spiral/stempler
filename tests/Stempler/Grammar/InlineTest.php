@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Tests\Grammar;
@@ -16,7 +18,7 @@ class InlineTest extends BaseTest
 {
     protected const GRAMMARS = [InlineGrammar::class];
 
-    public function testRaw()
+    public function testRaw(): void
     {
         $this->assertTokens(
             [
@@ -26,7 +28,7 @@ class InlineTest extends BaseTest
         );
     }
 
-    public function testInject()
+    public function testInject(): void
     {
         $this->assertTokens(
             [
@@ -38,7 +40,7 @@ class InlineTest extends BaseTest
         );
     }
 
-    public function testInjectMultiline()
+    public function testInjectMultiline(): void
     {
         // no whitespaces
         $this->assertTokens(
@@ -51,7 +53,7 @@ class InlineTest extends BaseTest
         );
     }
 
-    public function testDefault()
+    public function testDefault(): void
     {
         // no whitespaces
         $this->assertTokens(
@@ -66,7 +68,7 @@ class InlineTest extends BaseTest
         );
     }
 
-    public function testDefaultQuotes()
+    public function testDefaultQuotes(): void
     {
         // no whitespaces
         $this->assertTokens(
@@ -81,7 +83,7 @@ class InlineTest extends BaseTest
         );
     }
 
-    public function testInvalid()
+    public function testInvalid(): void
     {
         // no whitespaces
         $this->assertTokens(
@@ -92,7 +94,7 @@ class InlineTest extends BaseTest
         );
     }
 
-    public function testInvalid2()
+    public function testInvalid2(): void
     {
         // no whitespaces
         $this->assertTokens(
@@ -103,7 +105,7 @@ class InlineTest extends BaseTest
         );
     }
 
-    public function testInvalid3()
+    public function testInvalid3(): void
     {
         // no whitespaces
         $this->assertTokens(
@@ -114,7 +116,7 @@ class InlineTest extends BaseTest
         );
     }
 
-    public function testInvalid4()
+    public function testInvalid4(): void
     {
         // no whitespaces
         $this->assertTokens(
@@ -125,7 +127,7 @@ class InlineTest extends BaseTest
         );
     }
 
-    public function testInvalid5()
+    public function testInvalid5(): void
     {
         // no whitespaces
         $this->assertTokens(
@@ -136,7 +138,7 @@ class InlineTest extends BaseTest
         );
     }
 
-    public function testDefaultSpaces()
+    public function testDefaultSpaces(): void
     {
         // no whitespaces
         $this->assertTokens(

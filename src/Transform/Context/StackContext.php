@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Transform\Context;
@@ -32,7 +34,7 @@ final class StackContext
      * @param Aggregate $aggregate
      * @param int       $level
      */
-    public function register(Aggregate $aggregate, int $level = 0)
+    public function register(Aggregate $aggregate, int $level = 0): void
     {
         // collect all stack withing specific scope
         $node = $this->getStackRootNode($level);
@@ -135,7 +137,7 @@ final class StackContext
 
         if (!$node instanceof AttributedInterface) {
             throw new LogicException(sprintf(
-                "Unable to create import on node without attribute storage (%s)",
+                'Unable to create import on node without attribute storage (%s)',
                 is_object($node) ? get_class($node) : gettype($node)
             ));
         }

@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Transform\Merge\Inject;
@@ -130,7 +132,7 @@ final class PHPMixin
      * @param string $block
      * @param string $value
      */
-    public function set(string $block, string $value)
+    public function set(string $block, string $value): void
     {
         if (!isset($this->blocks[$block])) {
             return;
@@ -142,7 +144,7 @@ final class PHPMixin
     /**
      * @param string $func
      */
-    private function parse(string $func)
+    private function parse(string $func): void
     {
         $level = 0;
         $start = $name = $value = null;

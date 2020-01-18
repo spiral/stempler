@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Tests\Grammar;
@@ -17,7 +19,7 @@ class DynamicTest extends BaseTest
 {
     protected const GRAMMARS = [DynamicGrammar::class];
 
-    public function testRaw()
+    public function testRaw(): void
     {
         $this->assertTokens(
             [
@@ -27,7 +29,7 @@ class DynamicTest extends BaseTest
         );
     }
 
-    public function testEcho()
+    public function testEcho(): void
     {
         $this->assertTokens(
             [
@@ -39,7 +41,7 @@ class DynamicTest extends BaseTest
         );
     }
 
-    public function testEchoWithString()
+    public function testEchoWithString(): void
     {
         $this->assertTokens(
             [
@@ -51,7 +53,7 @@ class DynamicTest extends BaseTest
         );
     }
 
-    public function testEchoRaw()
+    public function testEchoRaw(): void
     {
         $this->assertTokens(
             [
@@ -63,7 +65,7 @@ class DynamicTest extends BaseTest
         );
     }
 
-    public function testInvalidEcho()
+    public function testInvalidEcho(): void
     {
         $this->assertTokens(
             [
@@ -73,7 +75,7 @@ class DynamicTest extends BaseTest
         );
     }
 
-    public function testInvalidEcho2()
+    public function testInvalidEcho2(): void
     {
         $this->assertTokens(
             [
@@ -83,7 +85,7 @@ class DynamicTest extends BaseTest
         );
     }
 
-    public function testEscapedEcho()
+    public function testEscapedEcho(): void
     {
         $this->assertTokens(
             [
@@ -93,7 +95,7 @@ class DynamicTest extends BaseTest
         );
     }
 
-    public function testEscapedRawEcho()
+    public function testEscapedRawEcho(): void
     {
         $this->assertTokens(
             [
@@ -103,7 +105,7 @@ class DynamicTest extends BaseTest
         );
     }
 
-    public function testDirective()
+    public function testDirective(): void
     {
         $this->assertTokens(
             [
@@ -114,7 +116,7 @@ class DynamicTest extends BaseTest
         );
     }
 
-    public function testDirectiveAfterRaw()
+    public function testDirectiveAfterRaw(): void
     {
         $this->assertTokens(
             [
@@ -126,7 +128,7 @@ class DynamicTest extends BaseTest
         );
     }
 
-    public function testDirectiveBeforeRaw()
+    public function testDirectiveBeforeRaw(): void
     {
         $this->assertTokens(
             [
@@ -138,7 +140,7 @@ class DynamicTest extends BaseTest
         );
     }
 
-    public function testDirectiveBeforeRawAndValue()
+    public function testDirectiveBeforeRawAndValue(): void
     {
         $this->assertTokens(
             [
@@ -150,7 +152,7 @@ class DynamicTest extends BaseTest
         );
     }
 
-    public function testDirectiveEmbedded()
+    public function testDirectiveEmbedded(): void
     {
         $this->assertTokens(
             [
@@ -163,7 +165,7 @@ class DynamicTest extends BaseTest
         );
     }
 
-    public function testDirectiveAfterDirective()
+    public function testDirectiveAfterDirective(): void
     {
         $this->assertTokens(
             [
@@ -176,7 +178,7 @@ class DynamicTest extends BaseTest
         );
     }
 
-    public function testDirectiveWithBody()
+    public function testDirectiveWithBody(): void
     {
         $this->assertTokens(
             [
@@ -190,7 +192,7 @@ class DynamicTest extends BaseTest
         );
     }
 
-    public function testDirectiveWithBodyConsecutive()
+    public function testDirectiveWithBodyConsecutive(): void
     {
         $this->assertTokens(
             [
@@ -206,7 +208,7 @@ class DynamicTest extends BaseTest
         );
     }
 
-    public function testDirectiveWithNestedParenthesis()
+    public function testDirectiveWithNestedParenthesis(): void
     {
         $this->assertTokens(
             [
@@ -220,7 +222,7 @@ class DynamicTest extends BaseTest
         );
     }
 
-    public function testDirectiveWhitespaceBeforeBody()
+    public function testDirectiveWhitespaceBeforeBody(): void
     {
         $this->assertTokens(
             [
@@ -235,7 +237,7 @@ class DynamicTest extends BaseTest
         );
     }
 
-    public function testDirectiveMultipleWhitespaceBeforeBody()
+    public function testDirectiveMultipleWhitespaceBeforeBody(): void
     {
         $this->assertTokens(
             [
@@ -250,7 +252,7 @@ class DynamicTest extends BaseTest
         );
     }
 
-    public function testDirectiveWithQuoteInBody()
+    public function testDirectiveWithQuoteInBody(): void
     {
         $this->assertTokens(
             [
@@ -265,7 +267,7 @@ class DynamicTest extends BaseTest
         );
     }
 
-    public function testInvalidDirective()
+    public function testInvalidDirective(): void
     {
         $this->assertTokens(
             [
@@ -275,7 +277,7 @@ class DynamicTest extends BaseTest
         );
     }
 
-    public function testDeclareDirective()
+    public function testDeclareDirective(): void
     {
         $this->assertTokens(
             [
@@ -285,7 +287,7 @@ class DynamicTest extends BaseTest
         );
     }
 
-    public function testDeclareWithBodyDirective()
+    public function testDeclareWithBodyDirective(): void
     {
         $this->assertTokens(
             [
@@ -295,7 +297,7 @@ class DynamicTest extends BaseTest
         );
     }
 
-    public function testDeclareSyntaxOff()
+    public function testDeclareSyntaxOff(): void
     {
         $this->assertTokens(
             [
@@ -308,7 +310,7 @@ class DynamicTest extends BaseTest
         );
     }
 
-    public function testDeclareSyntaxOn()
+    public function testDeclareSyntaxOn(): void
     {
         $this->assertTokens(
             [
@@ -321,7 +323,7 @@ class DynamicTest extends BaseTest
         );
     }
 
-    public function testDeclareCustomSyntax()
+    public function testDeclareCustomSyntax(): void
     {
         $this->assertTokens(
             [
@@ -333,7 +335,7 @@ class DynamicTest extends BaseTest
         );
     }
 
-    public function testDeclareRawCustomSyntax()
+    public function testDeclareRawCustomSyntax(): void
     {
         $this->assertTokens(
             [
@@ -345,7 +347,7 @@ class DynamicTest extends BaseTest
         );
     }
 
-    public function testDeclareCustomDefault()
+    public function testDeclareCustomDefault(): void
     {
         $this->assertTokens(
             [
@@ -360,7 +362,7 @@ class DynamicTest extends BaseTest
         );
     }
 
-    public function testTokenName()
+    public function testTokenName(): void
     {
         $this->assertSame('DECLARE:KEYWORD', DeclareGrammar::tokenName(DeclareGrammar::TYPE_KEYWORD));
         $this->assertSame('DECLARE:EQUAL', DeclareGrammar::tokenName(DeclareGrammar::TYPE_EQUAL));

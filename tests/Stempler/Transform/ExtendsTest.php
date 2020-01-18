@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Tests\Transform;
@@ -21,7 +23,7 @@ use Spiral\Stempler\Transform\Visitor\DefineBlocks;
 
 class ExtendsTest extends BaseTest
 {
-    public function testNoExtends()
+    public function testNoExtends(): void
     {
         $loader = $loader ?? new StringLoader();
         $loader->set('root', '<block:content>hello world</block:content>');
@@ -34,7 +36,7 @@ class ExtendsTest extends BaseTest
         );
     }
 
-    public function testExtendsParent()
+    public function testExtendsParent(): void
     {
         $loader = $loader ?? new StringLoader();
         $loader->set('root', '<extends:parent/><block:content>hello world</block:content>');
@@ -48,7 +50,7 @@ class ExtendsTest extends BaseTest
         );
     }
 
-    public function testExtendsParentBlock()
+    public function testExtendsParentBlock(): void
     {
         $loader = $loader ?? new StringLoader();
         $loader->set('root', '<extends:parent/><block:content>hello ${parent}</block:content>');
@@ -62,7 +64,7 @@ class ExtendsTest extends BaseTest
         );
     }
 
-    public function testExtendsParentBlockWithNoAttribute()
+    public function testExtendsParentBlockWithNoAttribute(): void
     {
         $loader = $loader ?? new StringLoader();
         $loader->set('root', '<extends:parent/><block:content>hello ${parent}</block:content>');
@@ -76,7 +78,7 @@ class ExtendsTest extends BaseTest
         );
     }
 
-    public function testExtendsParentBlockWithAttribute()
+    public function testExtendsParentBlockWithAttribute(): void
     {
         $loader = $loader ?? new StringLoader();
         $loader->set('root', '<extends:parent class="red"/><block:content>hello ${parent}</block:content>');
@@ -90,7 +92,7 @@ class ExtendsTest extends BaseTest
         );
     }
 
-    public function testExtendsAttribute()
+    public function testExtendsAttribute(): void
     {
         $loader = $loader ?? new StringLoader();
         $loader->set('root', '<extends:parent value="x"/><block:content>hello ${parent}</block:content>');
@@ -104,7 +106,7 @@ class ExtendsTest extends BaseTest
         );
     }
 
-    public function testExtendsViaPath()
+    public function testExtendsViaPath(): void
     {
         $loader = $loader ?? new StringLoader();
         $loader->set('root', '<extends path="parent" value="x"/><block:content>hello ${parent}</block:content>');
@@ -118,7 +120,7 @@ class ExtendsTest extends BaseTest
         );
     }
 
-    public function testExtendsMultiple()
+    public function testExtendsMultiple(): void
     {
         $loader = $loader ?? new StringLoader();
         $loader->set('root', '<extends:child/><block:data>root</block:data>');
@@ -133,7 +135,7 @@ class ExtendsTest extends BaseTest
         );
     }
 
-    public function testExtendsInline()
+    public function testExtendsInline(): void
     {
         $loader = $loader ?? new StringLoader();
         $loader->set('root', 'hello <placeholder><extends:child/><block:data>root</block:data></placeholder>');

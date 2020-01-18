@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Lexer\Grammar\Dynamic;
@@ -104,7 +106,7 @@ final class DirectiveGrammar implements \IteratorAggregate
     public function getIterator()
     {
         if ($this->tokens === []) {
-            throw new \LogicException("Directive not parsed");
+            throw new \LogicException('Directive not parsed');
         }
 
         yield from $this->tokens;
@@ -133,7 +135,7 @@ final class DirectiveGrammar implements \IteratorAggregate
             }
         }
 
-        throw new SyntaxException("Directive not parsed", $this->tokens[0]);
+        throw new SyntaxException('Directive not parsed', $this->tokens[0]);
     }
 
     /**
@@ -155,7 +157,7 @@ final class DirectiveGrammar implements \IteratorAggregate
     /**
      * Pack keyword token.
      */
-    private function flushName()
+    private function flushName(): void
     {
         if ($this->name === []) {
             return;
@@ -220,7 +222,7 @@ final class DirectiveGrammar implements \IteratorAggregate
     /**
      * Pack name token.
      */
-    private function flushBody()
+    private function flushBody(): void
     {
         if ($this->body === []) {
             return;
@@ -236,7 +238,7 @@ final class DirectiveGrammar implements \IteratorAggregate
     private function getLastToken(): Token
     {
         if ($this->tokens === []) {
-            throw new \LogicException("Directive not parsed");
+            throw new \LogicException('Directive not parsed');
         }
 
         return $this->tokens[count($this->tokens) - 1];

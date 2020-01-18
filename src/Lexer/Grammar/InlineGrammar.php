@@ -1,10 +1,12 @@
 <?php
+
 /**
  * Spiral Framework.
  *
  * @license   MIT
  * @author    Anton Titov (Wolfy-J)
  */
+
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Lexer\Grammar;
@@ -60,6 +62,28 @@ final class InlineGrammar implements GrammarInterface
             }
 
             yield from $binding;
+        }
+    }
+
+    /**
+     * @codeCoverageIgnore
+     * @inheritDoc
+     */
+    public static function tokenName(int $token): string
+    {
+        switch ($token) {
+            case self::TYPE_OPEN_TAG:
+                return 'INLINE:OPEN_TAG';
+            case self::TYPE_CLOSE_TAG:
+                return 'INLINE:CLOSE_TAG';
+            case self::TYPE_NAME:
+                return 'INLINE:NAME';
+            case self::TYPE_SEPARATOR:
+                return 'INLINE:SEPARATOR';
+            case self::TYPE_DEFAULT:
+                return 'INLINE:DEFAULT';
+            default:
+                return 'INLINE:UNDEFINED';
         }
     }
 
@@ -188,7 +212,7 @@ final class InlineGrammar implements GrammarInterface
     /**
      * Pack name token.
      */
-    private function flushName()
+    private function flushName(): void
     {
         if ($this->name === []) {
             return;
@@ -201,7 +225,7 @@ final class InlineGrammar implements GrammarInterface
     /**
      * Pack default token.
      */
-    private function flushDefault()
+    private function flushDefault(): void
     {
         if ($this->default === [] || $this->default === null) {
             return;
@@ -209,27 +233,5 @@ final class InlineGrammar implements GrammarInterface
 
         $this->tokens[] = $this->packToken($this->default, self::TYPE_DEFAULT);
         $this->default = [];
-    }
-
-    /**
-     * @codeCoverageIgnore
-     * @inheritDoc
-     */
-    public static function tokenName(int $token): string
-    {
-        switch ($token) {
-            case self::TYPE_OPEN_TAG:
-                return "INLINE:OPEN_TAG";
-            case self::TYPE_CLOSE_TAG:
-                return "INLINE:CLOSE_TAG";
-            case self::TYPE_NAME:
-                return "INLINE:NAME";
-            case self::TYPE_SEPARATOR:
-                return "INLINE:SEPARATOR";
-            case self::TYPE_DEFAULT:
-                return "INLINE:DEFAULT";
-            default:
-                return "INLINE:UNDEFINED";
-        }
     }
 }
