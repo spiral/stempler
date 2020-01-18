@@ -36,9 +36,9 @@ abstract class BaseTest extends \Spiral\Stempler\Tests\Compiler\BaseTest
     protected const DIRECTIVES = [];
 
     /**
-     * @param Template $document
-     * @return string
-     */
+ * @param Template $document
+ * @return string
+ */
     protected function compile(Template $document): string
     {
         $compiler = new Compiler();

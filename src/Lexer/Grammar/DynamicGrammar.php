@@ -107,6 +107,18 @@ final class DynamicGrammar implements GrammarInterface
                         // configure braces syntax
                         $this->declare($directive->getBody());
                     } else {
+                        if (
+                            $this->directiveRenderer !== null
+                            && !$this->directiveRenderer->hasDirective($directive->getKeyword())
+                        ) {
+                            // directive opening char
+                            yield $n;
+
+                            // unknown directive, treat as plain test
+                            $src->replay($n->offset);
+                            continue;
+                        }
+
                         yield from $directive;
                     }
 
