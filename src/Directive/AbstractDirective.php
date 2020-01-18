@@ -17,7 +17,7 @@ use Spiral\Stempler\Node\Dynamic\Directive;
 /**
  * Automatically invokes methods associated with directive name.
  */
-abstract class AbstractDirectiveRenderer implements DirectiveRendererInterface
+abstract class AbstractDirective implements DirectiveRendererInterface
 {
     /** @var ReflectionObject */
     private $r;

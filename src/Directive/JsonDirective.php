@@ -13,7 +13,7 @@ namespace Spiral\Stempler\Directive;
 
 use Spiral\Stempler\Node\Dynamic\Directive;
 
-final class JsonDirective extends AbstractDirectiveRenderer
+final class JsonDirective extends AbstractDirective
 {
     private const DEFAULT_OPTIONS = JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT;
 

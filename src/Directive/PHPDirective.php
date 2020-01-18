@@ -13,7 +13,7 @@ namespace Spiral\Stempler\Directive;
 
 use Spiral\Stempler\Node\Dynamic\Directive;
 
-final class PHPDirective extends AbstractDirectiveRenderer
+final class PHPDirective extends AbstractDirective
 {
     /**
      * @param Directive $directive

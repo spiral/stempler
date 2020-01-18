@@ -16,7 +16,7 @@ use Spiral\Stempler\Node\Dynamic\Directive;
 /**
  * Render loops and their commands.
  */
-final class LoopDirective extends AbstractDirectiveRenderer
+final class LoopDirective extends AbstractDirective
 {
     /**
      * @param Directive $directive

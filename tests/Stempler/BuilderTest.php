@@ -17,7 +17,7 @@ use Spiral\Stempler\Compiler\Renderer\CoreRenderer;
 use Spiral\Stempler\Compiler\Renderer\DynamicRenderer;
 use Spiral\Stempler\Compiler\Renderer\HTMLRenderer;
 use Spiral\Stempler\Compiler\Renderer\PHPRenderer;
-use Spiral\Stempler\Directive\DirectiveRendererGroup;
+use Spiral\Stempler\Directive\DirectiveGroup;
 use Spiral\Stempler\Lexer\Grammar\DynamicGrammar;
 use Spiral\Stempler\Lexer\Grammar\HTMLGrammar;
 use Spiral\Stempler\Lexer\Grammar\InlineGrammar;
@@ -60,7 +60,7 @@ class BuilderTest extends TestCase
 
         $builder->getCompiler()->addRenderer(new CoreRenderer());
         $builder->getCompiler()->addRenderer(new PHPRenderer());
-        $builder->getCompiler()->addRenderer(new DynamicRenderer(new DirectiveRendererGroup()));
+        $builder->getCompiler()->addRenderer(new DynamicRenderer(new DirectiveGroup()));
         $builder->getCompiler()->addRenderer(new HTMLRenderer());
 
         return $builder;

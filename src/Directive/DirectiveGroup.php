@@ -13,7 +13,7 @@ namespace Spiral\Stempler\Directive;
 
 use Spiral\Stempler\Node\Dynamic\Directive;
 
-final class DirectiveRendererGroup implements DirectiveRendererInterface
+final class DirectiveGroup implements DirectiveRendererInterface
 {
     /** @var DirectiveRendererInterface[] */
     private $directives = [];

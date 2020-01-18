@@ -14,7 +14,7 @@ namespace Spiral\Stempler\Tests\Directive;
 use Spiral\Stempler\Compiler;
 use Spiral\Stempler\Compiler\Renderer\CoreRenderer;
 use Spiral\Stempler\Compiler\Renderer\HTMLRenderer;
-use Spiral\Stempler\Directive\DirectiveRendererGroup;
+use Spiral\Stempler\Directive\DirectiveGroup;
 use Spiral\Stempler\Lexer\Grammar\DynamicGrammar;
 use Spiral\Stempler\Lexer\Grammar\HTMLGrammar;
 use Spiral\Stempler\Node\Template;
@@ -46,7 +46,7 @@ abstract class BaseTest extends \Spiral\Stempler\Tests\Compiler\BaseTest
             $compiler->addRenderer(new $renderer());
         }
 
-        $directiveGroup = new DirectiveRendererGroup();
+        $directiveGroup = new DirectiveGroup();
         foreach (static::DIRECTIVES as $directive) {
             $directiveGroup->addDirective(new $directive());
         }

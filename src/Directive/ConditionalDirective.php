@@ -16,7 +16,7 @@ use Spiral\Stempler\Node\Dynamic\Directive;
 /**
  * @see https://github.com/laravel/framework/tree/6.x/src/Illuminate/View/Compilers/Concerns
  */
-final class ConditionalDirective extends AbstractDirectiveRenderer
+final class ConditionalDirective extends AbstractDirective
 {
     /** @var bool */
     private $firstSwitchCase = false;
