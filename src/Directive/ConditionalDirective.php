@@ -36,7 +36,7 @@ final class ConditionalDirective extends AbstractDirective
      */
     public function renderUnless(Directive $directive): string
     {
-        return sprintf('<?php if(!%s): ?>', $directive->body);
+        return sprintf('<?php if(!(%s)): ?>', $directive->body);
     }
 
     /**
@@ -131,10 +131,10 @@ final class ConditionalDirective extends AbstractDirective
         if ($this->firstSwitchCase) {
             $this->firstSwitchCase = false;
 
-            return sprintf('case %s: ?>', $directive->body);
+            return sprintf('case (%s): ?>', $directive->body);
         }
 
-        return sprintf('<?php case %s: ?>', $directive->body);
+        return sprintf('<?php case (%s): ?>', $directive->body);
     }
 
     /**

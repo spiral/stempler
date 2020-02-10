@@ -54,7 +54,7 @@ class ConditionalTest extends BaseTest
         $doc = $this->parse('@unless(false) ok @endunless');
 
         $this->assertSame(
-            '<?php if(!false): ?> ok <?php endif; ?>',
+            '<?php if(!(false)): ?> ok <?php endif; ?>',
             $this->compile($doc)
         );
     }
@@ -84,7 +84,7 @@ class ConditionalTest extends BaseTest
         $doc = $this->parse('@switch(1) @case(1) 1 @endswitch');
 
         $this->assertSame(
-            '<?php switch(1): case 1: ?> 1 <?php endswitch; ?>',
+            '<?php switch(1): case (1): ?> 1 <?php endswitch; ?>',
             $this->compile($doc)
         );
     }
@@ -94,7 +94,7 @@ class ConditionalTest extends BaseTest
         $doc = $this->parse('@switch($var) @case(1) 1 @break @default default @endswitch');
 
         $this->assertSame(
-            '<?php switch($var): case 1: ?> 1 <?php break; ?> <?php default: ?> default <?php endswitch; ?>',
+            '<?php switch($var): case (1): ?> 1 <?php break; ?> <?php default: ?> default <?php endswitch; ?>',
             $this->compile($doc)
         );
     }
