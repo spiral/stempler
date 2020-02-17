@@ -134,6 +134,7 @@ final class HTMLGrammar implements GrammarInterface
             switch ($n->char) {
                 case '"':
                 case "'":
+                case "`":
                     $chunks[] = $n;
 
                     // language inclusions allow nested strings
@@ -219,6 +220,7 @@ final class HTMLGrammar implements GrammarInterface
             switch ($n->char) {
                 case '"':
                 case "'":
+                case "`":
                     $this->flush();
                     $this->attribute[] = $n;
                     break;
@@ -262,7 +264,7 @@ final class HTMLGrammar implements GrammarInterface
                         $this->whitespace[] = $n;
                         break;
                     }
-                        $this->flushWhitespace();
+                    $this->flushWhitespace();
 
 
                     if (!preg_match(self::REGEXP_KEYWORD, $n->char)) {
