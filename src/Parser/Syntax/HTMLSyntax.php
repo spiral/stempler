@@ -188,7 +188,9 @@ final class HTMLSyntax implements SyntaxInterface
         $verbatim = new Verbatim(new Parser\Context($token, $parser->getPath()));
 
         if ($token->tokens === []) {
-            $verbatim->nodes[] = $token->content;
+            if ($token->content) {
+                $verbatim->nodes[] = $token->content;
+            }
         } else {
             $parser->parseTokens(
                 new Assembler($verbatim, 'nodes'),
