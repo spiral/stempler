@@ -38,6 +38,15 @@ class StackTest extends BaseTest
         $this->assertSame('css', $doc->nodes[0]->nodes[0]->content);
     }
 
+    public function testQuotedStack(): void
+    {
+        $doc = $this->parse('<stack:collect name="\'css\'">css</stack:collect>');
+
+        $this->assertInstanceOf(Aggregate::class, $doc->nodes[0]);
+        $this->assertInstanceOf(Raw::class, $doc->nodes[0]->nodes[0]);
+        $this->assertSame('\'css\'', $doc->nodes[0]->nodes[0]->content);
+    }
+
     public function testStackPushAfter(): void
     {
         $doc = $this->parse('<stack:collect name="css"/><stack:push name="css">css</stack:push>');
