@@ -271,8 +271,8 @@ class HtmlTokenizer
         preg_match_all($attribute, $content, $attributes);
 
         foreach ($attributes['value'] as $index => $value) {
-            if ($value && ($value{0} == "'" || $value{0} == '"')) {
-                $value = trim($value, $value{0});
+            if ($value && (strpos($value, "'") === 0 || strpos($value, '"') === 0)) {
+                $value = trim($value, substr($value, 0, 1));
             }
 
             //Local and global php isolation restore
@@ -287,12 +287,12 @@ class HtmlTokenizer
 
         //Fetching name
         $name = $isolator->repairPHP(current(explode(' ', $content)));
-        if ($name{0} == '/') {
+        if (strpos($name, '/') === 0) {
             $token[self::TOKEN_TYPE] = self::TAG_CLOSE;
             unset($token[self::TOKEN_ATTRIBUTES]);
         }
 
-        if ($content{strlen($content) - 1} == '/') {
+        if (substr($content,strlen($content) - 1,1) === '/') {
             $token[self::TOKEN_TYPE] = self::TAG_SHORT;
         }
 
@@ -315,7 +315,7 @@ class HtmlTokenizer
      * Handles single token and passes it to a callback function if specified.
      *
      * @param int|null $tokenType Token type.
-     * @param string   $content   Non parsed token content.
+     * @param string   $content Non parsed token content.
      */
     protected function handleToken($tokenType, string $content)
     {
