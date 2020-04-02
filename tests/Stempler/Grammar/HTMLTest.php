@@ -255,4 +255,68 @@ class HTMLTest extends BaseTest
             ('<script>alert("<a>");</script>')
         );
     }
+
+    public function testCloseScript(): void
+    {
+        $this->assertTokens(
+            [
+                new Token(HTMLGrammar::TYPE_OPEN, 0, '<'),
+                new Token(HTMLGrammar::TYPE_KEYWORD, 1, 'script'),
+                new Token(HTMLGrammar::TYPE_CLOSE, 7, '>'),
+                new Token(HTMLGrammar::TYPE_VERBATIM, 8, 'alert("</script>");'),
+                new Token(HTMLGrammar::TYPE_OPEN_SHORT, 27, '</'),
+                new Token(HTMLGrammar::TYPE_KEYWORD, 29, 'script'),
+                new Token(HTMLGrammar::TYPE_CLOSE, 35, '>'),
+            ],
+            ('<script>alert("</script>");</script>')
+        );
+    }
+
+    public function testCommentScript(): void
+    {
+        $this->assertTokens(
+            [
+                new Token(HTMLGrammar::TYPE_OPEN, 0, '<'),
+                new Token(HTMLGrammar::TYPE_KEYWORD, 1, 'script'),
+                new Token(HTMLGrammar::TYPE_CLOSE, 7, '>'),
+                new Token(HTMLGrammar::TYPE_VERBATIM, 8, 'alert("</script>"); //hello '),
+                new Token(HTMLGrammar::TYPE_OPEN_SHORT, 36, '</'),
+                new Token(HTMLGrammar::TYPE_KEYWORD, 38, 'script'),
+                new Token(HTMLGrammar::TYPE_CLOSE, 44, '>'),
+            ],
+            ('<script>alert("</script>"); //hello </script>')
+        );
+    }
+
+    public function testCommentScriptQuotes(): void
+    {
+        $this->assertTokens(
+            [
+                new Token(HTMLGrammar::TYPE_OPEN, 0, '<'),
+                new Token(HTMLGrammar::TYPE_KEYWORD, 1, 'script'),
+                new Token(HTMLGrammar::TYPE_CLOSE, 7, '>'),
+                new Token(HTMLGrammar::TYPE_VERBATIM, 8, 'alert("</script>"); //hello"'),
+                new Token(HTMLGrammar::TYPE_OPEN_SHORT, 36, '</'),
+                new Token(HTMLGrammar::TYPE_KEYWORD, 38, 'script'),
+                new Token(HTMLGrammar::TYPE_CLOSE, 44, '>'),
+            ],
+            ('<script>alert("</script>"); //hello"</script>')
+        );
+    }
+
+    public function testCommentAlternative(): void
+    {
+        $this->assertTokens(
+            [
+                new Token(HTMLGrammar::TYPE_OPEN, 0, '<'),
+                new Token(HTMLGrammar::TYPE_KEYWORD, 1, 'script'),
+                new Token(HTMLGrammar::TYPE_CLOSE, 7, '>'),
+                new Token(HTMLGrammar::TYPE_VERBATIM, 8, "alert(\"</script>\"); /*hello\n'\"*/"),
+                new Token(HTMLGrammar::TYPE_OPEN_SHORT, 40, '</'),
+                new Token(HTMLGrammar::TYPE_KEYWORD, 42, 'script'),
+                new Token(HTMLGrammar::TYPE_CLOSE, 48, '>'),
+            ],
+            ("<script>alert(\"</script>\"); /*hello\n'\"*/</script>")
+        );
+    }
 }

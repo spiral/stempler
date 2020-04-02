@@ -74,6 +74,8 @@ final class HTMLGrammar implements GrammarInterface
             }
 
             $tagName = $this->tagName($tag);
+
+            // todo: add support for custom tag list
             if (in_array($tagName, self::VERBATIM_TAGS)) {
                 yield from $tag;
                 yield from $this->parseVerbatim($src, $tagName);
@@ -134,7 +136,7 @@ final class HTMLGrammar implements GrammarInterface
             switch ($n->char) {
                 case '"':
                 case "'":
-                case "`":
+                case '`':
                     $chunks[] = $n;
 
                     // language inclusions allow nested strings
@@ -150,6 +152,50 @@ final class HTMLGrammar implements GrammarInterface
                     }
 
                     break;
+
+                case '/':
+                    $chunks[] = $n;
+
+                    $multiline = false;
+                    if ($src->lookaheadByte(1) === '/' || $src->lookaheadByte(1) === '*') {
+                        if ($src->lookaheadByte(1) === '*') {
+                            $multiline = true;
+                        }
+
+                        $chunks[] = $src->next();
+
+                        // language inclusions allow nested strings
+                        while ($nc = $src->next()) {
+                            if ($nc instanceof Token) {
+                                continue;
+                            }
+
+                            if ($nc->char === '<') {
+                                $tag = (clone $this)->parseGrammar($src);
+                                if ($tag === null || $this->tagName($tag) !== $verbatim) {
+                                    $src->replay($n->offset);
+                                    break;
+                                }
+                                // back to primary loop
+                                $src->replay($nc->offset - 1);
+                                break 2;
+                            }
+
+                            $chunks[] = $nc;
+
+                            if ($multiline) {
+                                if ($nc->char === '*' && $src->lookaheadByte(1) === '/') {
+                                    $chunks[] = $src->next();
+                                    break;
+                                }
+                            } elseif ($nc->char === "\n") {
+                                break;
+                            }
+                        }
+                    }
+
+                    break;
+
                 case '<':
                     // tag beginning?
                     $tag = (clone $this)->parseGrammar($src);
@@ -220,7 +266,7 @@ final class HTMLGrammar implements GrammarInterface
             switch ($n->char) {
                 case '"':
                 case "'":
-                case "`":
+                case '`':
                     $this->flush();
                     $this->attribute[] = $n;
                     break;
