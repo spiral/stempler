@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace Spiral\Stempler\Transform\Merge\Inject;
 
+use Spiral\Stempler\Node\Block;
 use Spiral\Stempler\Node\Dynamic\Output;
 use Spiral\Stempler\Node\Mixin;
 use Spiral\Stempler\Node\NodeInterface;
@@ -57,6 +58,14 @@ final class InjectPHP implements VisitorInterface
         $php = new PHPMixin($node->tokens, self::PHP_MACRO_FUNCTION);
         foreach ($this->blocks->getNames() as $name) {
             if ($php->has($name)) {
+                $block = $this->blocks->get($name);
+
+                // @todo improve using post-processing on injections
+                if ($this->isReference($block)) {
+                    // resolved on later stage
+                    continue;
+                }
+
                 $php->set($name, $this->trimPHP($this->blocks->claim($name)));
             }
         }
@@ -70,6 +79,41 @@ final class InjectPHP implements VisitorInterface
      */
     public function leaveNode($node, VisitorContext $ctx): void
     {
+    }
+
+    /**
+     * @param array|NodeInterface $node
+     * @return bool
+     */
+    private function isReference($node): bool
+    {
+        switch (true) {
+            case is_array($node):
+                foreach ($node as $child) {
+                    if ($this->isReference($child)) {
+                        return true;
+                    }
+                }
+
+                return false;
+
+            case $node instanceof QuotedValue:
+                return $this->isReference($node->getValue());
+
+            case $node instanceof Mixin:
+                foreach ($node->nodes as $child) {
+                    if ($this->isReference($child)) {
+                        return true;
+                    }
+                }
+
+                return false;
+
+            case $node instanceof Block:
+                return true;
+        }
+
+        return false;
     }
 
     /**
