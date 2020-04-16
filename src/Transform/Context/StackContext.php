@@ -11,7 +11,6 @@ declare(strict_types=1);
 
 namespace Spiral\Stempler\Transform\Context;
 
-use Spiral\Core\Exception\LogicException;
 use Spiral\Stempler\Node\Aggregate;
 use Spiral\Stempler\Node\AttributedInterface;
 use Spiral\Stempler\Node\HTML\Tag;
@@ -45,16 +44,22 @@ final class StackContext
     }
 
     /**
-     * @param string $name
-     * @param Tag    $child
+     * @param string      $name
+     * @param Tag         $child
+     * @param string|null $uniqueID
      * @return bool
      */
-    public function push(string $name, Tag $child): bool
+    public function push(string $name, Tag $child, string $uniqueID = null): bool
     {
         foreach ($this->getStacks() as $stack) {
             if ($stack->accepts($name) !== $name) {
                 continue;
             }
+
+            if ($uniqueID !== null && isset($stack->uniqueIDs[$uniqueID])) {
+                return true;
+            }
+            $stack->uniqueIDs[$uniqueID] = true;
 
             foreach ($child->nodes as $child) {
                 if (!in_array($child, $stack->nodes)) {
@@ -69,16 +74,22 @@ final class StackContext
     }
 
     /**
-     * @param string $name
-     * @param Tag    $child
+     * @param string      $name
+     * @param Tag         $child
+     * @param string|null $uniqueID
      * @return bool
      */
-    public function prepend(string $name, Tag $child): bool
+    public function prepend(string $name, Tag $child, string $uniqueID = null): bool
     {
         foreach ($this->getStacks() as $stack) {
             if ($stack->accepts($name) !== $name) {
                 continue;
             }
+
+            if ($uniqueID !== null && isset($stack->uniqueIDs[$uniqueID])) {
+                return true;
+            }
+            $stack->uniqueIDs[$uniqueID] = true;
 
             foreach ($child->nodes as $child) {
                 if (!in_array($child, $stack->nodes)) {
@@ -136,10 +147,12 @@ final class StackContext
         }
 
         if (!$node instanceof AttributedInterface) {
-            throw new LogicException(sprintf(
-                'Unable to create import on node without attribute storage (%s)',
-                is_object($node) ? get_class($node) : gettype($node)
-            ));
+            throw new \LogicException(
+                sprintf(
+                    'Unable to create import on node without attribute storage (%s)',
+                    is_object($node) ? get_class($node) : gettype($node)
+                )
+            );
         }
 
         return $node;

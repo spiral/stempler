@@ -192,6 +192,36 @@ class StackTest extends BaseTest
         );
     }
 
+    public function testNoUniquness(): void
+    {
+        $this->assertSame(
+            '123',
+            $this->compile(
+                '
+<stack:collect name="element" level="2"/>
+<stack:push name="element">1</stack:push>
+<stack:push name="element">2</stack:push>
+<stack:push name="element">3</stack:push>
+'
+            )->getContent()
+        );
+    }
+
+    public function testUniquness(): void
+    {
+        $this->assertSame(
+            '13',
+            $this->compile(
+                '
+<stack:collect name="element" level="2"/>
+<stack:push name="element" unique-id="1">1</stack:push>
+<stack:push name="element" unique-id="1">2</stack:push>
+<stack:push name="element" unique-id="2">3</stack:push>
+'
+            )->getContent()
+        );
+    }
+
     protected function getBuilder(LoaderInterface $loader, array $visitors): Builder
     {
         $builder = parent::getBuilder($loader, $visitors);

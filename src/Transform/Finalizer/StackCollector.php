@@ -60,7 +60,7 @@ final class StackCollector implements VisitorInterface
     {
         $name = $this->stackName($node);
 
-        if ($name === null || !$ctx->push($name, $node)) {
+        if ($name === null || !$ctx->push($name, $node, $this->uniqueID($node))) {
             return null;
         }
 
@@ -76,13 +76,12 @@ final class StackCollector implements VisitorInterface
     {
         $name = $this->stackName($node);
 
-        if ($name === null || !$ctx->prepend($name, $node)) {
+        if ($name === null || !$ctx->prepend($name, $node, $this->uniqueID($node))) {
             return null;
         }
 
         return self::REMOVE_NODE;
     }
-
 
     /**
      * @param Tag $tag
@@ -97,5 +96,20 @@ final class StackCollector implements VisitorInterface
         }
 
         return $options['name'] ?? null;
+    }
+
+    /**
+     * @param Tag $tag
+     * @return string|null
+     */
+    private function uniqueID(Tag $tag): ?string
+    {
+        foreach ($tag->attrs as $attr) {
+            if (is_string($attr->value)) {
+                $options[$attr->name] = trim($attr->value, '\'"');
+            }
+        }
+
+        return $options['unique-id'] ?? null;
     }
 }

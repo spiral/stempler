@@ -27,6 +27,9 @@ final class Aggregate implements NodeInterface
     /** @var NodeInterface[] */
     public $nodes = [];
 
+    /** @var array */
+    public $uniqueIDs = [];
+
     /**
      * @param Context|null $context
      * @param string       $pattern
