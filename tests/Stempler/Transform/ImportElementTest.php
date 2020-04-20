@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace Spiral\Stempler\Tests\Transform;
 
 use Spiral\Stempler\Builder;
+use Spiral\Stempler\Directive\ConditionalDirective;
 use Spiral\Stempler\Directive\LoopDirective;
 use Spiral\Stempler\Loader\LoaderInterface;
 use Spiral\Stempler\Loader\StringLoader;
@@ -246,6 +247,48 @@ class ImportElementTest extends BaseTest
         );
     }
 
+    public function testHasInjectionEmpty(): void
+    {
+        $loader = $loader ?? new StringLoader();
+        $loader->set(
+            'root',
+            '<use:element path="import" as="opt"/><opt>hello world</opt>'
+        );
+
+        $loader->set('import', '@if(injected(\'header\'))<div class="header">${header}</div>@endif${context}');
+
+        $builder = $this->getBuilder($loader, []);
+
+        $this->assertSame(
+            '<?php if(injected(\'header\')): ?>'
+            . '<div class="header"></div>'
+            . '<?php endif; ?>'
+            . 'hello world',
+            $builder->compile('root')->getContent()
+        );
+    }
+
+    public function testHasInjection(): void
+    {
+        $loader = $loader ?? new StringLoader();
+        $loader->set(
+            'root',
+            '<use:element path="import" as="opt"/><opt><block:header>abc</block:header>hello world</opt>'
+        );
+
+        $loader->set('import', '@if(injected(\'header\'))<div class="header">${header}</div>@endif${context}');
+
+        $builder = $this->getBuilder($loader, []);
+
+        $this->assertSame(
+            '<?php if(true): ?>'
+            . '<div class="header">abc</div>'
+            . '<?php endif; ?>'
+            . 'hello world',
+            $builder->compile('root')->getContent()
+        );
+    }
+
     public function testParentBlock(): void
     {
         $loader = $loader ?? new StringLoader();
@@ -295,6 +338,7 @@ class ImportElementTest extends BaseTest
         // so we can inject into PHP
         $dynamic = new DynamicToPHP();
         $dynamic->addDirective(new LoopDirective());
+        $dynamic->addDirective(new ConditionalDirective());
 
         $builder->addVisitor($dynamic, Builder::STAGE_FINALIZE);
 

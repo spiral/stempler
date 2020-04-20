@@ -31,6 +31,8 @@ final class InjectPHP implements VisitorInterface
     // php marcos to inject values into
     private const PHP_MACRO_FUNCTION = 'inject';
 
+    private const PHP_MARCO_EXISTS_FUNCTION = 'injected';
+
     /** @var BlockClaims */
     private $blocks;
 
@@ -38,7 +40,7 @@ final class InjectPHP implements VisitorInterface
     private $fetcher;
 
     /**
-     * @param BlockClaims $blocks
+     * @param  BlockClaims  $blocks
      */
     public function __construct(BlockClaims $blocks)
     {
@@ -51,26 +53,48 @@ final class InjectPHP implements VisitorInterface
      */
     public function enterNode($node, VisitorContext $ctx)
     {
-        if (!$node instanceof PHP || strpos($node->content, self::PHP_MACRO_FUNCTION) === false) {
+        if (
+            !$node instanceof PHP
+            || (
+                strpos($node->content, self::PHP_MACRO_FUNCTION) === false
+                && strpos($node->content, self::PHP_MARCO_EXISTS_FUNCTION) === false
+            )
+        ) {
             return null;
         }
 
         $php = new PHPMixin($node->tokens, self::PHP_MACRO_FUNCTION);
         foreach ($this->blocks->getNames() as $name) {
+            $block = $this->blocks->get($name);
+
+            if ($this->isReference($block)) {
+                // resolved on later stage
+                continue;
+            }
+
             if ($php->has($name)) {
-                $block = $this->blocks->get($name);
-
-                // @todo improve using post-processing on injections
-                if ($this->isReference($block)) {
-                    // resolved on later stage
-                    continue;
-                }
-
                 $php->set($name, $this->trimPHP($this->blocks->claim($name)));
             }
         }
 
         $node->content = $php->compile();
+        $node->tokens = token_get_all($node->content);
+
+        $exists = new PHPMixin($node->tokens, self::PHP_MARCO_EXISTS_FUNCTION);
+        foreach ($this->blocks->getNames() as $name) {
+            $block = $this->blocks->get($name);
+
+            if ($this->isReference($block)) {
+                // resolved on later stage
+                continue;
+            }
+
+            if ($exists->has($name)) {
+                $exists->set($name, 'true');
+            }
+        }
+
+        $node->content = $exists->compile();
         $node->tokens = token_get_all($node->content);
     }
 
@@ -82,7 +106,7 @@ final class InjectPHP implements VisitorInterface
     }
 
     /**
-     * @param array|NodeInterface $node
+     * @param  array|NodeInterface  $node
      * @return bool
      */
     private function isReference($node): bool
@@ -117,7 +141,7 @@ final class InjectPHP implements VisitorInterface
     }
 
     /**
-     * @param array|NodeInterface $node
+     * @param  array|NodeInterface  $node
      * @return string
      */
     private function trimPHP($node): string
@@ -156,7 +180,7 @@ final class InjectPHP implements VisitorInterface
     }
 
     /**
-     * @param Raw $node
+     * @param  Raw  $node
      * @return string
      */
     private function exportValue(Raw $node): string
@@ -168,7 +192,7 @@ final class InjectPHP implements VisitorInterface
             case strtolower($value) === 'false':
                 return 'false';
             case is_float($value) || is_numeric($value):
-                return (string)$value;
+                return (string) $value;
         }
 
         return var_export($node->content, true);
