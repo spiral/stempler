@@ -41,6 +41,13 @@ class HTMLTest extends BaseTest
         $this->assertSame('<a href="google.com"><b>click me</b></a>', $this->compile($doc));
     }
 
+    public function testCompileNestedSingleQuote(): void
+    {
+        $doc = $this->parse('<a href=\'google.com\'><b>click me</b></a>');
+
+        $this->assertSame('<a href=\'google.com\'><b>click me</b></a>', $this->compile($doc));
+    }
+
     public function testCompileVoid(): void
     {
         $doc = $this->parse('<br>');

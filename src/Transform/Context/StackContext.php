@@ -62,9 +62,7 @@ final class StackContext
             $stack->uniqueIDs[$uniqueID] = true;
 
             foreach ($child->nodes as $child) {
-                if (!in_array($child, $stack->nodes)) {
-                    $stack->nodes[] = $child;
-                }
+                $stack->nodes[] = $child;
             }
 
             return true;
@@ -92,9 +90,7 @@ final class StackContext
             $stack->uniqueIDs[$uniqueID] = true;
 
             foreach ($child->nodes as $child) {
-                if (!in_array($child, $stack->nodes)) {
-                    array_unshift($stack->nodes, $child);
-                }
+                array_unshift($stack->nodes, $child);
             }
 
             return true;
