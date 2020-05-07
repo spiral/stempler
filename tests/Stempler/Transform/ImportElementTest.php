@@ -260,7 +260,7 @@ class ImportElementTest extends BaseTest
         $builder = $this->getBuilder($loader, []);
 
         $this->assertSame(
-            '<?php if(injected(\'header\')): ?>'
+            '<?php if(false): ?>'
             . '<div class="header"></div>'
             . '<?php endif; ?>'
             . 'hello world',

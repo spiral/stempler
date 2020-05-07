@@ -16,6 +16,7 @@ use Spiral\Stempler\Node\HTML\Tag;
 use Spiral\Stempler\Node\NodeInterface;
 use Spiral\Stempler\Node\Template;
 use Spiral\Stempler\Transform\Finalizer\IsolateBlocks;
+use Spiral\Stempler\Transform\Finalizer\IsolatePHPBlocks;
 use Spiral\Stempler\Transform\Merge\Inject;
 use Spiral\Stempler\Traverser;
 use Spiral\Stempler\VisitorInterface;
@@ -78,20 +79,26 @@ final class Merger
      */
     public function isolateNodes(Template $node, string $path): Template
     {
-        $node->nodes = $this->traverse($node->nodes, new IsolateBlocks($path));
+        $node->nodes = $this->traverse(
+            $node->nodes,
+            new IsolateBlocks($path),
+            new IsolatePHPBlocks($path)
+        );
 
         return $node;
     }
 
     /**
-     * @param array            $nodes
-     * @param VisitorInterface $visitor
+     * @param array               $nodes
+     * @param VisitorInterface... $visitors
      * @return array|NodeInterface[]
      */
-    protected function traverse(array $nodes, VisitorInterface $visitor)
+    protected function traverse(array $nodes, VisitorInterface ...$visitors)
     {
         $traverser = new Traverser();
-        $traverser->addVisitor($visitor);
+        foreach ($visitors as $visitor) {
+            $traverser->addVisitor($visitor);
+        }
 
         return $traverser->traverse($nodes);
     }
