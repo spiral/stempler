@@ -113,8 +113,11 @@ final class HTMLSyntax implements SyntaxInterface
                 }
 
                 if (
-                    strpos($this->attr->name, 'on') === 0 ||
-                    in_array($this->attr->name, self::VERBATIM_ATTRIBUTES, true)
+                    is_string($this->attr->name)
+                    && (
+                        strpos($this->attr->name, 'on') === 0 ||
+                        in_array($this->attr->name, self::VERBATIM_ATTRIBUTES, true)
+                    )
                 ) {
                     $this->attr->value = $this->parseVerbatim($parser, $token);
                 } else {
