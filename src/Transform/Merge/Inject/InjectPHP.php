@@ -180,7 +180,7 @@ final class InjectPHP implements VisitorInterface
                 return $this->trimPHP($node->trimValue());
         }
 
-        return '';
+        return 'null';
     }
 
     /**
