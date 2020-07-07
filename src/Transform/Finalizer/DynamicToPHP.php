@@ -20,6 +20,8 @@ use Spiral\Stempler\Node\HTML\Attr;
 use Spiral\Stempler\Node\HTML\Tag;
 use Spiral\Stempler\Node\HTML\Verbatim;
 use Spiral\Stempler\Node\PHP;
+use Spiral\Stempler\Node\Template;
+use Spiral\Stempler\Transform\Merge\ExtendsParent;
 use Spiral\Stempler\Traverser;
 use Spiral\Stempler\VisitorContext;
 use Spiral\Stempler\VisitorInterface;
@@ -39,7 +41,7 @@ final class DynamicToPHP implements VisitorInterface
     private $directives = [];
 
     /** @var Traverser */
-    private $attrTraverser;
+    private $traverser;
 
     /**
      * @param string $defaultFilter
@@ -82,6 +84,13 @@ final class DynamicToPHP implements VisitorInterface
 
         if ($node instanceof Directive) {
             return $this->directive($node, $ctx);
+        }
+
+        if ($node instanceof Template) {
+            $extendsTag = $node->getAttribute(ExtendsParent::class);
+            if ($extendsTag instanceof Tag) {
+                $extendsTag->attrs = $this->traverser->traverse($extendsTag->attrs);
+            }
         }
 
         return null;
