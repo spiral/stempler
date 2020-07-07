@@ -101,7 +101,7 @@ final class PHPMixin
             $result .= $token[1];
         }
 
-        return trim($result);
+        return rtrim(trim($result), ';');
     }
 
     /**
