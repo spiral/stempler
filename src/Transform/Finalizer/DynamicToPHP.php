@@ -20,6 +20,7 @@ use Spiral\Stempler\Node\HTML\Attr;
 use Spiral\Stempler\Node\HTML\Tag;
 use Spiral\Stempler\Node\HTML\Verbatim;
 use Spiral\Stempler\Node\PHP;
+use Spiral\Stempler\Traverser;
 use Spiral\Stempler\VisitorContext;
 use Spiral\Stempler\VisitorInterface;
 
@@ -37,6 +38,9 @@ final class DynamicToPHP implements VisitorInterface
     /** @var DirectiveRendererInterface[] */
     private $directives = [];
 
+    /** @var Traverser */
+    private $attrTraverser;
+
     /**
      * @param string $defaultFilter
      * @param array  $directives
@@ -45,6 +49,9 @@ final class DynamicToPHP implements VisitorInterface
     {
         $this->defaultFilter = $defaultFilter;
         $this->directives = $directives;
+
+        $this->traverser = new Traverser();
+        $this->traverser->addVisitor($this);
     }
 
     /**
@@ -119,7 +126,11 @@ final class DynamicToPHP implements VisitorInterface
             $result = sprintf("<?php echo {$filter}; ?>", trim($node->body));
         }
 
-        return new PHP($result, token_get_all($result), $node->getContext());
+        return new PHP(
+            $result,
+            token_get_all($result),
+            $node->getContext()->withValue(PHP::ORIGINAL_BODY, trim($node->body))
+        );
     }
 
     /**

@@ -21,6 +21,8 @@ final class PHP implements NodeInterface
 {
     use ContextTrait;
 
+    public const ORIGINAL_BODY = 'PHP_BODY';
+
     /** @var string */
     public $content;
 

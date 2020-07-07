@@ -40,7 +40,7 @@ final class InjectPHP implements VisitorInterface
     private $fetcher;
 
     /**
-     * @param  BlockClaims  $blocks
+     * @param BlockClaims $blocks
      */
     public function __construct(BlockClaims $blocks)
     {
@@ -106,7 +106,7 @@ final class InjectPHP implements VisitorInterface
     }
 
     /**
-     * @param  array|NodeInterface  $node
+     * @param array|NodeInterface $node
      * @return bool
      */
     private function isReference($node): bool
@@ -141,7 +141,7 @@ final class InjectPHP implements VisitorInterface
     }
 
     /**
-     * @param  array|NodeInterface  $node
+     * @param array|NodeInterface $node
      * @return string
      */
     private function trimPHP($node): string
@@ -170,6 +170,10 @@ final class InjectPHP implements VisitorInterface
                 return trim($node->body);
 
             case $node instanceof PHP:
+                if ($node->getContext()->getValue(PHP::ORIGINAL_BODY) !== null) {
+                    return $node->getContext()->getValue(PHP::ORIGINAL_BODY);
+                }
+
                 return (new PHPMixin($node->tokens, self::PHP_MACRO_FUNCTION))->trimBody();
 
             case $node instanceof QuotedValue:
@@ -180,7 +184,7 @@ final class InjectPHP implements VisitorInterface
     }
 
     /**
-     * @param  Raw  $node
+     * @param Raw $node
      * @return string
      */
     private function exportValue(Raw $node): string

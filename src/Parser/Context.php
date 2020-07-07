@@ -25,6 +25,9 @@ final class Context
     /** @var string|null */
     private $path;
 
+    /** @var array */
+    private $values = [];
+
     /**
      * @param Token       $token
      * @param string|null $path
@@ -49,5 +52,27 @@ final class Context
     public function getPath(): ?string
     {
         return $this->path;
+    }
+
+    /**
+     * @param string $name
+     * @param mixed  $value
+     * @return $this
+     */
+    public function withValue(string $name, $value): self
+    {
+        $ctx = clone $this;
+        $ctx->values[$name] = $value;
+        return $ctx;
+    }
+
+    /**
+     * @param string $name
+     * @param null   $default
+     * @return mixed|null
+     */
+    public function getValue(string $name, $default = null)
+    {
+        return $this->values[$name] ?? $default;
     }
 }
