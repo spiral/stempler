@@ -1,12 +1,5 @@
 <?php
 
-/**
- * Spiral Framework.
- *
- * @license   MIT
- * @author    Anton Titov (Wolfy-J)
- */
-
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Node;
@@ -16,27 +9,24 @@ use Spiral\Stempler\Parser\Context;
 
 /**
  * Aggregated multiple nodes together using public pattern.
+ *
+ * @implements NodeInterface<Aggregate>
+ * @template TNode of NodeInterface
  */
 final class Aggregate implements NodeInterface
 {
     use ContextTrait;
 
-    /** @var string */
-    public $pattern = '*';
+    /** @var TNode[] */
+    public array $nodes = [];
 
-    /** @var NodeInterface[] */
-    public $nodes = [];
+    public array $uniqueIDs = [];
 
-    /** @var array */
-    public $uniqueIDs = [];
-
-    /**
-     * @param Context|null $context
-     */
-    public function __construct(Context $context = null, string $pattern = '*')
-    {
+    public function __construct(
+        Context $context = null,
+        public string $pattern = '*'
+    ) {
         $this->context = $context;
-        $this->pattern = $pattern;
     }
 
     /**
@@ -51,19 +41,19 @@ final class Aggregate implements NodeInterface
         }
 
         $conditions = [];
-        foreach (explode(';', $this->pattern) as $condition) {
-            if (strpos($condition, ':') === false) {
+        foreach (\explode(';', $this->pattern) as $condition) {
+            if (!\str_contains($condition, ':')) {
                 //Invalid
                 continue;
             }
 
-            [$option, $value] = explode(':', trim($condition));
+            [$option, $value] = \explode(':', \trim($condition));
             $conditions[$option] = $value;
         }
 
         if (isset($conditions['include'])) {
-            $include = explode(',', $conditions['include']);
-            if (in_array($name, $include)) {
+            $include = \explode(',', $conditions['include']);
+            if (\in_array($name, $include)) {
                 return $name;
             }
 
@@ -71,8 +61,8 @@ final class Aggregate implements NodeInterface
         }
 
         if (isset($conditions['exclude'])) {
-            $exclude = explode(',', $conditions['exclude']);
-            if (in_array($name, $exclude)) {
+            $exclude = \explode(',', $conditions['exclude']);
+            if (\in_array($name, $exclude)) {
                 return null;
             }
 
@@ -80,9 +70,9 @@ final class Aggregate implements NodeInterface
         }
 
         if (isset($conditions['prefix'])) {
-            $conditions['prefix'] = rtrim($conditions['prefix'], ' *');
-            if (strpos($name, $conditions['prefix']) === 0) {
-                return substr($name, strlen($conditions['prefix']));
+            $conditions['prefix'] = \rtrim($conditions['prefix'], ' *');
+            if (\str_starts_with($name, $conditions['prefix'])) {
+                return substr($name, \strlen($conditions['prefix']));
             }
 
             return null;
@@ -92,7 +82,7 @@ final class Aggregate implements NodeInterface
     }
 
     /**
-     * @inheritDoc
+     * @return \Generator<string, TNode[]>
      */
     public function getIterator(): \Generator
     {

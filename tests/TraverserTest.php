@@ -1,12 +1,5 @@
 <?php
 
-/**
- * Spiral Framework.
- *
- * @license   MIT
- * @author    Anton Titov (Wolfy-J)
- */
-
 declare(strict_types=1);
 
 namespace Spiral\Tests\Stempler;
@@ -40,15 +33,18 @@ class TraverserTest extends BaseTest implements VisitorInterface
 
         $t = new Traverser();
         $t->addVisitor(new class() implements VisitorInterface {
-            public function enterNode($node, VisitorContext $ctx): void
+            public function enterNode(mixed $node, VisitorContext $ctx): mixed
             {
-                if ($node instanceof Tag && $node->name == 'a') {
+                if ($node instanceof Tag && $node->name === 'a') {
                     $node->name = 'b';
                 }
+
+                return null;
             }
 
-            public function leaveNode($node, VisitorContext $ctx): void
+            public function leaveNode(mixed $node, VisitorContext $ctx): mixed
             {
+                return null;
             }
         });
 
@@ -66,13 +62,14 @@ class TraverserTest extends BaseTest implements VisitorInterface
 
         $t = new Traverser();
         $t->addVisitor(new class() implements VisitorInterface {
-            public function enterNode($node, VisitorContext $ctx): void
+            public function enterNode(mixed $node, VisitorContext $ctx): mixed
             {
+                return null;
             }
 
-            public function leaveNode($node, VisitorContext $ctx)
+            public function leaveNode(mixed $node, VisitorContext $ctx): mixed
             {
-                if ($node instanceof Tag && $node->name == 'a') {
+                if ($node instanceof Tag && $node->name === 'a') {
                     $new = new Tag();
                     $new->name = 'link';
                     $new->void = true;
@@ -98,15 +95,18 @@ class TraverserTest extends BaseTest implements VisitorInterface
 
         $t = new Traverser();
         $t->addVisitor(new class() implements VisitorInterface {
-            public function enterNode($node, VisitorContext $ctx): void
+            public function enterNode(mixed $node, VisitorContext $ctx): mixed
             {
+                return null;
             }
 
-            public function leaveNode($node, VisitorContext $ctx)
+            public function leaveNode(mixed $node, VisitorContext $ctx): mixed
             {
-                if ($node instanceof Tag && $node->name == 'b') {
+                if ($node instanceof Tag && $node->name === 'b') {
                     return VisitorInterface::REMOVE_NODE;
                 }
+
+                return null;
             }
         });
 
@@ -128,7 +128,7 @@ class TraverserTest extends BaseTest implements VisitorInterface
         $doc->nodes = $t->traverse($doc->nodes);
     }
 
-    public function enterNode($node, VisitorContext $ctx): void
+    public function enterNode(mixed $node, VisitorContext $ctx): mixed
     {
         if ($ctx->getCurrentNode() instanceof Raw) {
             $this->assertInstanceOf(Tag::class, $ctx->getParentNode());
@@ -137,9 +137,12 @@ class TraverserTest extends BaseTest implements VisitorInterface
             $this->assertInstanceOf(Tag::class, $ctx->getFirstNode());
             $this->assertSame('a', $ctx->getFirstNode()->name);
         }
+
+        return null;
     }
 
-    public function leaveNode($node, VisitorContext $ctx): void
+    public function leaveNode(mixed $node, VisitorContext $ctx): mixed
     {
+        return null;
     }
 }

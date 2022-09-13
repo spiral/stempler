@@ -1,12 +1,5 @@
 <?php
 
-/**
- * Spiral Framework.
- *
- * @license   MIT
- * @author    Anton Titov (Wolfy-J)
- */
-
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Lexer\Grammar;
@@ -19,7 +12,7 @@ use Spiral\Stempler\Lexer\Token;
 final class RawGrammar implements GrammarInterface
 {
     /**
-     * @inheritDoc
+     * @return \Generator<int, Byte|Token|null>
      */
     public function parse(Buffer $src): \Generator
     {
@@ -53,7 +46,6 @@ final class RawGrammar implements GrammarInterface
 
     /**
      * @codeCoverageIgnore
-     * @inheritDoc
      */
     public static function tokenName(int $token): string
     {

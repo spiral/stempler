@@ -1,12 +1,5 @@
 <?php
 
-/**
- * Spiral Framework.
- *
- * @license   MIT
- * @author    Anton Titov (Wolfy-J)
- */
-
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Transform\Merge\Inject;
@@ -27,18 +20,12 @@ use Spiral\Stempler\VisitorInterface;
  */
 final class InjectAttributes implements VisitorInterface
 {
-    /** @var BlockClaims */
-    private $blocks;
-
-    public function __construct(BlockClaims $blocks)
-    {
-        $this->blocks = $blocks;
+    public function __construct(
+        private readonly BlockClaims $blocks
+    ) {
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function enterNode($node, VisitorContext $ctx)
+    public function enterNode(mixed $node, VisitorContext $ctx): mixed
     {
         if (!$node instanceof Aggregate) {
             return null;
@@ -53,46 +40,55 @@ final class InjectAttributes implements VisitorInterface
             $value = $this->blocks->claim($name);
 
             if ($value instanceof QuotedValue) {
+                /**
+                 * TODO issue #767
+                 * @link https://github.com/spiral/framework/issues/767
+                 * @psalm-suppress InvalidPropertyAssignmentValue
+                 */
                 $node->nodes[] = new Attr($alias, $value->getValue());
                 continue;
             }
 
             // simple copy attribute copy
             if ($value instanceof Attr) {
+                /**
+                 * TODO issue #767
+                 * @link https://github.com/spiral/framework/issues/767
+                 * @psalm-suppress InvalidPropertyAssignmentValue
+                 */
                 $node->nodes[] = clone $value;
                 continue;
             }
 
+            /**
+             * TODO issue #767
+             * @link https://github.com/spiral/framework/issues/767
+             * @psalm-suppress InvalidPropertyAssignmentValue
+             */
             $node->nodes[] = new Attr($alias, $this->wrapValue($value));
         }
+
+        return null;
+    }
+
+    public function leaveNode(mixed $node, VisitorContext $ctx): mixed
+    {
+        return null;
     }
 
     /**
-     * @inheritDoc
+     * @return Nil|Verbatim|Mixin|scalar
      */
-    public function leaveNode($node, VisitorContext $ctx): void
+    private function wrapValue(mixed $value): mixed
     {
-    }
-
-    /**
-     * @param array $value
-     * @return array|Nil|Mixin
-     */
-    private function wrapValue($value)
-    {
-        if ($value === [] || $value === null || $value instanceof Nil) {
-            return new Nil();
-        }
-
-        if ($value instanceof Verbatim || is_scalar($value)) {
-            return $value;
-        }
-
-        // auto-quote
-        return new Mixin(array_merge(
-            [new Raw('"')],
-            is_array($value) ? $value : [$value],
-            [new Raw('"')]
-        ));
+        return match (true) {
+            $value === [] || $value === null || $value instanceof Nil => new Nil(),
+            $value instanceof Verbatim || \is_scalar($value) => $value,
+            default => new Mixin(\array_merge(
+                [new Raw('"')],
+                \is_array($value) ? $value : [$value],
+                [new Raw('"')]
+            ))
+        };
     }
 }

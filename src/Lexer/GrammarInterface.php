@@ -1,12 +1,5 @@
 <?php
 
-/**
- * Spiral Framework.
- *
- * @license   MIT
- * @author    Anton Titov (Wolfy-J)
- */
-
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Lexer;
@@ -16,7 +9,7 @@ interface GrammarInterface
     /**
      * Generate stream of tokens or pass generation to overlay grammar.
      *
-     * @return \Generator|Token[]|Byte[]
+     * @return \Generator<array-key, Byte|Token|null>
      */
     public function parse(Buffer $src): \Generator;
 

@@ -1,12 +1,5 @@
 <?php
 
-/**
- * Spiral Framework.
- *
- * @license   MIT
- * @author    Anton Titov (Wolfy-J)
- */
-
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Node;
@@ -17,30 +10,25 @@ use Spiral\Stempler\Parser\Context;
 
 /**
  * Blocks used to extend and import templates. Block operate as template variable.
+ *
+ * @implements NodeInterface<Block>
+ * @template TNode of NodeInterface
  */
 final class Block implements NodeInterface, AttributedInterface
 {
     use ContextTrait;
     use AttributeTrait;
 
-    /** @var string */
-    public $name;
+    /** @var TNode[] */
+    public array $nodes = [];
 
-    /** @var NodeInterface[] */
-    public $nodes = [];
-
-    /**
-     * @param Context|null $context
-     */
-    public function __construct(string $name, Context $context = null)
-    {
-        $this->name = $name;
+    public function __construct(
+        public ?string $name,
+        Context $context = null
+    ) {
         $this->context = $context;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function getIterator(): \Generator
     {
         yield 'nodes' => $this->nodes;

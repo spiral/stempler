@@ -1,12 +1,5 @@
 <?php
 
-/**
- * Spiral Framework.
- *
- * @license   MIT
- * @author    Anton Titov (Wolfy-J)
- */
-
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Transform;
@@ -21,25 +14,19 @@ use Spiral\Stempler\Node\Raw;
  */
 final class QuotedValue
 {
-    /** @var mixed|NodeInterface */
-    private $value;
-
-    /**
-     * @param mixed $value
-     */
-    public function __construct($value)
-    {
-        $this->value = $value;
+    public function __construct(
+        private readonly NodeInterface|string $value
+    ) {
     }
 
-    /**
-     * @return mixed|NodeInterface
-     */
-    public function getValue()
+    public function getValue(): mixed
     {
         return $this->value;
     }
 
+    /**
+     * @return NodeInterface[]
+     */
     public function trimValue(): array
     {
         $value = $this->value;
@@ -47,8 +34,8 @@ final class QuotedValue
             return [];
         }
 
-        if (is_string($value)) {
-            return [new Raw(trim($value, '\'"'))];
+        if (\is_string($value)) {
+            return [new Raw(\trim($value, '\'"'))];
         }
 
         if (!$value instanceof Mixin) {
@@ -58,15 +45,26 @@ final class QuotedValue
         // trim mixin quotes
         $nodes = $value->nodes;
 
-        if (count($nodes) >= 3 && $nodes[0] instanceof Raw && $nodes[count($nodes) - 1] instanceof Raw) {
+        if (\count($nodes) >= 3 && $nodes[0] instanceof Raw && $nodes[\count($nodes) - 1] instanceof Raw) {
+            /**
+             * TODO issue #767
+             * @link https://github.com/spiral/framework/issues/767
+             * @psalm-suppress InvalidArrayAccess
+             */
             $quote = $nodes[0]->content[0];
-            if (!in_array($quote, ['"', '\''])) {
+            if (!\in_array($quote, ['"', "'"])) {
                 return $nodes;
             }
 
-            $nodes[0] = new Raw(ltrim($nodes[0]->content, $quote));
-            $nodes[count($nodes) - 1] = new Raw(
-                rtrim($nodes[count($nodes) - 1]->content, $quote)
+            $nodes[0] = new Raw(\ltrim($nodes[0]->content, $quote));
+            /**
+             * TODO issue #767
+             * @link https://github.com/spiral/framework/issues/767
+             * @psalm-suppress NoInterfaceProperties
+             */
+            $content = $nodes[\count($nodes) - 1]->content;
+            $nodes[\count($nodes) - 1] = new Raw(
+                \rtrim($content, $quote)
             );
         }
 
@@ -76,6 +74,6 @@ final class QuotedValue
             }
         }
 
-        return [new Mixin(array_values($nodes))];
+        return [new Mixin(\array_values($nodes))];
     }
 }

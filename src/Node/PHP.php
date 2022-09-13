@@ -1,12 +1,5 @@
 <?php
 
-/**
- * Spiral Framework.
- *
- * @license   MIT
- * @author    Anton Titov (Wolfy-J)
- */
-
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Node;
@@ -16,6 +9,8 @@ use Spiral\Stempler\Parser\Context;
 
 /**
  * Static PHP block.
+ *
+ * @implements NodeInterface<PHP>
  */
 final class PHP implements NodeInterface
 {
@@ -23,25 +18,15 @@ final class PHP implements NodeInterface
 
     public const ORIGINAL_BODY = 'PHP_BODY';
 
-    /** @var string */
-    public $content;
-
-    /** @var array @internal */
-    public $tokens;
-
-    /**
-     * @param Context|null $context
-     */
-    public function __construct(string $content, array $tokens, Context $context = null)
-    {
-        $this->content = $content;
-        $this->tokens = $tokens;
+    public function __construct(
+        public string $content,
+        /** @internal */
+        public array $tokens,
+        Context $context = null
+    ) {
         $this->context = $context;
     }
 
-    /**
-     * @inheritDoc
-     */
     public function getIterator(): \Generator
     {
         yield from [];

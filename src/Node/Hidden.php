@@ -1,12 +1,5 @@
 <?php
 
-/**
- * Spiral Framework.
- *
- * @license   MIT
- * @author    Anton Titov (Wolfy-J)
- */
-
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Node;
@@ -15,19 +8,20 @@ use Spiral\Stempler\Parser\Context;
 
 /**
  * Allow traversing but do not render.
+ *
+ * @implements NodeInterface<Hidden>
+ * @template TNode of NodeInterface
  */
 final class Hidden implements NodeInterface
 {
-    /** @var NodeInterface[] */
-    public $nodes;
-
-    public function __construct(array $nodes)
-    {
-        $this->nodes = $nodes;
+    /** @param TNode[] $nodes */
+    public function __construct(
+        public array $nodes
+    ) {
     }
 
     /**
-     * @return \Generator|\Traversable
+     * @return \Generator<string, TNode[]>
      */
     public function getIterator(): \Generator
     {

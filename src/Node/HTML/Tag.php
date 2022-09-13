@@ -1,12 +1,5 @@
 <?php
 
-/**
- * Spiral Framework.
- *
- * @license   MIT
- * @author    Anton Titov (Wolfy-J)
- */
-
 declare(strict_types=1);
 
 namespace Spiral\Stempler\Node\HTML;
@@ -20,27 +13,27 @@ use Spiral\Stempler\Parser\Context;
 
 /**
  * Tag or other control block.
+ *
+ * @implements NodeInterface<Tag>
+ * @template TNode of NodeInterface
  */
 final class Tag implements NodeInterface, AttributedInterface
 {
     use ContextTrait;
     use AttributeTrait;
 
-    /** @var bool */
-    public $void = false;
+    public bool $void = false;
 
-    /** @var Mixin|string */
-    public $name;
+    public Mixin|string|null $name = null;
 
     /** @var Attr[] */
-    public $attrs = [];
-
-    /** @var NodeInterface[] */
-    public $nodes = [];
+    public array $attrs = [];
 
     /**
-     * @param Context|null $context
+     * @var TNode[]
      */
+    public array $nodes = [];
+
     public function __construct(Context $context = null)
     {
         $this->context = $context;
