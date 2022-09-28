@@ -20,8 +20,8 @@ final class Bundle implements ImportInterface
     private ?Template $template = null;
 
     public function __construct(
-        private string $path,
-        private ?string $prefix = null,
+        private readonly string $path,
+        private readonly ?string $prefix = null,
         Context $context = null
     ) {
         $this->context = $context;
