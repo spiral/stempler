@@ -126,8 +126,6 @@ class TraverserTest extends BaseTestCase implements VisitorInterface
         $t->addVisitor($this);
 
         $doc->nodes = $t->traverse($doc->nodes);
-        // To suppress Rector error
-        $this->assertTrue(true);
     }
 
     public function enterNode(mixed $node, VisitorContext $ctx): mixed
