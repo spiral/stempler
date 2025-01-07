@@ -18,6 +18,6 @@ final class MergerTest extends TestCase
 
         $template = $merger->merge(new Template([new Bundle('/')]), new Tag());
 
-        self::assertCount(1, $template->nodes);
+        $this->assertCount(1, $template->nodes);
     }
 }

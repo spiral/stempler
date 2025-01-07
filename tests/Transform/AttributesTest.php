@@ -26,12 +26,12 @@ class AttributesTest extends BaseTestCase
 
         $doc = $builder->load('root');
 
-        self::assertInstanceOf(Aggregate::class, $doc->nodes[0]->attrs[1]);
+        $this->assertInstanceOf(Aggregate::class, $doc->nodes[0]->attrs[1]);
 
         /** @var Aggregate $aggr */
         $aggr = $doc->nodes[0]->attrs[1];
 
-        self::assertSame('style', $aggr->accepts('style'));
+        $this->assertSame('style', $aggr->accepts('style'));
     }
 
     public function testAggregatedAttributePattern(): void
@@ -46,13 +46,13 @@ class AttributesTest extends BaseTestCase
 
         $doc = $builder->load('root');
 
-        self::assertInstanceOf(Aggregate::class, $doc->nodes[0]->attrs[1]);
+        $this->assertInstanceOf(Aggregate::class, $doc->nodes[0]->attrs[1]);
 
         /** @var Aggregate $aggr */
         $aggr = $doc->nodes[0]->attrs[1];
 
-        self::assertNull($aggr->accepts('style'));
-        self::assertSame('style', $aggr->accepts('a-style'));
+        $this->assertSame(null, $aggr->accepts('style'));
+        $this->assertSame('style', $aggr->accepts('a-style'));
     }
 
     public function testAggregateInclude(): void
@@ -67,13 +67,13 @@ class AttributesTest extends BaseTestCase
 
         $doc = $builder->load('root');
 
-        self::assertInstanceOf(Aggregate::class, $doc->nodes[0]->attrs[1]);
+        $this->assertInstanceOf(Aggregate::class, $doc->nodes[0]->attrs[1]);
 
         /** @var Aggregate $aggr */
         $aggr = $doc->nodes[0]->attrs[1];
 
-        self::assertSame('style', $aggr->accepts('style'));
-        self::assertNull($aggr->accepts('another'));
+        $this->assertSame('style', $aggr->accepts('style'));
+        $this->assertSame(null, $aggr->accepts('another'));
     }
 
     public function testAggregateExclude(): void
@@ -88,13 +88,13 @@ class AttributesTest extends BaseTestCase
 
         $doc = $builder->load('root');
 
-        self::assertInstanceOf(Aggregate::class, $doc->nodes[0]->attrs[1]);
+        $this->assertInstanceOf(Aggregate::class, $doc->nodes[0]->attrs[1]);
 
         /** @var Aggregate $aggr */
         $aggr = $doc->nodes[0]->attrs[1];
 
-        self::assertNull($aggr->accepts('style'));
-        self::assertSame('another', $aggr->accepts('another'));
+        $this->assertSame(null, $aggr->accepts('style'));
+        $this->assertSame('another', $aggr->accepts('another'));
     }
 
     public function testAggregateSimple(): void
@@ -112,7 +112,10 @@ class AttributesTest extends BaseTestCase
 
         $builder = $this->getBuilder($loader, []);
 
-        self::assertSame('<a href="google.com" style="color:red"></a>', $builder->compile('root')->getContent());
+        $this->assertSame(
+            '<a href="google.com" style="color:red"></a>',
+            $builder->compile('root')->getContent()
+        );
     }
 
     public function testAggregateVoid(): void
@@ -129,7 +132,10 @@ class AttributesTest extends BaseTestCase
 
         $builder = $this->getBuilder($loader, []);
 
-        self::assertSame('<a href="google.com" blue></a>', $builder->compile('root')->getContent());
+        $this->assertSame(
+            '<a href="google.com" blue></a>',
+            $builder->compile('root')->getContent()
+        );
     }
 
     public function testAggregateBlock(): void
@@ -147,7 +153,10 @@ class AttributesTest extends BaseTestCase
 
         $builder = $this->getBuilder($loader, []);
 
-        self::assertSame('<a href="google.com" blue green="orange"></a>', $builder->compile('root')->getContent());
+        $this->assertSame(
+            '<a href="google.com" blue green="orange"></a>',
+            $builder->compile('root')->getContent()
+        );
     }
 
     public function testAggregatePHP(): void
@@ -165,7 +174,10 @@ class AttributesTest extends BaseTestCase
 
         $builder = $this->getBuilder($loader, []);
 
-        self::assertSame('<a href="google.com" <?php echo $value ? "checked" : ""; ?>></a>', $builder->compile('root')->getContent());
+        $this->assertSame(
+            '<a href="google.com" <?php echo $value ? "checked" : ""; ?>></a>',
+            $builder->compile('root')->getContent()
+        );
     }
 
     public function testAggregateVerbatim(): void
@@ -182,7 +194,10 @@ class AttributesTest extends BaseTestCase
 
         $builder = $this->getBuilder($loader, []);
 
-        self::assertSame('<a href="google.com" style="color: <?=\'red\'?>"></a>', $builder->compile('root')->getContent());
+        $this->assertSame(
+            '<a href="google.com" style="color: <?=\'red\'?>"></a>',
+            $builder->compile('root')->getContent()
+        );
     }
 
     public function testEqualsToPHP(): void
@@ -199,7 +214,10 @@ class AttributesTest extends BaseTestCase
 
         $builder = $this->getBuilder($loader, []);
 
-        self::assertSame('<a href="google.com" class=<?=\'red\'?>></a>', $builder->compile('root')->getContent());
+        $this->assertSame(
+            '<a href="google.com" class=<?=\'red\'?>></a>',
+            $builder->compile('root')->getContent()
+        );
     }
 
     protected function getBuilder(LoaderInterface $loader, array $visitors): Builder

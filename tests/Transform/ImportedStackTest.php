@@ -25,8 +25,8 @@ class ImportedStackTest extends BaseTestCase
     {
         $doc = $this->parse('<stack:collect name="css"/>');
 
-        self::assertInstanceOf(Aggregate::class, $doc->nodes[0]);
-        self::assertSame([], $doc->nodes[0]->nodes);
+        $this->assertInstanceOf(Aggregate::class, $doc->nodes[0]);
+        $this->assertSame([], $doc->nodes[0]->nodes);
     }
 
     public function testImportedStack(): void
@@ -46,7 +46,10 @@ class ImportedStackTest extends BaseTestCase
 
         $builder = $this->getBuilder($loader, []);
 
-        self::assertSame('css<a href="google.com">hello world</a>', $builder->compile('root')->getContent());
+        $this->assertSame(
+            'css<a href="google.com">hello world</a>',
+            $builder->compile('root')->getContent()
+        );
     }
 
     public function testStackDefinedInParent(): void
@@ -78,7 +81,10 @@ class ImportedStackTest extends BaseTestCase
 
         $builder = $this->getBuilder($loader, []);
 
-        self::assertSame('<html>css<body><a href="google.com">hello world</a></body></html>', $builder->compile('root')->getContent());
+        $this->assertSame(
+            '<html>css<body><a href="google.com">hello world</a></body></html>',
+            $builder->compile('root')->getContent()
+        );
     }
 
     public function testStackDefinedInParentWithChild(): void
@@ -112,7 +118,10 @@ class ImportedStackTest extends BaseTestCase
 
         $builder = $this->getBuilder($loader, []);
 
-        self::assertSame('<html>css<body><a href="google.com">hello world</a></body>js</html>', $builder->compile('root')->getContent());
+        $this->assertSame(
+            '<html>css<body><a href="google.com">hello world</a></body>js</html>',
+            $builder->compile('root')->getContent()
+        );
     }
 
     public function testGrid(): void
@@ -155,7 +164,10 @@ class ImportedStackTest extends BaseTestCase
 
         $builder = $this->getBuilder($loader, []);
 
-        self::assertSame('<table><thead><tr>ID</tr><tr>Title</tr></thead><tbody><td>value</td><td>value</td></tbody></table>', $builder->compile('root')->getContent());
+        $this->assertSame(
+            '<table><thead><tr>ID</tr><tr>Title</tr></thead><tbody><td>value</td><td>value</td></tbody></table>',
+            $builder->compile('root')->getContent()
+        );
     }
 
     protected function getBuilder(LoaderInterface $loader, array $visitors): Builder

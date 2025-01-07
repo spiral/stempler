@@ -20,49 +20,49 @@ class DynamicTest extends BaseTestCase
     {
         $doc = $this->parse('raw');
 
-        self::assertInstanceOf(Raw::class, $doc->nodes[0]);
-        self::assertSame('raw', $doc->nodes[0]->content);
+        $this->assertInstanceOf(Raw::class, $doc->nodes[0]);
+        $this->assertSame('raw', $doc->nodes[0]->content);
     }
 
     public function testEmptyDirective(): void
     {
         $doc = $this->parse('@directive');
 
-        self::assertInstanceOf(Directive::class, $doc->nodes[0]);
-        self::assertSame('directive', $doc->nodes[0]->name);
-        self::assertNull($doc->nodes[0]->body);
+        $this->assertInstanceOf(Directive::class, $doc->nodes[0]);
+        $this->assertSame('directive', $doc->nodes[0]->name);
+        $this->assertSame(null, $doc->nodes[0]->body);
     }
 
     public function testDirectiveWithBody(): void
     {
         $doc = $this->parse('@directive(100, [])');
 
-        self::assertInstanceOf(Directive::class, $doc->nodes[0]);
-        self::assertSame('directive', $doc->nodes[0]->name);
-        self::assertSame('100, []', $doc->nodes[0]->body);
+        $this->assertInstanceOf(Directive::class, $doc->nodes[0]);
+        $this->assertSame('directive', $doc->nodes[0]->name);
+        $this->assertSame('100, []', $doc->nodes[0]->body);
     }
 
     public function testDeclareSkip(): void
     {
         $doc = $this->parse('@declare');
-        self::assertCount(0, $doc->nodes);
+        $this->assertCount(0, $doc->nodes);
     }
 
     public function testOutput(): void
     {
         $doc = $this->parse('{{ $name }}');
 
-        self::assertInstanceOf(Output::class, $doc->nodes[0]);
-        self::assertFalse($doc->nodes[0]->rawOutput);
-        self::assertSame(' $name ', $doc->nodes[0]->body);
+        $this->assertInstanceOf(Output::class, $doc->nodes[0]);
+        $this->assertSame(false, $doc->nodes[0]->rawOutput);
+        $this->assertSame(' $name ', $doc->nodes[0]->body);
     }
 
     public function testRawOutput(): void
     {
         $doc = $this->parse('{!! $name !!}');
 
-        self::assertInstanceOf(Output::class, $doc->nodes[0]);
-        self::assertTrue($doc->nodes[0]->rawOutput);
-        self::assertSame(' $name ', $doc->nodes[0]->body);
+        $this->assertInstanceOf(Output::class, $doc->nodes[0]);
+        $this->assertSame(true, $doc->nodes[0]->rawOutput);
+        $this->assertSame(' $name ', $doc->nodes[0]->body);
     }
 }
