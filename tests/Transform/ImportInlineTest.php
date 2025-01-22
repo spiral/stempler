@@ -24,7 +24,10 @@ class ImportInlineTest extends BaseTestCase
 
         $builder = $this->getBuilder($loader, []);
 
-        self::assertSame('<url href="google.com">hello world</url>', $builder->compile('root')->getContent());
+        $this->assertSame(
+            '<url href="google.com">hello world</url>',
+            $builder->compile('root')->getContent()
+        );
     }
 
     public function testInlineImport(): void
@@ -39,7 +42,10 @@ class ImportInlineTest extends BaseTestCase
 
         $builder = $this->getBuilder($loader, []);
 
-        self::assertSame('<a href="google.com">hello world</a>', $builder->compile('root')->getContent());
+        $this->assertSame(
+            '<a href="google.com">hello world</a>',
+            $builder->compile('root')->getContent()
+        );
     }
 
     public function testInlineImportN(): void
@@ -55,7 +61,10 @@ class ImportInlineTest extends BaseTestCase
 
         $builder = $this->getBuilder($loader, []);
 
-        self::assertSame('<a href="google.com">hello world</a><a href="spiralscout.com">foo bar</a>', $builder->compile('root')->getContent());
+        $this->assertSame(
+            '<a href="google.com">hello world</a><a href="spiralscout.com">foo bar</a>',
+            $builder->compile('root')->getContent()
+        );
     }
 
     protected function getBuilder(LoaderInterface $loader, array $visitors): Builder

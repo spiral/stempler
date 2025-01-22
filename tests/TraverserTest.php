@@ -50,7 +50,10 @@ class TraverserTest extends BaseTestCase implements VisitorInterface
 
         $doc->nodes = $t->traverse($doc->nodes);
 
-        self::assertSame('<b href="url"></b>', $this->compile($doc));
+        $this->assertSame(
+            '<b href="url"></b>',
+            $this->compile($doc)
+        );
     }
 
     public function testReplaceNode(): void
@@ -80,7 +83,10 @@ class TraverserTest extends BaseTestCase implements VisitorInterface
 
         $doc->nodes = $t->traverse($doc->nodes);
 
-        self::assertSame('<link src="url"/>', $this->compile($doc));
+        $this->assertSame(
+            '<link src="url"/>',
+            $this->compile($doc)
+        );
     }
 
     public function testRemoveNode(): void
@@ -106,7 +112,10 @@ class TraverserTest extends BaseTestCase implements VisitorInterface
 
         $doc->nodes = $t->traverse($doc->nodes);
 
-        self::assertSame('<a href="url">hello</a>', $this->compile($doc));
+        $this->assertSame(
+            '<a href="url">hello</a>',
+            $this->compile($doc)
+        );
     }
 
     public function testVisitorContext(): void
@@ -117,18 +126,16 @@ class TraverserTest extends BaseTestCase implements VisitorInterface
         $t->addVisitor($this);
 
         $doc->nodes = $t->traverse($doc->nodes);
-        // To suppress Rector error
-        self::assertTrue(true);
     }
 
     public function enterNode(mixed $node, VisitorContext $ctx): mixed
     {
         if ($ctx->getCurrentNode() instanceof Raw) {
-            self::assertInstanceOf(Tag::class, $ctx->getParentNode());
-            self::assertSame('b', $ctx->getParentNode()->name);
+            $this->assertInstanceOf(Tag::class, $ctx->getParentNode());
+            $this->assertSame('b', $ctx->getParentNode()->name);
 
-            self::assertInstanceOf(Tag::class, $ctx->getFirstNode());
-            self::assertSame('a', $ctx->getFirstNode()->name);
+            $this->assertInstanceOf(Tag::class, $ctx->getFirstNode());
+            $this->assertSame('a', $ctx->getFirstNode()->name);
         }
 
         return null;

@@ -16,6 +16,9 @@ class PHPTest extends BaseTestCase
     {
         $doc = $this->parse('@php echo 1; @endphp');
 
-        self::assertSame('<?php echo 1; ?>', $this->compile($doc));
+        $this->assertSame(
+            '<?php echo 1; ?>',
+            $this->compile($doc)
+        );
     }
 }

@@ -16,6 +16,6 @@ class RawTest extends BaseTestCase
     {
         $doc = $this->parse('hello world');
 
-        self::assertSame('hello world', $this->compile($doc));
+        $this->assertSame('hello world', $this->compile($doc));
     }
 }

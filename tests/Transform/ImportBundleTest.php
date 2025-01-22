@@ -24,7 +24,10 @@ class ImportBundleTest extends BaseTestCase
 
         $builder = $this->getBuilder($loader, []);
 
-        self::assertSame('<url href="google.com">hello world</url>', $builder->compile('root')->getContent());
+        $this->assertSame(
+            '<url href="google.com">hello world</url>',
+            $builder->compile('root')->getContent()
+        );
     }
 
     public function testInlineBundle(): void
@@ -45,7 +48,10 @@ class ImportBundleTest extends BaseTestCase
 
         $builder = $this->getBuilder($loader, []);
 
-        self::assertSame('<a href="google.com">hello world</a>', $builder->compile('root')->getContent());
+        $this->assertSame(
+            '<a href="google.com">hello world</a>',
+            $builder->compile('root')->getContent()
+        );
     }
 
     public function testImportElementViaBundle(): void
@@ -61,7 +67,10 @@ class ImportBundleTest extends BaseTestCase
 
         $builder = $this->getBuilder($loader, []);
 
-        self::assertSame('<a href="google.com">hello world</a>', $builder->compile('root')->getContent());
+        $this->assertSame(
+            '<a href="google.com">hello world</a>',
+            $builder->compile('root')->getContent()
+        );
     }
 
 
