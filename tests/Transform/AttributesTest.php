@@ -19,19 +19,19 @@ class AttributesTest extends BaseTestCase
         $loader ??= new StringLoader();
         $loader->set(
             'root',
-            '<a href="" attr:aggregate></a>'
+            '<a href="" attr:aggregate></a>',
         );
 
         $builder = $this->getBuilder($loader, []);
 
         $doc = $builder->load('root');
 
-        $this->assertInstanceOf(Aggregate::class, $doc->nodes[0]->attrs[1]);
+        self::assertInstanceOf(Aggregate::class, $doc->nodes[0]->attrs[1]);
 
         /** @var Aggregate $aggr */
         $aggr = $doc->nodes[0]->attrs[1];
 
-        $this->assertSame('style', $aggr->accepts('style'));
+        self::assertSame('style', $aggr->accepts('style'));
     }
 
     public function testAggregatedAttributePattern(): void
@@ -39,20 +39,20 @@ class AttributesTest extends BaseTestCase
         $loader ??= new StringLoader();
         $loader->set(
             'root',
-            '<a href="${href}" attr:aggregate="prefix:a-"></a>'
+            '<a href="${href}" attr:aggregate="prefix:a-"></a>',
         );
 
         $builder = $this->getBuilder($loader, []);
 
         $doc = $builder->load('root');
 
-        $this->assertInstanceOf(Aggregate::class, $doc->nodes[0]->attrs[1]);
+        self::assertInstanceOf(Aggregate::class, $doc->nodes[0]->attrs[1]);
 
         /** @var Aggregate $aggr */
         $aggr = $doc->nodes[0]->attrs[1];
 
-        $this->assertSame(null, $aggr->accepts('style'));
-        $this->assertSame('style', $aggr->accepts('a-style'));
+        self::assertNull($aggr->accepts('style'));
+        self::assertSame('style', $aggr->accepts('a-style'));
     }
 
     public function testAggregateInclude(): void
@@ -60,20 +60,20 @@ class AttributesTest extends BaseTestCase
         $loader ??= new StringLoader();
         $loader->set(
             'root',
-            '<a href="${href}" attr:aggregate="include:style"></a>'
+            '<a href="${href}" attr:aggregate="include:style"></a>',
         );
 
         $builder = $this->getBuilder($loader, []);
 
         $doc = $builder->load('root');
 
-        $this->assertInstanceOf(Aggregate::class, $doc->nodes[0]->attrs[1]);
+        self::assertInstanceOf(Aggregate::class, $doc->nodes[0]->attrs[1]);
 
         /** @var Aggregate $aggr */
         $aggr = $doc->nodes[0]->attrs[1];
 
-        $this->assertSame('style', $aggr->accepts('style'));
-        $this->assertSame(null, $aggr->accepts('another'));
+        self::assertSame('style', $aggr->accepts('style'));
+        self::assertNull($aggr->accepts('another'));
     }
 
     public function testAggregateExclude(): void
@@ -81,20 +81,20 @@ class AttributesTest extends BaseTestCase
         $loader ??= new StringLoader();
         $loader->set(
             'root',
-            '<a href="${href}" attr:aggregate="exclude:style"></a>'
+            '<a href="${href}" attr:aggregate="exclude:style"></a>',
         );
 
         $builder = $this->getBuilder($loader, []);
 
         $doc = $builder->load('root');
 
-        $this->assertInstanceOf(Aggregate::class, $doc->nodes[0]->attrs[1]);
+        self::assertInstanceOf(Aggregate::class, $doc->nodes[0]->attrs[1]);
 
         /** @var Aggregate $aggr */
         $aggr = $doc->nodes[0]->attrs[1];
 
-        $this->assertSame(null, $aggr->accepts('style'));
-        $this->assertSame('another', $aggr->accepts('another'));
+        self::assertNull($aggr->accepts('style'));
+        self::assertSame('another', $aggr->accepts('another'));
     }
 
     public function testAggregateSimple(): void
@@ -102,20 +102,17 @@ class AttributesTest extends BaseTestCase
         $loader ??= new StringLoader();
         $loader->set(
             'root',
-            '<use:element path="element" as="element"/><element href="google.com" style="color:red"/>'
+            '<use:element path="element" as="element"/><element href="google.com" style="color:red"/>',
         );
 
         $loader->set(
             'element',
-            '<a href="${href}" attr:aggregate></a>'
+            '<a href="${href}" attr:aggregate></a>',
         );
 
         $builder = $this->getBuilder($loader, []);
 
-        $this->assertSame(
-            '<a href="google.com" style="color:red"></a>',
-            $builder->compile('root')->getContent()
-        );
+        self::assertSame('<a href="google.com" style="color:red"></a>', $builder->compile('root')->getContent());
     }
 
     public function testAggregateVoid(): void
@@ -123,19 +120,16 @@ class AttributesTest extends BaseTestCase
         $loader ??= new StringLoader();
         $loader->set(
             'root',
-            '<use:element path="element" as="element"/><element href="google.com" blue/>'
+            '<use:element path="element" as="element"/><element href="google.com" blue/>',
         );
         $loader->set(
             'element',
-            '<a href="${href}" attr:aggregate></a>'
+            '<a href="${href}" attr:aggregate></a>',
         );
 
         $builder = $this->getBuilder($loader, []);
 
-        $this->assertSame(
-            '<a href="google.com" blue></a>',
-            $builder->compile('root')->getContent()
-        );
+        self::assertSame('<a href="google.com" blue></a>', $builder->compile('root')->getContent());
     }
 
     public function testAggregateBlock(): void
@@ -144,19 +138,16 @@ class AttributesTest extends BaseTestCase
         $loader->set(
             'root',
             '<use:element path="element" as="element"/>'
-            . '<element href="google.com" blue><block:green>orange</block:green></element>'
+            . '<element href="google.com" blue><block:green>orange</block:green></element>',
         );
         $loader->set(
             'element',
-            '<a href="${href}" attr:aggregate></a>'
+            '<a href="${href}" attr:aggregate></a>',
         );
 
         $builder = $this->getBuilder($loader, []);
 
-        $this->assertSame(
-            '<a href="google.com" blue green="orange"></a>',
-            $builder->compile('root')->getContent()
-        );
+        self::assertSame('<a href="google.com" blue green="orange"></a>', $builder->compile('root')->getContent());
     }
 
     public function testAggregatePHP(): void
@@ -165,19 +156,16 @@ class AttributesTest extends BaseTestCase
         $loader->set(
             'root',
             '<use:element path="element" as="element"/>'
-            . '<element href="google.com" {!! $value ? "checked" : "" !!}/>'
+            . '<element href="google.com" {!! $value ? "checked" : "" !!}/>',
         );
         $loader->set(
             'element',
-            '<a href="${href}" attr:aggregate></a>'
+            '<a href="${href}" attr:aggregate></a>',
         );
 
         $builder = $this->getBuilder($loader, []);
 
-        $this->assertSame(
-            '<a href="google.com" <?php echo $value ? "checked" : ""; ?>></a>',
-            $builder->compile('root')->getContent()
-        );
+        self::assertSame('<a href="google.com" <?php echo $value ? "checked" : ""; ?>></a>', $builder->compile('root')->getContent());
     }
 
     public function testAggregateVerbatim(): void
@@ -185,19 +173,16 @@ class AttributesTest extends BaseTestCase
         $loader ??= new StringLoader();
         $loader->set(
             'root',
-            '<use:element path="element" as="element"/><element href="google.com" style="color: <?=\'red\'?>"/>'
+            '<use:element path="element" as="element"/><element href="google.com" style="color: <?=\'red\'?>"/>',
         );
         $loader->set(
             'element',
-            '<a href="${href}" attr:aggregate></a>'
+            '<a href="${href}" attr:aggregate></a>',
         );
 
         $builder = $this->getBuilder($loader, []);
 
-        $this->assertSame(
-            '<a href="google.com" style="color: <?=\'red\'?>"></a>',
-            $builder->compile('root')->getContent()
-        );
+        self::assertSame('<a href="google.com" style="color: <?=\'red\'?>"></a>', $builder->compile('root')->getContent());
     }
 
     public function testEqualsToPHP(): void
@@ -205,19 +190,16 @@ class AttributesTest extends BaseTestCase
         $loader ??= new StringLoader();
         $loader->set(
             'root',
-            '<use:element path="element" as="element"/><element href="google.com" class=<?=\'red\'?>/>'
+            '<use:element path="element" as="element"/><element href="google.com" class=<?=\'red\'?>/>',
         );
         $loader->set(
             'element',
-            '<a href="${href}" attr:aggregate></a>'
+            '<a href="${href}" attr:aggregate></a>',
         );
 
         $builder = $this->getBuilder($loader, []);
 
-        $this->assertSame(
-            '<a href="google.com" class=<?=\'red\'?>></a>',
-            $builder->compile('root')->getContent()
-        );
+        self::assertSame('<a href="google.com" class=<?=\'red\'?>></a>', $builder->compile('root')->getContent());
     }
 
     protected function getBuilder(LoaderInterface $loader, array $visitors): Builder
@@ -232,7 +214,7 @@ class AttributesTest extends BaseTestCase
     {
         return [
             new DefineBlocks(),
-            new DefineAttributes()
+            new DefineAttributes(),
         ];
     }
 }

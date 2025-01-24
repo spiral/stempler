@@ -25,8 +25,8 @@ class ImportedStackTest extends BaseTestCase
     {
         $doc = $this->parse('<stack:collect name="css"/>');
 
-        $this->assertInstanceOf(Aggregate::class, $doc->nodes[0]);
-        $this->assertSame([], $doc->nodes[0]->nodes);
+        self::assertInstanceOf(Aggregate::class, $doc->nodes[0]);
+        self::assertSame([], $doc->nodes[0]->nodes);
     }
 
     public function testImportedStack(): void
@@ -37,7 +37,7 @@ class ImportedStackTest extends BaseTestCase
             '<use:element path="import" as="url"/>
 <stack:collect name="css"/>
 <url href="google.com">hello world</url>
-'
+',
         );
         $loader->set('import', '
 <stack:push name="css">css</stack:push>
@@ -46,10 +46,7 @@ class ImportedStackTest extends BaseTestCase
 
         $builder = $this->getBuilder($loader, []);
 
-        $this->assertSame(
-            'css<a href="google.com">hello world</a>',
-            $builder->compile('root')->getContent()
-        );
+        self::assertSame('css<a href="google.com">hello world</a>', $builder->compile('root')->getContent());
     }
 
     public function testStackDefinedInParent(): void
@@ -62,7 +59,7 @@ class ImportedStackTest extends BaseTestCase
 <block:body>
     <url href="google.com">hello world</url>
 </block:body>
-'
+',
         );
 
         $loader->set(
@@ -71,7 +68,7 @@ class ImportedStackTest extends BaseTestCase
             <stack:collect name="css"/>
             <body>${body}</body>
             <stack:collect name="js"/>
-            </html>'
+            </html>',
         );
 
         $loader->set('import', '
@@ -81,10 +78,7 @@ class ImportedStackTest extends BaseTestCase
 
         $builder = $this->getBuilder($loader, []);
 
-        $this->assertSame(
-            '<html>css<body><a href="google.com">hello world</a></body></html>',
-            $builder->compile('root')->getContent()
-        );
+        self::assertSame('<html>css<body><a href="google.com">hello world</a></body></html>', $builder->compile('root')->getContent());
     }
 
     public function testStackDefinedInParentWithChild(): void
@@ -99,7 +93,7 @@ class ImportedStackTest extends BaseTestCase
     <stack:push name="js">js</stack:push>
     <url href="google.com">hello world</url>
 </block:body>
-'
+',
         );
 
         $loader->set(
@@ -108,7 +102,7 @@ class ImportedStackTest extends BaseTestCase
             <stack:collect name="css"/>
             <body>${body}</body>
             <stack:collect name="js"/>
-            </html>'
+            </html>',
         );
 
         $loader->set('import', '
@@ -118,10 +112,7 @@ class ImportedStackTest extends BaseTestCase
 
         $builder = $this->getBuilder($loader, []);
 
-        $this->assertSame(
-            '<html>css<body><a href="google.com">hello world</a></body>js</html>',
-            $builder->compile('root')->getContent()
-        );
+        self::assertSame('<html>css<body><a href="google.com">hello world</a></body>js</html>', $builder->compile('root')->getContent());
     }
 
     public function testGrid(): void
@@ -136,11 +127,11 @@ class ImportedStackTest extends BaseTestCase
     <grid:cell title="ID">value</grid:cell>
     <grid:cell title="Title">value</grid:cell>
 </grid:render>
-'
+',
         );
 
         $loader->set(
-            'grid' . DIRECTORY_SEPARATOR . 'render',
+            'grid/render',
             '
 <table>
 <thead>
@@ -151,23 +142,20 @@ class ImportedStackTest extends BaseTestCase
 </tbody>
 <hidden>${context}</hidden>
 </table>
-'
+',
         );
 
         $loader->set(
-            'grid' . DIRECTORY_SEPARATOR . 'cell',
+            'grid/cell',
             '
 <stack:push name="head"><tr>${title}</tr></stack:push>
 <stack:push name="body"><td>${context}</td></stack:push>
-'
+',
         );
 
         $builder = $this->getBuilder($loader, []);
 
-        $this->assertSame(
-            '<table><thead><tr>ID</tr><tr>Title</tr></thead><tbody><td>value</td><td>value</td></tbody></table>',
-            $builder->compile('root')->getContent()
-        );
+        self::assertSame('<table><thead><tr>ID</tr><tr>Title</tr></thead><tbody><td>value</td><td>value</td></tbody></table>', $builder->compile('root')->getContent());
     }
 
     protected function getBuilder(LoaderInterface $loader, array $visitors): Builder
@@ -195,7 +183,7 @@ class ImportedStackTest extends BaseTestCase
             new DefineAttributes(),
             new DefineBlocks(),
             new DefineStacks(),
-            new DefineHidden()
+            new DefineHidden(),
         ];
     }
 }

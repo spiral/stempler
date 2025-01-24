@@ -16,9 +16,9 @@ class RawTest extends BaseTestCase
     {
         $this->assertTokens(
             [
-                new Token(Token::TYPE_RAW, 0, 'raw body')
+                new Token(Token::TYPE_RAW, 0, 'raw body'),
             ],
-            ('raw body')
+            ('raw body'),
         );
     }
 
@@ -31,9 +31,9 @@ class RawTest extends BaseTestCase
         }
 
         foreach ($tokens as $index => $token) {
-            $this->assertSame($token->type, $parsed[$index]->type, 'Token type mismatch');
-            $this->assertSame($token->offset, $parsed[$index]->offset, 'Token offset mismatch');
-            $this->assertSame($token->content, $parsed[$index]->content, 'Token content mismatch');
+            self::assertSame($token->type, $parsed[$index]->type, 'Token type mismatch');
+            self::assertSame($token->offset, $parsed[$index]->offset, 'Token offset mismatch');
+            self::assertSame($token->content, $parsed[$index]->content, 'Token content mismatch');
         }
     }
 
