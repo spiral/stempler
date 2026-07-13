@@ -15,7 +15,6 @@ final class Traverser
 {
     /** @var VisitorInterface[] */
     private array $visitors = [];
-
     private bool $stopTraversal = false;
 
     public function __construct(array $visitors = [])
@@ -52,7 +51,7 @@ final class Traverser
      * @return NodeInterface[]
      * @throws \Throwable
      */
-    public function traverse(array $nodes, ?VisitorContext $context = null): array
+    public function traverse(array $nodes, VisitorContext $context = null): array
     {
         $context ??= new VisitorContext();
 
@@ -96,7 +95,7 @@ final class Traverser
 
                     default:
                         throw new \LogicException(
-                            'enterNode() returned invalid value of type ' . \gettype($result),
+                            'enterNode() returned invalid value of type ' . \gettype($result)
                         );
                 }
             }
@@ -130,7 +129,7 @@ final class Traverser
 
                     default:
                         throw new \LogicException(
-                            'leaveNode() returned invalid value of type ' . \gettype($result),
+                            'leaveNode() returned invalid value of type ' . gettype($result)
                         );
                 }
 
@@ -194,7 +193,7 @@ final class Traverser
 
                     default:
                         throw new \LogicException(
-                            'enterNode() returned invalid value of type ' . \gettype($result),
+                            'enterNode() returned invalid value of type ' . \gettype($result)
                         );
                 }
             }
@@ -223,7 +222,7 @@ final class Traverser
 
                     default:
                         throw new \LogicException(
-                            'leaveNode() returned invalid value of type ' . \gettype($result),
+                            'leaveNode() returned invalid value of type ' . \gettype($result)
                         );
                 }
 

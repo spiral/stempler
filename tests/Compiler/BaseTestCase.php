@@ -15,10 +15,15 @@ abstract class BaseTestCase extends TestCase
     protected const GRAMMARS = [
         /* GRAMMAR => SYNTAX */
     ];
+
     protected const RENDERS = [
         /* RENDERER */
     ];
 
+    /**
+     * @param Template $document
+     * @return string
+     */
     protected function compile(Template $document): string
     {
         $compiler = new Compiler();
@@ -29,6 +34,10 @@ abstract class BaseTestCase extends TestCase
         return $compiler->compile($document)->getContent();
     }
 
+    /**
+     * @param string $string
+     * @return Template
+     */
     protected function parse(string $string): Template
     {
         $parser = new Parser();

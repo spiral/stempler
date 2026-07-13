@@ -22,14 +22,14 @@ use Spiral\Stempler\Parser\Syntax\HTMLSyntax;
 use Spiral\Stempler\Parser\Syntax\InlineSyntax;
 use Spiral\Stempler\Parser\Syntax\PHPSyntax;
 
-final class BuilderTest extends TestCase
+class BuilderTest extends TestCase
 {
     public function testRaw(): void
     {
         $builder = $this->getBuilder(new StringLoader());
         $builder->getLoader()->set('home', 'hello world');
 
-        self::assertSame('hello world', $builder->compile('home')->getContent());
+        $this->assertSame('hello world', $builder->compile('home')->getContent());
     }
 
     public function testInvalidPath(): void

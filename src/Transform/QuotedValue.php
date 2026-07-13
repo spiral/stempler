@@ -15,8 +15,9 @@ use Spiral\Stempler\Node\Raw;
 final class QuotedValue
 {
     public function __construct(
-        private readonly NodeInterface|string $value,
-    ) {}
+        private readonly NodeInterface|string $value
+    ) {
+    }
 
     public function getValue(): mixed
     {
@@ -63,7 +64,7 @@ final class QuotedValue
              */
             $content = $nodes[\count($nodes) - 1]->content;
             $nodes[\count($nodes) - 1] = new Raw(
-                \is_string($content) ? \rtrim($content, $quote) : $content,
+                \rtrim($content, $quote)
             );
         }
 

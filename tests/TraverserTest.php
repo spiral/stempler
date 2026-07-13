@@ -16,12 +16,13 @@ use Spiral\Stempler\Traverser;
 use Spiral\Stempler\VisitorContext;
 use Spiral\Stempler\VisitorInterface;
 
-final class TraverserTest extends BaseTestCase implements VisitorInterface
+class TraverserTest extends BaseTestCase implements VisitorInterface
 {
     protected const RENDERS = [
         CoreRenderer::class,
         HTMLRenderer::class,
     ];
+
     protected const GRAMMARS = [
         HTMLGrammar::class => HTMLSyntax::class,
     ];
@@ -31,7 +32,7 @@ final class TraverserTest extends BaseTestCase implements VisitorInterface
         $doc = $this->parse('<a href="url"></a>');
 
         $t = new Traverser();
-        $t->addVisitor(new class implements VisitorInterface {
+        $t->addVisitor(new class() implements VisitorInterface {
             public function enterNode(mixed $node, VisitorContext $ctx): mixed
             {
                 if ($node instanceof Tag && $node->name === 'a') {
@@ -49,7 +50,10 @@ final class TraverserTest extends BaseTestCase implements VisitorInterface
 
         $doc->nodes = $t->traverse($doc->nodes);
 
-        self::assertSame('<b href="url"></b>', $this->compile($doc));
+        $this->assertSame(
+            '<b href="url"></b>',
+            $this->compile($doc)
+        );
     }
 
     public function testReplaceNode(): void
@@ -57,7 +61,7 @@ final class TraverserTest extends BaseTestCase implements VisitorInterface
         $doc = $this->parse('<a href="url"></a>');
 
         $t = new Traverser();
-        $t->addVisitor(new class implements VisitorInterface {
+        $t->addVisitor(new class() implements VisitorInterface {
             public function enterNode(mixed $node, VisitorContext $ctx): mixed
             {
                 return null;
@@ -79,7 +83,10 @@ final class TraverserTest extends BaseTestCase implements VisitorInterface
 
         $doc->nodes = $t->traverse($doc->nodes);
 
-        self::assertSame('<link src="url"/>', $this->compile($doc));
+        $this->assertSame(
+            '<link src="url"/>',
+            $this->compile($doc)
+        );
     }
 
     public function testRemoveNode(): void
@@ -87,7 +94,7 @@ final class TraverserTest extends BaseTestCase implements VisitorInterface
         $doc = $this->parse('<a href="url"><b></b>hello</a>');
 
         $t = new Traverser();
-        $t->addVisitor(new class implements VisitorInterface {
+        $t->addVisitor(new class() implements VisitorInterface {
             public function enterNode(mixed $node, VisitorContext $ctx): mixed
             {
                 return null;
@@ -105,7 +112,10 @@ final class TraverserTest extends BaseTestCase implements VisitorInterface
 
         $doc->nodes = $t->traverse($doc->nodes);
 
-        self::assertSame('<a href="url">hello</a>', $this->compile($doc));
+        $this->assertSame(
+            '<a href="url">hello</a>',
+            $this->compile($doc)
+        );
     }
 
     public function testVisitorContext(): void
@@ -116,18 +126,16 @@ final class TraverserTest extends BaseTestCase implements VisitorInterface
         $t->addVisitor($this);
 
         $doc->nodes = $t->traverse($doc->nodes);
-        // To suppress Rector error
-        self::assertTrue(true);
     }
 
     public function enterNode(mixed $node, VisitorContext $ctx): mixed
     {
         if ($ctx->getCurrentNode() instanceof Raw) {
-            self::assertInstanceOf(Tag::class, $ctx->getParentNode());
-            self::assertSame('b', $ctx->getParentNode()->name);
+            $this->assertInstanceOf(Tag::class, $ctx->getParentNode());
+            $this->assertSame('b', $ctx->getParentNode()->name);
 
-            self::assertInstanceOf(Tag::class, $ctx->getFirstNode());
-            self::assertSame('a', $ctx->getFirstNode()->name);
+            $this->assertInstanceOf(Tag::class, $ctx->getFirstNode());
+            $this->assertSame('a', $ctx->getFirstNode()->name);
         }
 
         return null;

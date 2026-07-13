@@ -14,8 +14,9 @@ use Spiral\Stempler\VisitorInterface;
 final class IsolateBlocks implements VisitorInterface
 {
     public function __construct(
-        private readonly string $path,
-    ) {}
+        private readonly string $path
+    ) {
+    }
 
     public function enterNode(mixed $node, VisitorContext $ctx): mixed
     {

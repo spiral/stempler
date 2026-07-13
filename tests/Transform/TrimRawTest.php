@@ -8,13 +8,13 @@ use Spiral\Stempler\Node\HTML\Attr;
 use Spiral\Stempler\Node\Raw;
 use Spiral\Stempler\Transform\Finalizer\TrimRaw;
 
-final class TrimRawTest extends BaseTestCase
+class TrimRawTest extends BaseTestCase
 {
     public function testNotEmpty(): void
     {
         $doc = $this->parse('<a>hello world</a>abc');
 
-        self::assertInstanceOf(Raw::class, $doc->nodes[1]);
+        $this->assertInstanceOf(Raw::class, $doc->nodes[1]);
     }
 
     public function testEmpty(): void
@@ -23,7 +23,7 @@ final class TrimRawTest extends BaseTestCase
             <a>hello world</a>
         ');
 
-        self::assertCount(1, $doc->nodes);
+        $this->assertCount(1, $doc->nodes);
     }
 
     public function testKeepAttribute(): void
@@ -32,11 +32,11 @@ final class TrimRawTest extends BaseTestCase
             <a href=" ${name} ${other} ">hello world</a>
         ');
 
-        self::assertCount(1, $doc->nodes);
+        $this->assertCount(1, $doc->nodes);
 
         /** @var Attr $href */
         $href = $doc->nodes[0]->attrs[0];
-        self::assertCount(5, $href->value->nodes);
+        $this->assertCount(5, $href->value->nodes);
     }
 
     protected function getVisitors(): array

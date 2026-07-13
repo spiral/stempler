@@ -23,6 +23,7 @@ final class Tag implements NodeInterface, AttributedInterface
     use AttributeTrait;
 
     public bool $void = false;
+
     public Mixin|string|null $name = null;
 
     /** @var Attr[] */
@@ -33,7 +34,7 @@ final class Tag implements NodeInterface, AttributedInterface
      */
     public array $nodes = [];
 
-    public function __construct(?Context $context = null)
+    public function __construct(Context $context = null)
     {
         $this->context = $context;
     }

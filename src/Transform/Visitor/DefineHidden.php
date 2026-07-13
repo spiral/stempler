@@ -6,6 +6,7 @@ namespace Spiral\Stempler\Transform\Visitor;
 
 use Spiral\Stempler\Node\Hidden;
 use Spiral\Stempler\Node\HTML\Tag;
+use Spiral\Stempler\Node\NodeInterface;
 use Spiral\Stempler\VisitorContext;
 use Spiral\Stempler\VisitorInterface;
 

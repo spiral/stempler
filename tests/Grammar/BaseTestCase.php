@@ -12,18 +12,22 @@ abstract class BaseTestCase extends TestCase
 {
     protected const GRAMMARS = [];
 
+    /**
+     * @param array  $tokens
+     * @param string $source
+     */
     protected function assertTokens(array $tokens, string $source): void
     {
         $parsed = $this->tokens($source);
 
-        if (\count($tokens) !== \count($parsed)) {
+        if (count($tokens) !== count($parsed)) {
             $this->fail('Token count mismatch');
         }
 
         foreach ($tokens as $index => $token) {
-            self::assertSame($token->type, $parsed[$index]->type, 'Token type mismatch');
-            self::assertSame($token->offset, $parsed[$index]->offset, 'Token offset mismatch');
-            self::assertSame($token->content, $parsed[$index]->content, 'Token content mismatch');
+            $this->assertSame($token->type, $parsed[$index]->type, 'Token type mismatch');
+            $this->assertSame($token->offset, $parsed[$index]->offset, 'Token offset mismatch');
+            $this->assertSame($token->content, $parsed[$index]->content, 'Token content mismatch');
         }
     }
 

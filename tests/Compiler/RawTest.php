@@ -6,7 +6,7 @@ namespace Spiral\Tests\Stempler\Compiler;
 
 use Spiral\Stempler\Compiler\Renderer\CoreRenderer;
 
-final class RawTest extends BaseTestCase
+class RawTest extends BaseTestCase
 {
     protected const RENDERS = [
         CoreRenderer::class,
@@ -16,6 +16,6 @@ final class RawTest extends BaseTestCase
     {
         $doc = $this->parse('hello world');
 
-        self::assertSame('hello world', $this->compile($doc));
+        $this->assertSame('hello world', $this->compile($doc));
     }
 }

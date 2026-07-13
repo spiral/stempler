@@ -14,12 +14,11 @@ use Spiral\Stempler\Parser\Context;
  */
 final class Hidden implements NodeInterface
 {
-    /**
-     * @param TNode[] $nodes
-     */
+    /** @param TNode[] $nodes */
     public function __construct(
-        public array $nodes,
-    ) {}
+        public array $nodes
+    ) {
+    }
 
     public function getIterator(): \Generator
     {

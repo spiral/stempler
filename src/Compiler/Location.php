@@ -15,8 +15,9 @@ final class Location
         public string $path,
         public int $offset,
         public ?string $grammar = null,
-        public ?Location $parent = null,
-    ) {}
+        public ?Location $parent = null
+    ) {
+    }
 
     public static function fromContext(Context $context, ?Location $parent = null): Location
     {
@@ -24,7 +25,7 @@ final class Location
             $context->getPath(),
             $context->getToken()->offset,
             $context->getToken()->grammar,
-            $parent,
+            $parent
         );
     }
 }

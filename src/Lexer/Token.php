@@ -15,8 +15,9 @@ final class Token
         public int $type,
         public ?int $offset,
         public string $content,
-        public ?string $grammar = null,
-    ) {}
+        public ?string $grammar = null
+    ) {
+    }
 
     /**
      * User friendly token information.

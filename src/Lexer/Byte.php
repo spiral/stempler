@@ -8,6 +8,7 @@ final class Byte
 {
     public function __construct(
         public int $offset,
-        public string $char,
-    ) {}
+        public string $char
+    ) {
+    }
 }

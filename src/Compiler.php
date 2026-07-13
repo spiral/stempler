@@ -22,7 +22,7 @@ final class Compiler
         $this->renders[] = $renderer;
     }
 
-    public function compile(array|NodeInterface $node, ?Result $result = null): Result
+    public function compile(array|NodeInterface $node, Result $result = null): Result
     {
         $result ??= new Result();
 
@@ -42,7 +42,7 @@ final class Compiler
 
         throw new CompilerException(
             \sprintf('Unable to compile %s, no renderer found', $node::class),
-            $node->getContext(),
+            $node->getContext()
         );
     }
 }

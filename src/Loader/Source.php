@@ -11,8 +11,19 @@ final class Source
 {
     public function __construct(
         private readonly string $content,
-        private readonly ?string $filename = null,
-    ) {}
+        private readonly ?string $filename = null
+    ) {
+    }
+
+    public function getContent(): string
+    {
+        return $this->content;
+    }
+
+    public function getFilename(): ?string
+    {
+        return $this->filename;
+    }
 
     public static function resolveLine(string $content, int $offset): int
     {
@@ -29,15 +40,5 @@ final class Source
         }
 
         return $line + 1;
-    }
-
-    public function getContent(): string
-    {
-        return $this->content;
-    }
-
-    public function getFilename(): ?string
-    {
-        return $this->filename;
     }
 }

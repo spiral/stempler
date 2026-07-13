@@ -12,8 +12,9 @@ final class DirectiveGroup implements DirectiveRendererInterface
      * @param \Spiral\Stempler\Directive\DirectiveRendererInterface[] $directives
      */
     public function __construct(
-        private array $directives = [],
-    ) {}
+        private array $directives = []
+    ) {
+    }
 
     /**
      * Add new directive(s) compiler.

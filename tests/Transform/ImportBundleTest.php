@@ -14,22 +14,25 @@ use Spiral\Stempler\Transform\Merge\ResolveImports;
 use Spiral\Stempler\Transform\Visitor\DefineAttributes;
 use Spiral\Stempler\Transform\Visitor\DefineBlocks;
 
-final class ImportBundleTest extends BaseTestCase
+class ImportBundleTest extends BaseTestCase
 {
     public function testNoImport(): void
     {
-        $loader ??= new StringLoader();
+        $loader = $loader ?? new StringLoader();
         $loader->set('root', '<url href="google.com">hello world</url>');
         $loader->set('import', '<a href="${href}">${context}</a>');
 
         $builder = $this->getBuilder($loader, []);
 
-        self::assertSame('<url href="google.com">hello world</url>', $builder->compile('root')->getContent());
+        $this->assertSame(
+            '<url href="google.com">hello world</url>',
+            $builder->compile('root')->getContent()
+        );
     }
 
     public function testInlineBundle(): void
     {
-        $loader ??= new StringLoader();
+        $loader = $loader ?? new StringLoader();
         $loader->set('root', '
 <use:bundle path="bundle" ns="prefix"/>
 <prefix:url href="google.com">hello world</prefix:url>
@@ -45,12 +48,15 @@ final class ImportBundleTest extends BaseTestCase
 
         $builder = $this->getBuilder($loader, []);
 
-        self::assertSame('<a href="google.com">hello world</a>', $builder->compile('root')->getContent());
+        $this->assertSame(
+            '<a href="google.com">hello world</a>',
+            $builder->compile('root')->getContent()
+        );
     }
 
     public function testImportElementViaBundle(): void
     {
-        $loader ??= new StringLoader();
+        $loader = $loader ?? new StringLoader();
         $loader->set('root', '
 <use:bundle path="bundle" ns="prefix"/>
 <prefix:url href="google.com">hello world</prefix:url>
@@ -61,8 +67,12 @@ final class ImportBundleTest extends BaseTestCase
 
         $builder = $this->getBuilder($loader, []);
 
-        self::assertSame('<a href="google.com">hello world</a>', $builder->compile('root')->getContent());
+        $this->assertSame(
+            '<a href="google.com">hello world</a>',
+            $builder->compile('root')->getContent()
+        );
     }
+
 
     protected function getBuilder(LoaderInterface $loader, array $visitors): Builder
     {
@@ -85,7 +95,7 @@ final class ImportBundleTest extends BaseTestCase
     {
         return [
             new DefineAttributes(),
-            new DefineBlocks(),
+            new DefineBlocks()
         ];
     }
 }

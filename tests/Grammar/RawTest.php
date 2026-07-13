@@ -8,7 +8,7 @@ use Spiral\Stempler\Lexer\Lexer;
 use Spiral\Stempler\Lexer\StringStream;
 use Spiral\Stempler\Lexer\Token;
 
-final class RawTest extends BaseTestCase
+class RawTest extends BaseTestCase
 {
     protected const GRAMMARS = [];
 
@@ -16,9 +16,9 @@ final class RawTest extends BaseTestCase
     {
         $this->assertTokens(
             [
-                new Token(Token::TYPE_RAW, 0, 'raw body'),
+                new Token(Token::TYPE_RAW, 0, 'raw body')
             ],
-            ('raw body'),
+            ('raw body')
         );
     }
 
@@ -26,14 +26,14 @@ final class RawTest extends BaseTestCase
     {
         $parsed = $this->tokens($source);
 
-        if (\count($tokens) !== \count($parsed)) {
+        if (count($tokens) !== count($parsed)) {
             $this->fail('Token count mismatch');
         }
 
         foreach ($tokens as $index => $token) {
-            self::assertSame($token->type, $parsed[$index]->type, 'Token type mismatch');
-            self::assertSame($token->offset, $parsed[$index]->offset, 'Token offset mismatch');
-            self::assertSame($token->content, $parsed[$index]->content, 'Token content mismatch');
+            $this->assertSame($token->type, $parsed[$index]->type, 'Token type mismatch');
+            $this->assertSame($token->offset, $parsed[$index]->offset, 'Token offset mismatch');
+            $this->assertSame($token->content, $parsed[$index]->content, 'Token content mismatch');
         }
     }
 

@@ -21,11 +21,13 @@ final class InjectPHP implements VisitorInterface
 {
     // php marcos to inject values into
     private const PHP_MACRO_FUNCTION = 'inject';
+
     private const PHP_MARCO_EXISTS_FUNCTION = 'injected';
 
     public function __construct(
-        private readonly BlockClaims $blocks,
-    ) {}
+        private readonly BlockClaims $blocks
+    ) {
+    }
 
     public function enterNode(mixed $node, VisitorContext $ctx): mixed
     {
@@ -135,7 +137,7 @@ final class InjectPHP implements VisitorInterface
                 return $this->exportValue($node);
 
             case $node instanceof Output:
-                return \trim((string) $node->body);
+                return \trim($node->body);
 
             case $node instanceof PHP:
                 return $node->getContext()?->getValue(PHP::ORIGINAL_BODY)

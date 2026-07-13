@@ -21,10 +21,9 @@ final class Output implements NodeInterface
      * Filter must be declared in sprintf format. Example: Slugify::slugify(%s)
      */
     public ?string $filter = null;
-
     public ?string $body = null;
 
-    public function __construct(?Context $context = null)
+    public function __construct(Context $context = null)
     {
         $this->context = $context;
     }

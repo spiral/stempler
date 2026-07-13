@@ -14,22 +14,25 @@ use Spiral\Stempler\Transform\Merge\ResolveImports;
 use Spiral\Stempler\Transform\Visitor\DefineAttributes;
 use Spiral\Stempler\Transform\Visitor\DefineBlocks;
 
-final class SourcemapTest extends BaseTestCase
+class SourcemapTest extends BaseTestCase
 {
     public function testSimpleLoad(): void
     {
         $res = $this->getBuilder($this->getFixtureLoader())->compile('bundle-import');
 
-        self::assertSame('<a href="abc">cde</a>', \trim($res->getContent()));
+        $this->assertSame(
+            '<a href="abc">cde</a>',
+            trim($res->getContent())
+        );
     }
 
     public function testGetTemplates(): void
     {
         $res = $this->getBuilder($this->getFixtureLoader())->compile('bundle-import');
 
-        self::assertSame([
+        $this->assertSame([
             'bundle-import',
-            'import/bundle',
+            'import/bundle'
         ], $res->getPaths());
     }
 
@@ -37,12 +40,15 @@ final class SourcemapTest extends BaseTestCase
     {
         $res = $this->getBuilder($this->getFixtureLoader())->compile('import-php');
 
-        self::assertSame(\preg_replace("/\s+/", '', '
+        $this->assertSame(
+            preg_replace("/\s+/", '', '
 <div>
     <?php foreach ([\'a\', \'b\', \'c\'] as $value): ?>
     <b><?php echo htmlspecialchars((string) ($value), ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?></b>
     <?php endforeach; ?>
-</div>'), \preg_replace("/\s+/", '', $res->getContent()));
+</div>'),
+            preg_replace("/\s+/", '', $res->getContent())
+        );
     }
 
     public function testCompress(): void
@@ -51,9 +57,9 @@ final class SourcemapTest extends BaseTestCase
 
         $sm = $res->getSourceMap($this->getFixtureLoader());
 
-        $sm2 = \unserialize(\serialize($sm));
+        $sm2 = unserialize(serialize($sm));
 
-        self::assertEquals($sm, $sm2);
+        $this->assertEquals($sm, $sm2);
     }
 
     public function testGetStack(): void
@@ -63,7 +69,7 @@ final class SourcemapTest extends BaseTestCase
         $sm = $res->getSourceMap($this->getFixtureLoader());
 
         $stack = $sm->getStack(6);
-        self::assertCount(4, $stack);
+        $this->assertCount(4, $stack);
     }
 
     public function testTripeImportAndExtend(): void
@@ -73,7 +79,7 @@ final class SourcemapTest extends BaseTestCase
         $sm = $res->getSourceMap($this->getFixtureLoader());
 
         $stack = $sm->getStack(12);
-        self::assertCount(5, $stack);
+        $this->assertCount(5, $stack);
     }
 
     protected function getBuilder(LoaderInterface $loader, array $visitors = []): Builder
@@ -95,7 +101,7 @@ final class SourcemapTest extends BaseTestCase
     {
         return [
             new DefineAttributes(),
-            new DefineBlocks(),
+            new DefineBlocks()
         ];
     }
 }

@@ -15,264 +15,312 @@ use Spiral\Stempler\Transform\Merge\ResolveImports;
 use Spiral\Stempler\Transform\Visitor\DefineAttributes;
 use Spiral\Stempler\Transform\Visitor\DefineBlocks;
 
-final class ImportElementTest extends BaseTestCase
+class ImportElementTest extends BaseTestCase
 {
     public function testNoImport(): void
     {
-        $loader ??= new StringLoader();
+        $loader = $loader ?? new StringLoader();
         $loader->set('root', '<url href="google.com">hello world</url>');
         $loader->set('import', '<a href="${href}">${context}</a>');
 
         $builder = $this->getBuilder($loader, []);
 
-        self::assertSame('<url href="google.com">hello world</url>', $builder->compile('root')->getContent());
+        $this->assertSame(
+            '<url href="google.com">hello world</url>',
+            $builder->compile('root')->getContent()
+        );
     }
 
     public function testSimpleImport(): void
     {
-        $loader ??= new StringLoader();
+        $loader = $loader ?? new StringLoader();
         $loader->set(
             'root',
-            '<use:element path="import" as="url"/><url href="google.com">hello world</url>',
+            '<use:element path="import" as="url"/><url href="google.com">hello world</url>'
         );
         $loader->set('import', '<a href="${href}"><block:context/></a>');
 
         $builder = $this->getBuilder($loader, []);
 
-        self::assertSame('<a href="google.com">hello world</a>', $builder->compile('root')->getContent());
+        $this->assertSame(
+            '<a href="google.com">hello world</a>',
+            $builder->compile('root')->getContent()
+        );
     }
 
     public function testImportWithPHP(): void
     {
-        $loader ??= new StringLoader();
+        $loader = $loader ?? new StringLoader();
         $loader->set(
             'root',
-            '<use:element path="import" as="url"/><url href="<?php echo \'google.com\'?>">hello world</url>',
+            '<use:element path="import" as="url"/><url href="<?php echo \'google.com\'?>">hello world</url>'
         );
         $loader->set('import', '<a href="${href}"><block:context/></a>');
 
         $builder = $this->getBuilder($loader, []);
 
-        self::assertSame('<a href="<?php echo \'google.com\'?>">hello world</a>', $builder->compile('root')->getContent());
+        $this->assertSame(
+            '<a href="<?php echo \'google.com\'?>">hello world</a>',
+            $builder->compile('root')->getContent()
+        );
     }
 
     public function testImportWithOutput(): void
     {
-        $loader ??= new StringLoader();
+        $loader = $loader ?? new StringLoader();
         $loader->set(
             'root',
-            '<use:element path="import" as="url"/><url href="{{ $url }}">hello world</url>',
+            '<use:element path="import" as="url"/><url href="{{ $url }}">hello world</url>'
         );
         $loader->set('import', '<a href="${href}"><block:context/></a>');
 
         $builder = $this->getBuilder($loader, []);
 
-        self::assertSame('<a href="<?php echo htmlspecialchars((string) ($url), ENT_QUOTES |'
-        . ' ENT_SUBSTITUTE, \'utf-8\'); ?>">hello world</a>', $builder->compile('root')->getContent());
+        $this->assertSame(
+            '<a href="<?php echo htmlspecialchars((string) ($url), ENT_QUOTES |'
+            . ' ENT_SUBSTITUTE, \'utf-8\'); ?>">hello world</a>',
+            $builder->compile('root')->getContent()
+        );
     }
 
     public function testStringValueIntoPHP(): void
     {
-        $loader ??= new StringLoader();
+        $loader = $loader ?? new StringLoader();
         $loader->set(
             'root',
-            '<use:element path="import" as="url"/><url href="{{ $url }}">hello world</url>',
+            '<use:element path="import" as="url"/><url href="{{ $url }}">hello world</url>'
         );
         $loader->set('import', '<a href="${href}">{{ strtoupper(inject(\'context\')) }}</a>');
 
         $builder = $this->getBuilder($loader, []);
 
-        self::assertSame('<a href="<?php echo htmlspecialchars((string) ($url), ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>">'
-        . '<?php echo htmlspecialchars((string) (strtoupper(\'hello world\')), ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>'
-        . '</a>', $builder->compile('root')->getContent());
+        $this->assertSame(
+            '<a href="<?php echo htmlspecialchars((string) ($url), ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>">'
+            . '<?php echo htmlspecialchars((string) (strtoupper(\'hello world\')), ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>'
+            . '</a>',
+            $builder->compile('root')->getContent()
+        );
     }
 
     public function testOutputValueIntoPHPFromAttribute(): void
     {
-        $loader ??= new StringLoader();
+        $loader = $loader ?? new StringLoader();
         $loader->set(
             'root',
-            '<use:element path="import" as="url"/><url href="{{ $url }}" value="<?php echo \'bad\'?>">abc</url>',
+            '<use:element path="import" as="url"/><url href="{{ $url }}" value="<?php echo \'bad\'?>">abc</url>'
         );
         $loader->set('import', '<a href="${href}">{{ strtoupper(inject(\'value\')) }}</a>');
 
         $builder = $this->getBuilder($loader, []);
 
-        self::assertSame('<a href="<?php echo htmlspecialchars((string) ($url), ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>">'
-        . '<?php echo htmlspecialchars((string) (strtoupper(\'bad\')), ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>'
-        . '</a>', $builder->compile('root')->getContent());
+        $this->assertSame(
+            '<a href="<?php echo htmlspecialchars((string) ($url), ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>">'
+            . '<?php echo htmlspecialchars((string) (strtoupper(\'bad\')), ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>'
+            . '</a>',
+            $builder->compile('root')->getContent()
+        );
     }
 
     public function testOutputValueIntoPHPFromAttributeUsingOutput(): void
     {
-        $loader ??= new StringLoader();
+        $loader = $loader ?? new StringLoader();
         $loader->set(
             'root',
-            '<use:element path="import" as="url"/><url href="{{ $url }}" value="{{ \'OK\' }}">abc</url>',
+            '<use:element path="import" as="url"/><url href="{{ $url }}" value="{{ \'OK\' }}">abc</url>'
         );
         $loader->set('import', '<a href="${href}">{{ strtoupper(inject(\'value\')) }}</a>');
 
         $builder = $this->getBuilder($loader, []);
 
-        self::assertSame('<a href="<?php echo htmlspecialchars((string) ($url), ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>">'
-        . '<?php echo htmlspecialchars((string) (strtoupper(\'OK\')), ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>'
-        . '</a>', $builder->compile('root')->getContent());
+        $this->assertSame(
+            '<a href="<?php echo htmlspecialchars((string) ($url), ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>">'
+            . '<?php echo htmlspecialchars((string) (strtoupper(\'OK\')), ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>'
+            . '</a>',
+            $builder->compile('root')->getContent()
+        );
     }
 
     public function testValueIntoPHPFromMultiValue(): void
     {
-        $loader ??= new StringLoader();
+        $loader = $loader ?? new StringLoader();
         $loader->set(
             'root',
-            '<use:element path="import" as="url"/><url href="{{ $url }}" value="hello {{ \'OK\' }}">abc</url>',
+            '<use:element path="import" as="url"/><url href="{{ $url }}" value="hello {{ \'OK\' }}">abc</url>'
         );
         $loader->set('import', '<a href="${href}">{{ strtoupper(inject(\'value\')) }}</a>');
 
         $builder = $this->getBuilder($loader, []);
 
-        self::assertSame('<a href="<?php echo htmlspecialchars((string) ($url), ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>">'
-        . '<?php echo htmlspecialchars((string) (strtoupper(\'hello \'.\'OK\')), ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>'
-        . '</a>', $builder->compile('root')->getContent());
+        $this->assertSame(
+            '<a href="<?php echo htmlspecialchars((string) ($url), ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>">'
+            . '<?php echo htmlspecialchars((string) (strtoupper(\'hello \'.\'OK\')), ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>'
+            . '</a>',
+            $builder->compile('root')->getContent()
+        );
     }
 
     public function testValueIntoPHPFromMultiValueWithSpacing(): void
     {
-        $loader ??= new StringLoader();
+        $loader = $loader ?? new StringLoader();
         $loader->set(
             'root',
-            '<use:element path="import" as="url"/><url href="{{ $url }}" value="{{ \'OK\' }}  {{ \'cool\' }}">abc</url>',
+            '<use:element path="import" as="url"/><url href="{{ $url }}" value="{{ \'OK\' }}  {{ \'cool\' }}">abc</url>'
         );
         $loader->set('import', '<a href="${href}">{{ strtoupper(inject(\'value\')) }}</a>');
 
         $builder = $this->getBuilder($loader, []);
 
-        self::assertSame('<a href="<?php echo htmlspecialchars((string) ($url), ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>">'
-        . '<?php echo htmlspecialchars((string) (strtoupper(\'OK\'.\' '
-        . ' \'.\'cool\')), ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>'
-        . '</a>', $builder->compile('root')->getContent());
+        $this->assertSame(
+            '<a href="<?php echo htmlspecialchars((string) ($url), ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>">'
+            . '<?php echo htmlspecialchars((string) (strtoupper(\'OK\'.\' '
+            . ' \'.\'cool\')), ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>'
+            . '</a>',
+            $builder->compile('root')->getContent()
+        );
     }
 
     public function testValueIntoPHPFromMultiValueWithSpacingAround(): void
     {
-        $loader ??= new StringLoader();
+        $loader = $loader ?? new StringLoader();
         $loader->set(
             'root',
             '<use:element path="import" as="url"/>'
-            . '<url href="{{ $url }}" value=" {{ \'OK\' }} {{ \'cool\' }} ">abc</url>',
+            . '<url href="{{ $url }}" value=" {{ \'OK\' }} {{ \'cool\' }} ">abc</url>'
         );
         $loader->set('import', '<a href="${href}">{{ strtoupper(inject(\'value\')) }}</a>');
 
         $builder = $this->getBuilder($loader, []);
 
-        self::assertSame('<a href="<?php echo htmlspecialchars((string) ($url), ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>">'
-        . '<?php echo htmlspecialchars((string) (strtoupper'
-        . '(\' \'.\'OK\'.\' \'.\'cool\'.\' \')), ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>'
-        . '</a>', $builder->compile('root')->getContent());
+        $this->assertSame(
+            '<a href="<?php echo htmlspecialchars((string) ($url), ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>">'
+            . '<?php echo htmlspecialchars((string) (strtoupper'
+            . '(\' \'.\'OK\'.\' \'.\'cool\'.\' \')), ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>'
+            . '</a>',
+            $builder->compile('root')->getContent()
+        );
     }
 
     public function testDefaultPHPValue(): void
     {
-        $loader ??= new StringLoader();
+        $loader = $loader ?? new StringLoader();
         $loader->set(
             'root',
-            '<use:element path="import" as="url"/><url href="{{ $url }}"></url>',
+            '<use:element path="import" as="url"/><url href="{{ $url }}"></url>'
         );
         $loader->set('import', '<a href="${href}">{{ strtoupper(inject(\'value\', \'default\'.\'xxx\')) }}</a>');
 
         $builder = $this->getBuilder($loader, []);
 
-        self::assertSame('<a href="<?php echo htmlspecialchars((string) ($url), ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>">'
-        . '<?php echo htmlspecialchars((string) (strtoupper(inject(\'value\', '
-        . '\'default\'.\'xxx\'))), ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>'
-        . '</a>', $builder->compile('root')->getContent());
+        $this->assertSame(
+            '<a href="<?php echo htmlspecialchars((string) ($url), ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>">'
+            . '<?php echo htmlspecialchars((string) (strtoupper(inject(\'value\', '
+            . '\'default\'.\'xxx\'))), ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>'
+            . '</a>',
+            $builder->compile('root')->getContent()
+        );
     }
 
     public function testDefaultPHPValueArray(): void
     {
-        $loader ??= new StringLoader();
+        $loader = $loader ?? new StringLoader();
         $loader->set(
             'root',
-            '<use:element path="import" as="url"/><url href="{{ $url }}"></url>',
+            '<use:element path="import" as="url"/><url href="{{ $url }}"></url>'
         );
         $loader->set('import', '<a href="${href}">{{ strtoupper(inject(\'value\', [\'abc\'])) }}</a>');
 
         $builder = $this->getBuilder($loader, []);
 
-        self::assertSame('<a href="<?php echo htmlspecialchars((string) ($url), ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>">'
-        . '<?php echo htmlspecialchars((string) (strtoupper(inject(\'value\', '
-        . '[\'abc\']))), ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>'
-        . '</a>', $builder->compile('root')->getContent());
+        $this->assertSame(
+            '<a href="<?php echo htmlspecialchars((string) ($url), ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>">'
+            . '<?php echo htmlspecialchars((string) (strtoupper(inject(\'value\', '
+            . '[\'abc\']))), ENT_QUOTES | ENT_SUBSTITUTE, \'utf-8\'); ?>'
+            . '</a>',
+            $builder->compile('root')->getContent()
+        );
     }
 
     public function testHasInjectionEmpty(): void
     {
-        $loader ??= new StringLoader();
+        $loader = $loader ?? new StringLoader();
         $loader->set(
             'root',
-            '<use:element path="import" as="opt"/><opt>hello world</opt>',
+            '<use:element path="import" as="opt"/><opt>hello world</opt>'
         );
 
         $loader->set('import', '@if(injected(\'header\'))<div class="header">${header}</div>@endif${context}');
 
         $builder = $this->getBuilder($loader, []);
 
-        self::assertSame('<?php if(false): ?>'
-        . '<div class="header"></div>'
-        . '<?php endif; ?>'
-        . 'hello world', $builder->compile('root')->getContent());
+        $this->assertSame(
+            '<?php if(false): ?>'
+            . '<div class="header"></div>'
+            . '<?php endif; ?>'
+            . 'hello world',
+            $builder->compile('root')->getContent()
+        );
     }
 
     public function testHasInjection(): void
     {
-        $loader ??= new StringLoader();
+        $loader = $loader ?? new StringLoader();
         $loader->set(
             'root',
-            '<use:element path="import" as="opt"/><opt><block:header>abc</block:header>hello world</opt>',
+            '<use:element path="import" as="opt"/><opt><block:header>abc</block:header>hello world</opt>'
         );
 
         $loader->set('import', '@if(injected(\'header\'))<div class="header">${header}</div>@endif${context}');
 
         $builder = $this->getBuilder($loader, []);
 
-        self::assertSame('<?php if(true): ?>'
-        . '<div class="header">abc</div>'
-        . '<?php endif; ?>'
-        . 'hello world', $builder->compile('root')->getContent());
+        $this->assertSame(
+            '<?php if(true): ?>'
+            . '<div class="header">abc</div>'
+            . '<?php endif; ?>'
+            . 'hello world',
+            $builder->compile('root')->getContent()
+        );
     }
 
     public function testParentBlock(): void
     {
-        $loader ??= new StringLoader();
+        $loader = $loader ?? new StringLoader();
         $loader->set(
             'root',
-            '<use:element path="import" as="h"/><h><block:c>a<block:parent/></block:c></h>',
+            '<use:element path="import" as="h"/><h><block:c>a<block:parent/></block:c></h>'
         );
         $loader->set('import', '<x c="${c|b}"></x>');
 
         $builder = $this->getBuilder($loader, []);
-        self::assertSame('<x c="ab"></x>', $builder->compile('root')->getContent());
+        $this->assertSame(
+            '<x c="ab"></x>',
+            $builder->compile('root')->getContent()
+        );
     }
 
     public function testParentBlockShort(): void
     {
-        $loader ??= new StringLoader();
+        $loader = $loader ?? new StringLoader();
         $loader->set(
             'root',
-            '<use:element path="import" as="h"/><h c="a ${parent}"/>',
+            '<use:element path="import" as="h"/><h c="a ${parent}"/>'
         );
         $loader->set('import', '<x c="${c|b}"></x>');
 
 
         $builder = $this->getBuilder($loader, []);
 
-        self::assertSame('<x c="a b"></x>', $builder->compile('root')->getContent());
+        $this->assertSame(
+            '<x c="a b"></x>',
+            $builder->compile('root')->getContent()
+        );
     }
 
     public function testElementPathAndAlias(): void
     {
         $element = new Element('path/to/import');
-        self::assertSame('path/to/import', $element->getPath());
-        self::assertSame('import', $element->getAlias());
+        $this->assertSame('path/to/import', $element->getPath());
+        $this->assertSame('import', $element->getAlias());
     }
 
     protected function getBuilder(LoaderInterface $loader, array $visitors): Builder
@@ -294,7 +342,7 @@ final class ImportElementTest extends BaseTestCase
     {
         return [
             new DefineAttributes(),
-            new DefineBlocks(),
+            new DefineBlocks()
         ];
     }
 }
