@@ -11,15 +11,15 @@ use Spiral\Stempler\Lexer\StreamInterface;
 use Spiral\Stempler\Lexer\StringStream;
 use Spiral\Stempler\Lexer\Token;
 
-class BufferTest extends TestCase
+final class BufferTest extends TestCase
 {
     public function testNext(): void
     {
         $src = $this->buffer('abc');
-        $this->assertEquals(new Byte(0, 'a'), $src->next());
-        $this->assertEquals(new Byte(1, 'b'), $src->next());
-        $this->assertEquals(new Byte(2, 'c'), $src->next());
-        $this->assertEquals(null, $src->next());
+        self::assertEquals(new Byte(0, 'a'), $src->next());
+        self::assertEquals(new Byte(1, 'b'), $src->next());
+        self::assertEquals(new Byte(2, 'c'), $src->next());
+        self::assertEquals(null, $src->next());
     }
 
     public function testIterate(): void
@@ -29,120 +29,120 @@ class BufferTest extends TestCase
             $out .= $n->char;
         }
 
-        $this->assertEquals('abc', $out);
+        self::assertSame('abc', $out);
     }
 
     public function testGetBytes(): void
     {
         $src = $this->buffer('abc');
-        $this->assertEquals('abc', $src->nextBytes());
+        self::assertSame('abc', $src->nextBytes());
 
-        $this->assertEquals('', $src->nextBytes());
+        self::assertSame('', $src->nextBytes());
     }
 
     public function testLookahead(): void
     {
         $src = $this->buffer('abc');
-        $this->assertEquals('a', $src->lookahead()->char);
-        $this->assertEquals(0, $src->lookahead()->offset);
+        self::assertEquals('a', $src->lookahead()->char);
+        self::assertEquals(0, $src->lookahead()->offset);
 
         // no iteration expected
-        $this->assertEquals('a', $src->lookahead()->char);
-        $this->assertEquals(0, $src->lookahead()->offset);
+        self::assertEquals('a', $src->lookahead()->char);
+        self::assertEquals(0, $src->lookahead()->offset);
 
-        $this->assertEquals(new Byte(0, 'a'), $src->next());
+        self::assertEquals(new Byte(0, 'a'), $src->next());
 
-        $this->assertEquals('b', $src->lookahead()->char);
-        $this->assertEquals(1, $src->lookahead()->offset);
-
-        // no iteration expected
-        $this->assertEquals('b', $src->lookahead()->char);
-        $this->assertEquals(1, $src->lookahead()->offset);
-
-        $this->assertEquals(new Byte(1, 'b'), $src->next());
-
-        $this->assertEquals('c', $src->lookahead()->char);
-        $this->assertEquals(2, $src->lookahead()->offset);
+        self::assertEquals('b', $src->lookahead()->char);
+        self::assertEquals(1, $src->lookahead()->offset);
 
         // no iteration expected
-        $this->assertEquals('c', $src->lookahead()->char);
-        $this->assertEquals(2, $src->lookahead()->offset);
+        self::assertEquals('b', $src->lookahead()->char);
+        self::assertEquals(1, $src->lookahead()->offset);
 
-        $this->assertEquals(new Byte(2, 'c'), $src->next());
+        self::assertEquals(new Byte(1, 'b'), $src->next());
 
-        $this->assertEquals(null, $src->lookahead());
-        $this->assertEquals(null, $src->lookahead());
-        $this->assertEquals(null, $src->next());
+        self::assertEquals('c', $src->lookahead()->char);
+        self::assertEquals(2, $src->lookahead()->offset);
+
+        // no iteration expected
+        self::assertEquals('c', $src->lookahead()->char);
+        self::assertEquals(2, $src->lookahead()->offset);
+
+        self::assertEquals(new Byte(2, 'c'), $src->next());
+
+        self::assertEquals(null, $src->lookahead());
+        self::assertEquals(null, $src->lookahead());
+        self::assertEquals(null, $src->next());
     }
 
     public function testLookaheadByte(): void
     {
         $src = $this->buffer('abc');
-        $this->assertEquals('a', $src->lookaheadByte());
+        self::assertSame('a', $src->lookaheadByte());
 
-        $this->assertEquals(new Byte(0, 'a'), $src->next());
-        $this->assertEquals('b', $src->lookaheadByte());
+        self::assertEquals(new Byte(0, 'a'), $src->next());
+        self::assertSame('b', $src->lookaheadByte());
 
-        $this->assertEquals(new Byte(1, 'b'), $src->next());
-        $this->assertEquals('c', $src->lookaheadByte());
+        self::assertEquals(new Byte(1, 'b'), $src->next());
+        self::assertSame('c', $src->lookaheadByte());
 
-        $this->assertEquals(new Byte(2, 'c'), $src->next());
-        $this->assertEquals(null, $src->lookaheadByte());
+        self::assertEquals(new Byte(2, 'c'), $src->next());
+        self::assertEquals(null, $src->lookaheadByte());
     }
 
     public function testReplay(): void
     {
         $src = $this->buffer('abc');
-        $this->assertEquals(new Byte(0, 'a'), $a = $src->next());
-        $this->assertEquals(new Byte(1, 'b'), $b = $src->next());
-        $this->assertEquals(new Byte(2, 'c'), $c = $src->next());
+        self::assertEquals(new Byte(0, 'a'), $a = $src->next());
+        self::assertEquals(new Byte(1, 'b'), $b = $src->next());
+        self::assertEquals(new Byte(2, 'c'), $c = $src->next());
 
         $src->replay($a->offset);
-        $this->assertEquals(new Byte(1, 'b'), $src->next());
-        $this->assertEquals(new Byte(2, 'c'), $src->next());
+        self::assertEquals(new Byte(1, 'b'), $src->next());
+        self::assertEquals(new Byte(2, 'c'), $src->next());
 
         $src->replay($b->offset);
-        $this->assertEquals(new Byte(2, 'c'), $src->next());
+        self::assertEquals(new Byte(2, 'c'), $src->next());
 
         $src->replay($c->offset);
-        $this->assertEquals(null, $src->next());
+        self::assertEquals(null, $src->next());
     }
 
     public function testOffset(): void
     {
         $src = $this->buffer('abc');
-        $this->assertEquals(0, $src->getOffset());
+        self::assertSame(0, $src->getOffset());
 
-        $this->assertEquals(new Byte(0, 'a'), $src->next());
-        $this->assertEquals(0, $src->getOffset());
+        self::assertEquals(new Byte(0, 'a'), $src->next());
+        self::assertSame(0, $src->getOffset());
 
-        $this->assertEquals(new Byte(1, 'b'), $src->next());
-        $this->assertEquals(1, $src->getOffset());
+        self::assertEquals(new Byte(1, 'b'), $src->next());
+        self::assertSame(1, $src->getOffset());
 
-        $this->assertEquals(new Byte(2, 'c'), $src->next());
-        $this->assertEquals(2, $src->getOffset());
+        self::assertEquals(new Byte(2, 'c'), $src->next());
+        self::assertSame(2, $src->getOffset());
 
         $src = new Buffer($this->generateToken(new StringStream('abc')));
-        $this->assertEquals(new Token(0, null, 'a'), $src->next());
-        $this->assertEquals(0, $src->getOffset());
+        self::assertEquals(new Token(0, null, 'a'), $src->next());
+        self::assertSame(0, $src->getOffset());
     }
 
     public function testLookupBytes(): void
     {
         $src = $this->buffer('abc');
-        $this->assertEquals(0, $src->getOffset());
+        self::assertSame(0, $src->getOffset());
 
-        $this->assertEquals('ab', $src->lookaheadByte(2));
+        self::assertSame('ab', $src->lookaheadByte(2));
 
-        $this->assertEquals(new Byte(0, 'a'), $src->next());
+        self::assertEquals(new Byte(0, 'a'), $src->next());
 
-        $this->assertEquals('bc', $src->lookaheadByte(2));
-        $this->assertEquals('bc', $src->lookaheadByte(3));
+        self::assertSame('bc', $src->lookaheadByte(2));
+        self::assertSame('bc', $src->lookaheadByte(3));
 
-        $this->assertEquals(new Byte(1, 'b'), $src->next());
+        self::assertEquals(new Byte(1, 'b'), $src->next());
     }
 
-    protected function buffer(string $string)
+    protected function buffer(string $string): Buffer
     {
         return new Buffer($this->generate(new StringStream($string)));
     }

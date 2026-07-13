@@ -12,8 +12,12 @@ use Spiral\Stempler\VisitorContext;
 final class StackContext
 {
     private function __construct(
-        private readonly VisitorContext $ctx
-    ) {
+        private readonly VisitorContext $ctx,
+    ) {}
+
+    public static function on(VisitorContext $ctx): self
+    {
+        return new self($ctx);
     }
 
     public function register(Aggregate $aggregate, int $level = 0): void
@@ -26,7 +30,7 @@ final class StackContext
         $node->setAttribute(self::class, $stacks);
     }
 
-    public function push(string $name, Tag $child, string $uniqueID = null): bool
+    public function push(string $name, Tag $child, ?string $uniqueID = null): bool
     {
         foreach ($this->getStacks() as $stack) {
             if ($stack->accepts($name) !== $name) {
@@ -53,7 +57,7 @@ final class StackContext
         return false;
     }
 
-    public function prepend(string $name, Tag $child, string $uniqueID = null): bool
+    public function prepend(string $name, Tag $child, ?string $uniqueID = null): bool
     {
         foreach ($this->getStacks() as $stack) {
             if ($stack->accepts($name) !== $name) {
@@ -98,11 +102,6 @@ final class StackContext
         return $stacks;
     }
 
-    public static function on(VisitorContext $ctx): self
-    {
-        return new self($ctx);
-    }
-
     private function getStackRootNode(int $level): AttributedInterface
     {
         if ($level === 0) {
@@ -118,8 +117,8 @@ final class StackContext
             throw new \LogicException(
                 \sprintf(
                     'Unable to create import on node without attribute storage (%s)',
-                    \get_debug_type($node)
-                )
+                    \get_debug_type($node),
+                ),
             );
         }
 

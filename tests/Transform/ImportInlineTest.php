@@ -14,25 +14,22 @@ use Spiral\Stempler\Transform\Merge\ResolveImports;
 use Spiral\Stempler\Transform\Visitor\DefineAttributes;
 use Spiral\Stempler\Transform\Visitor\DefineBlocks;
 
-class ImportInlineTest extends BaseTestCase
+final class ImportInlineTest extends BaseTestCase
 {
     public function testNoImport(): void
     {
-        $loader = $loader ?? new StringLoader();
+        $loader ??= new StringLoader();
         $loader->set('root', '<url href="google.com">hello world</url>');
         $loader->set('import', '<a href="${href}">${context}</a>');
 
         $builder = $this->getBuilder($loader, []);
 
-        $this->assertSame(
-            '<url href="google.com">hello world</url>',
-            $builder->compile('root')->getContent()
-        );
+        self::assertSame('<url href="google.com">hello world</url>', $builder->compile('root')->getContent());
     }
 
     public function testInlineImport(): void
     {
-        $loader = $loader ?? new StringLoader();
+        $loader ??= new StringLoader();
         $loader->set('root', '
 <use:inline name="url">
     <a href="${href}">${context}</a>
@@ -42,15 +39,12 @@ class ImportInlineTest extends BaseTestCase
 
         $builder = $this->getBuilder($loader, []);
 
-        $this->assertSame(
-            '<a href="google.com">hello world</a>',
-            $builder->compile('root')->getContent()
-        );
+        self::assertSame('<a href="google.com">hello world</a>', $builder->compile('root')->getContent());
     }
 
     public function testInlineImportN(): void
     {
-        $loader = $loader ?? new StringLoader();
+        $loader ??= new StringLoader();
         $loader->set('root', '
 <use:inline name="url">
     <a href="${href}">${context}</a>
@@ -61,10 +55,7 @@ class ImportInlineTest extends BaseTestCase
 
         $builder = $this->getBuilder($loader, []);
 
-        $this->assertSame(
-            '<a href="google.com">hello world</a><a href="spiralscout.com">foo bar</a>',
-            $builder->compile('root')->getContent()
-        );
+        self::assertSame('<a href="google.com">hello world</a><a href="spiralscout.com">foo bar</a>', $builder->compile('root')->getContent());
     }
 
     protected function getBuilder(LoaderInterface $loader, array $visitors): Builder
@@ -88,7 +79,7 @@ class ImportInlineTest extends BaseTestCase
     {
         return [
             new DefineAttributes(),
-            new DefineBlocks()
+            new DefineBlocks(),
         ];
     }
 }

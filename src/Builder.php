@@ -34,9 +34,8 @@ final class Builder
     public function __construct(
         private readonly LoaderInterface $loader,
         private readonly Parser $parser = new Parser(),
-        private readonly Compiler $compiler = new Compiler()
-    ) {
-    }
+        private readonly Compiler $compiler = new Compiler(),
+    ) {}
 
     public function getLoader(): LoaderInterface
     {
@@ -104,7 +103,7 @@ final class Builder
             $tpl = $this->parser->withPath($path)->parse($stream);
             $tpl->setContext(new Context(
                 new Token(Token::TYPE_RAW, 0, ''),
-                $path
+                $path,
             ));
         } catch (ParserException $e) {
             throw $this->mapException($e);
@@ -114,8 +113,6 @@ final class Builder
             return $this->process($tpl);
         } catch (ContextExceptionInterface $e) {
             throw $this->mapException($e);
-        } catch (\Throwable $e) {
-            throw $e;
         }
     }
 
@@ -163,7 +160,7 @@ final class Builder
 
         $e->setLocation(
             $source->getFilename(),
-            Source::resolveLine($source->getContent(), $e->getContext()->getToken()->offset)
+            Source::resolveLine($source->getContent(), $e->getContext()->getToken()->offset),
         );
 
         return $e;
